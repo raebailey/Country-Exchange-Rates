@@ -5,14 +5,19 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 
 import components.CustomButton.ButtonStyle;
 import models.Country;
+import ui.Detail;
+
 import javax.swing.SwingConstants;
 
 public class CountryCard extends RoundPanel {
@@ -25,9 +30,11 @@ public class CountryCard extends RoundPanel {
 	private JLabel imagelbl;
 	private JLabel namelbl;
 	private CustomButton gotoBtn;
+	private JFrame frame;
 
-	public CountryCard(Country country) {
+	public CountryCard(Country country,JFrame frame) {
 		initialize();
+		this.frame = frame;
 		setSize(new Dimension(350, 200));
 		setPreferredSize(new Dimension(350, 200));
 		setMaximumSize(new Dimension(350, 200));
@@ -77,6 +84,42 @@ public class CountryCard extends RoundPanel {
 		gotoBtn.setText("Go to");
 		gotoBtn.setSize(62, 25);
 		gotoBtn.setLocation(269, 158);
+		gotoBtn.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				System.out.println(country);
+				frame.dispose();
+				new Detail(country);
+				
+				
+			}
+		});
 		add(gotoBtn);
 		setLayout(null);
 

@@ -43,6 +43,8 @@ public class UpdateRate_Task extends TimerTask {
 							} else {
 								models.insertRunTime(key.toString(), nextdate);
 							}
+						}else {
+							System.out.println("ERROR");
 						}
 					}
 //					System.out.println("Key: " + key + " Value: " + currencyObj.get(key));

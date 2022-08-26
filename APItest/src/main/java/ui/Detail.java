@@ -25,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 
+import cache.CacheManager;
 import components.CustomButton;
 import components.CustomButton.ButtonStyle;
 import components.LineChart;
@@ -36,39 +37,24 @@ import models.Rate;
 import net.miginfocom.swing.MigLayout;
 import sample.DatabaseModel;
 
-public class MainUI {
+public class Detail {
 
 	private JFrame frame;
 	private JTextField textField;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainUI window = new MainUI();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the application.
 	 */
-	public MainUI() {
-		initialize();
+	public Detail(Country country) {
+		initialize(country);
+		frame.setVisible(true);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize(Country country) {
 		FlatDarkLaf.setup();
 		frame = new JFrame();
 		frame.getContentPane().setSize(new Dimension(1280, 0));
@@ -91,18 +77,32 @@ public class MainUI {
 		JLabel imageLbl = new JLabel("");
 
 		DatabaseModel model = new DatabaseModel();
-		Country country = model.fetchCountry("JMD");
+//		Country country = model.fetchCountry("JMD");
 		String imageUrl = country.getImageUrl();
 		String default_url = "https://www.freeiconspng.com/uploads/no-image-icon-6.png";
 		URL url;
 		Image image;
 		try {
-			url = new URL(default_url);
-			image = ImageIO.read(url);
-
-			if (imageUrl != null) {
-				url = new URL(imageUrl);
+			Image newImage = (Image)CacheManager.getCacheItem(default_url);
+			if(newImage==null) {
+				url = new URL(default_url);
 				image = ImageIO.read(url);
+			}else {
+				image = newImage;
+			}
+			
+			
+			
+			
+			if (imageUrl != null) {
+				Image newImage1 = (Image)CacheManager.getCacheItem(imageUrl);
+				if(newImage1==null) {
+					url = new URL(imageUrl);
+					image = ImageIO.read(url);
+				}else {
+					image = newImage1;
+				}
+				
 			}
 			imageLbl.setIcon(new ImageIcon(image.getScaledInstance(320, 160, java.awt.Image.SCALE_SMOOTH)));
 		} catch (MalformedURLException e) {
@@ -316,5 +316,23 @@ public class MainUI {
 		lblNewLabel.setBounds(24, 2, 46, 35);
 		panel.add(lblNewLabel);
 	}
+
+	public JFrame getFrame() {
+		return frame;
+	}
+
+	public void setFrame(JFrame frame) {
+		this.frame = frame;
+	}
+
+	public JTextField getTextField() {
+		return textField;
+	}
+
+	public void setTextField(JTextField textField) {
+		this.textField = textField;
+	}
+	
+	
 
 }

@@ -21,9 +21,6 @@ public class Country_Task extends TimerTask {
 			JSONArray json = (JSONArray) Service.getCountry();
 			for (int i = 0; i < json.size(); i++) {
 				JSONObject obj = (JSONObject) json.get(i);
-				System.out.println("Name: " + obj.get("name")); // country name
-				System.out.println("Country Code: " + obj.get("alpha2Code")); // country code
-				System.out.println("Alt Country Code: " + obj.get("alpha3Code"));// country alternate code
 				JSONArray jsonArr = (JSONArray) obj.get("currencies");
 				if (jsonArr == null) {
 					reject += 1;
@@ -31,7 +28,6 @@ public class Country_Task extends TimerTask {
 					continue;
 				}
 				JSONObject currency_code = (JSONObject) jsonArr.get(0);
-				System.out.println("Currency Code: " + currency_code.get("code"));
 
 				JSONArray locationArr = (JSONArray) obj.get("latlng");
 				Double lng = (double) 0;
@@ -43,9 +39,6 @@ public class Country_Task extends TimerTask {
 
 				JSONObject flag = (JSONObject) obj.get("flags");
 				String imageUrl = (String) flag.get("png");
-//			"png":"https://flagcdn.com/w320/jm.png"}
-
-				System.out.println("Latitude: " + lat + " Longitude: " + lng);
 
 				DatabaseModel model = new DatabaseModel();
 				boolean exists = model.countryExist(currency_code.get("code").toString());
