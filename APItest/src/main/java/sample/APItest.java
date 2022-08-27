@@ -1,5 +1,6 @@
 package sample;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -15,7 +16,7 @@ public class APItest {
 
 		task = new UpdateRate_Task();
 		Date nextTime = new DatabaseModel().getRunTime();
-//				new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse("16/08/2022 21:05:00");
+				new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse("16/08/2022 21:05:00");
 
 		Date now = new Date();
 		long difference = nextTime.getTime() - now.getTime();

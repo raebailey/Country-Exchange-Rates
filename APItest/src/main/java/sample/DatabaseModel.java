@@ -110,11 +110,11 @@ public class DatabaseModel {
 			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				String country_code = rs.getString("currency_code");
+				String currency_code = rs.getString("currency_code");
+				long id = rs.getLong("id");
 				Double rate = rs.getDouble("rate");
 				String date = rs.getString("last_updated");
-				rateList.add(new Rate(country_code, rate, date));
-				System.out.println("Code = " + country_code);
+				rateList.add(new Rate(id,currency_code, rate, date));
 			}
 			rs.close();
 			stmt.close();
@@ -129,6 +129,8 @@ public class DatabaseModel {
 
 		return rateList.toArray(new Rate[rateList.size()]);
 	}
+	
+	//TODO ADD FETCH CURRENCIES METHOD
 
 	public void insertCountry(String code, String name, String currency_code, Double longitude, Double latitude,
 			String image) {
@@ -155,15 +157,36 @@ public class DatabaseModel {
 
 	}
 
-	public void insertRate(String key, String value, String last_update) {
+	public void insertRate(String key,String value, String last_update) {
 		if (con == null) {
 			con = getConnection();
 		}
 		try {
-			PreparedStatement stmt = con.prepareStatement("INSERT INTO Rates VALUES(?,?,?)");
-			stmt.setString(1, key);
-			stmt.setDouble(2, Double.valueOf(value));
-			stmt.setString(3, last_update);
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO Rates VALUES(?,?,?,?)");
+			stmt.setString(2, key);
+			stmt.setDouble(3, Double.valueOf(value));
+			stmt.setString(4, last_update);
+			stmt.execute();
+			stmt.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			con = null;
+		}
+
+	}
+	
+	public void insertCurrency(String currency_code,String name, String symbol) {
+		if (con == null) {
+			con = getConnection();
+		}
+		try {
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO Currency VALUES(?,?,?)");
+			stmt.setString(1, currency_code);
+			stmt.setString(2, name);
+			stmt.setString(3, symbol);
 			stmt.execute();
 			stmt.close();
 			con.close();
@@ -176,16 +199,15 @@ public class DatabaseModel {
 
 	}
 
-	public boolean rateExist(String code, Double rate) {
+	public boolean rateExist(String date) {
 		boolean exist = false;
 		if (con == null) {
 			con = getConnection();
 		}
 
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Rates where currency_code = ? and rate = ?");
-			stmt.setString(1, code);
-			stmt.setDouble(2, rate);
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Rates where last_updated = ? and rate = ?");
+			stmt.setString(1, date);
 			ResultSet rs = stmt.executeQuery();
 
 			exist = rs.next();
@@ -210,7 +232,33 @@ public class DatabaseModel {
 		}
 
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Country where currency_code = ?");
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Country where country_code = ?");
+			stmt.setString(1, code);
+			ResultSet rs = stmt.executeQuery();
+
+			exist = rs.next();
+			rs.close();
+			stmt.close();
+			con.close();
+
+			return exist;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			con = null;
+		}
+		return exist;
+
+	}
+	
+	public boolean currencyExist(String code) {
+		boolean exist = false;
+		if (con == null) {
+			con = getConnection();
+		}
+
+		try {
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Currency where currency_code = ?");
 			stmt.setString(1, code);
 			ResultSet rs = stmt.executeQuery();
 

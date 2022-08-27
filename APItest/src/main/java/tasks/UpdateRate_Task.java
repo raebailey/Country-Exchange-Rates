@@ -32,10 +32,10 @@ public class UpdateRate_Task extends TimerTask {
 				DatabaseModel models = new DatabaseModel();
 				currencyObj.keySet().stream().forEach(key -> {
 					if (key.toString().equals("JMD")) {
-						boolean exist = models.countryExist(key.toString());
-						boolean rateExist = models.rateExist(key.toString(),
-								Double.valueOf(currencyObj.get(key).toString()));
-						if (exist == true && rateExist != true) {
+						boolean exist = models.currencyExist(key.toString());
+						boolean rateExist = models.rateExist(date);
+								//Double.valueOf(currencyObj.get(key).toString()));
+						if (exist == true && rateExist!=false) {
 							models.insertRate(key.toString(), currencyObj.get(key).toString(), date);
 							System.out.println(currencyObj.get(key) + "\n");
 							if (models.runTimeExist(key.toString())) {
@@ -44,7 +44,7 @@ public class UpdateRate_Task extends TimerTask {
 								models.insertRunTime(key.toString(), nextdate);
 							}
 						}else {
-							System.out.println("ERROR");
+							System.out.println("ERROR: "+key.toString()+" Exists ");
 						}
 					}
 //					System.out.println("Key: " + key + " Value: " + currencyObj.get(key));

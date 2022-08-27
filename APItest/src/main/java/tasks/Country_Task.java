@@ -41,10 +41,17 @@ public class Country_Task extends TimerTask {
 				String imageUrl = (String) flag.get("png");
 
 				DatabaseModel model = new DatabaseModel();
-				boolean exists = model.countryExist(currency_code.get("code").toString());
+				String currencyCode = currency_code.get("code").toString();
+				boolean currExists = model.currencyExist(currencyCode);
+				if(currExists==false) {
+					String name = currency_code.get("name").toString();
+					String symbol = currency_code.get("symbol").toString();
+					model.insertCurrency(currencyCode,name , symbol);
+				}
+				boolean exists = model.countryExist(obj.get("alpha2Code").toString());
 				if (exists != true) {
 					model.insertCountry(obj.get("alpha2Code").toString(), obj.get("name").toString(),
-							currency_code.get("code").toString(), lng, lat, imageUrl);
+							currencyCode, lng, lat, imageUrl);
 				}
 			}
 

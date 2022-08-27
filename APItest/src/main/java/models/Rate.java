@@ -1,22 +1,15 @@
 package models;
 
 public class Rate {
-	private String countryCode;
+	private String currencyCode;
 	private Double rateVal;
 	private String date;
+	private long id;
 
-	public Rate(String countryCode, Double rateVal, String date) {
-		this.countryCode = countryCode;
+	public Rate(long id,String currencyCode, Double rateVal, String date) {
+		this.currencyCode = currencyCode;
 		this.rateVal = rateVal;
 		this.date = date;
-	}
-
-	public String getCountryCode() {
-		return countryCode;
-	}
-
-	public void setCountryCode(String countryCode) {
-		this.countryCode = countryCode;
 	}
 
 	public Double getRateVal() {
@@ -34,10 +27,26 @@ public class Rate {
 	public void setDate(String date) {
 		this.date = date;
 	}
+	
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getCurrencyCode() {
+		return currencyCode;
+	}
+
+	public void setCurrencyCode(String currencyCode) {
+		this.currencyCode = currencyCode;
+	}
 
 	@Override
 	public String toString() {
-		return "Rate [countryCode=" + countryCode + ", rateVal=" + rateVal + ", date=" + date + "]";
+		return "Rate [currencyCode=" + currencyCode + ", rateVal=" + rateVal + ", date=" + date + ", id=" + id + "]";
 	}
 
 }
