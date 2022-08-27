@@ -33,8 +33,8 @@ public class Country_Task extends TimerTask {
 				Double lng = (double) 0;
 				Double lat = (double) 0;
 				if (locationArr != null) {
-					lng = (Double) locationArr.get(0);
-					lat = (Double) locationArr.get(1);
+					lng = (Double) locationArr.get(1);
+					lat = (Double) locationArr.get(0);
 				}
 
 				JSONObject flag = (JSONObject) obj.get("flags");
