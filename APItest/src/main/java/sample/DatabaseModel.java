@@ -28,6 +28,8 @@ public class DatabaseModel {
 
 		return con;
 	}
+	
+	// TODO Refactor database to account for possibility of more than one country having the same currency code
 
 	public Country[] getCountries() {
 		if (con == null) {
