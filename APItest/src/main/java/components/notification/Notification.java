@@ -242,7 +242,7 @@ public class Notification extends javax.swing.JComponent {
         panel.setOpaque(false);
 
         lbMessage.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
-        lbMessage.setForeground(new java.awt.Color(38, 38, 38));
+        lbMessage.setForeground(Color.WHITE);
         lbMessage.setText("Message");
 
         lbMessageText.setForeground(new java.awt.Color(127, 127, 127));

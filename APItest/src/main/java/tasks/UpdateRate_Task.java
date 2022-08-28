@@ -31,11 +31,11 @@ public class UpdateRate_Task extends TimerTask {
 				System.out.println("Next Update Time:(unix) " + nextupdateTime + " (date time) " + nextdate);
 				DatabaseModel models = new DatabaseModel();
 				currencyObj.keySet().stream().forEach(key -> {
-					if (key.toString().equals("JMD")) {
+					//if (key.toString().equals("JMD")) {
 						boolean exist = models.currencyExist(key.toString());
-						boolean rateExist = models.rateExist(date);
+						boolean rateExist = models.rateExist(date,key.toString());
 								//Double.valueOf(currencyObj.get(key).toString()));
-						if (exist == true && rateExist!=false) {
+						if (exist == true && rateExist!=true) {
 							models.insertRate(key.toString(), currencyObj.get(key).toString(), date);
 							System.out.println(currencyObj.get(key) + "\n");
 							if (models.runTimeExist(key.toString())) {
@@ -46,7 +46,7 @@ public class UpdateRate_Task extends TimerTask {
 						}else {
 							System.out.println("ERROR: "+key.toString()+" Exists ");
 						}
-					}
+					//}
 //					System.out.println("Key: " + key + " Value: " + currencyObj.get(key));
 				});
 			} else {

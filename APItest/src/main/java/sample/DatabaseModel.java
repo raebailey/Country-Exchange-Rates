@@ -162,10 +162,10 @@ public class DatabaseModel {
 			con = getConnection();
 		}
 		try {
-			PreparedStatement stmt = con.prepareStatement("INSERT INTO Rates VALUES(?,?,?,?)");
-			stmt.setString(2, key);
-			stmt.setDouble(3, Double.valueOf(value));
-			stmt.setString(4, last_update);
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO Rates VALUES(?,?,?)");
+			stmt.setString(1, key);
+			stmt.setDouble(2, Double.valueOf(value));
+			stmt.setString(3, last_update);
 			stmt.execute();
 			stmt.close();
 			con.close();
@@ -199,18 +199,21 @@ public class DatabaseModel {
 
 	}
 
-	public boolean rateExist(String date) {
+	public boolean rateExist(String date,String code) {
 		boolean exist = false;
 		if (con == null) {
 			con = getConnection();
 		}
 
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Rates where last_updated = ? and rate = ?");
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Rates where last_updated = ? AND currency_code = ?");
 			stmt.setString(1, date);
+			stmt.setString(2, code);
 			ResultSet rs = stmt.executeQuery();
 
 			exist = rs.next();
+			
+			
 			rs.close();
 			stmt.close();
 			con.close();

@@ -4,7 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -19,8 +24,16 @@ import components.ScrollBarCustom;
 import components.TableDark;
 import models.Country;
 import sample.DatabaseModel;
+import tasks.Country_Task;
 import tasks.ImageLoader_Task;
+import tasks.UpdateRate_Task;
+
 import javax.swing.JScrollBar;
+import net.miginfocom.swing.MigLayout;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import java.awt.Font;
+import javax.swing.SwingConstants;
 
 public class Home {
 
@@ -29,6 +42,10 @@ public class Home {
 	private JPanel panel;
 	private JPanel panel_2;
 	ImageLoader_Task load;
+	private JPanel panel_1;
+	private JPanel panel_4;
+	private JTextField textField;
+	private JLabel lblNewLabel_1;
 
 	/**
 	 * Launch the application.
@@ -94,6 +111,28 @@ public class Home {
 		flowLayout.setHgap(20);
 		flowLayout.setAlignOnBaseline(true);
 		scrollPane.setViewportView(panel_2);
+		
+		panel_1 = new JPanel();
+		panel_1.setPreferredSize(new Dimension(10, 40));
+		panel.add(panel_1, BorderLayout.NORTH);
+		panel_1.setLayout(new BorderLayout(0, 0));
+		
+		panel_4 = new JPanel();
+		panel_4.setPreferredSize(new Dimension(300, 10));
+		panel_1.add(panel_4, BorderLayout.EAST);
+		panel_4.setBackground(new Color(53, 57, 53));
+		panel_4.setLayout(null);
+		
+		textField = new JTextField();
+		textField.setBounds(0, 0, 210, 40);
+		panel_4.add(textField);
+		textField.setColumns(10);
+		
+		lblNewLabel_1 = new JLabel("Search");
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblNewLabel_1.setBounds(209, 0, 91, 38);
+		panel_4.add(lblNewLabel_1);
 
 		DatabaseModel model = new DatabaseModel();
 		Country[] countries = model.getCountries();
