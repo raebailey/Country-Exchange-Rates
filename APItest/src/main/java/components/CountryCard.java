@@ -5,6 +5,8 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -15,10 +17,13 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 
 import components.CustomButton.ButtonStyle;
+import components.notification.Notification;
 import models.Country;
 import ui.Detail;
 
 import javax.swing.SwingConstants;
+
+import cache.CacheManager;
 
 public class CountryCard extends RoundPanel {
 	/**
@@ -59,6 +64,15 @@ public class CountryCard extends RoundPanel {
 		closeButton.setFocusable(false);
 		closeButton.setRound(20);
 		closeButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		closeButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new Notification(frame,Notification.Type.INFO,Notification.Location.BOTTOM_RIGHT,"pressed "+country.getName(),(Image)CacheManager.getCacheItem(country.getImageUrl())).showNotification();
+				
+			}
+			
+		});
 		layeredPane.add(closeButton);
 		imagelbl = new JLabel();
 		imagelbl.setHorizontalTextPosition(SwingConstants.CENTER);
