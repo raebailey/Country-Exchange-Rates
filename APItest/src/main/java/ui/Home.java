@@ -34,6 +34,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import javax.swing.ScrollPaneConstants;
 
 public class Home {
 
@@ -83,34 +84,30 @@ public class Home {
 		panel.setLayout(new BorderLayout(0, 0));
 		
 		scrollPane = new JScrollPane();
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		ScrollBarCustom scrollBarCustom = new ScrollBarCustom();
 		scrollBarCustom.setUnitIncrement(5);
-		scrollPane.setVerticalScrollBar(scrollBarCustom);
-		ScrollBarCustom scrollBarCustom_1 = new ScrollBarCustom();
-		scrollBarCustom_1.setOrientation(JScrollBar.HORIZONTAL);
-		scrollPane.setHorizontalScrollBar(scrollBarCustom_1);
-		
-		
+		scrollPane.setVerticalScrollBar(scrollBarCustom);;
 		
 
 		panel_2 = new JPanel();
-		panel_2.setPreferredSize(new Dimension(1200, 7000));
+//		panel_2.setPreferredSize(new Dimension(1000, 10));
+		panel_2.setPreferredSize(new Dimension(1200, 12000));
 		
-		scrollPane.setBorder(BorderFactory.createLineBorder(new Color(60, 60, 60), 2));
-		scrollPane.setCorner(JScrollPane.UPPER_RIGHT_CORNER, panel_2);
+//		scrollPane.setCorner(JScrollPane.UPPER_RIGHT_CORNER, panel_2);
 		panel.add(scrollPane);
 		
-		panel_2.setMinimumSize(new Dimension(1280, 10));
-		panel_2.setSize(new Dimension(1280, 0));
-		panel_2.setMaximumSize(new Dimension(1280, 32767));
+//		panel_2.setMinimumSize(new Dimension(1280, 10));
+//		panel_2.setSize(new Dimension(1280, 0));
+//		panel_2.setMaximumSize(new Dimension(1280, 32767));
 		panel_2.setAutoscrolls(true);
-//		panel_2.setPreferredSize(new Dimension(10, 2500));
 		FlowLayout flowLayout = (FlowLayout) panel_2.getLayout();
 		flowLayout.setAlignment(FlowLayout.LEADING);
 		flowLayout.setVgap(20);
 		flowLayout.setHgap(20);
 		flowLayout.setAlignOnBaseline(true);
 		scrollPane.setViewportView(panel_2);
+		
 		
 		panel_1 = new JPanel();
 		panel_1.setPreferredSize(new Dimension(10, 40));

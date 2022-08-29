@@ -6,7 +6,7 @@ public class Rate {
 	private String date;
 	private long id;
 
-	public Rate(long id,String currencyCode, Double rateVal, String date) {
+	public Rate(String currencyCode, Double rateVal, String date) {
 		this.currencyCode = currencyCode;
 		this.rateVal = rateVal;
 		this.date = date;

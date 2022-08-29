@@ -111,10 +111,9 @@ public class DatabaseModel {
 
 			while (rs.next()) {
 				String currency_code = rs.getString("currency_code");
-				long id = rs.getLong("id");
 				Double rate = rs.getDouble("rate");
 				String date = rs.getString("last_updated");
-				rateList.add(new Rate(id,currency_code, rate, date));
+				rateList.add(new Rate(currency_code, rate, date));
 			}
 			rs.close();
 			stmt.close();
