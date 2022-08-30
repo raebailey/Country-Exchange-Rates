@@ -105,12 +105,10 @@ public class Detail {
 				
 			}
 			imageLbl.setIcon(new ImageIcon(image.getScaledInstance(320, 160, java.awt.Image.SCALE_SMOOTH)));
-		} catch (MalformedURLException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			imageLbl.setIcon(new ImageIcon(getClass().getResource("/images/fail.png")));
 		}
 
 		imageLbl.setPreferredSize(new Dimension(320, 180));

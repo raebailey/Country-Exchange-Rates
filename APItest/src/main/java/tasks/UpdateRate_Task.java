@@ -18,7 +18,6 @@ public class UpdateRate_Task extends TimerTask {
 		LocalTime myObj = LocalTime.now();
 
 		System.out.println("\n\n<<<<Ran at " + myObj + ">>>>\n\n");
-		// TODO Auto-generated method stub
 		try {
 			JSONObject ratesObj = Service.getRate();
 			if (ratesObj.get("result").toString().equalsIgnoreCase("success")) {
@@ -31,10 +30,8 @@ public class UpdateRate_Task extends TimerTask {
 				System.out.println("Next Update Time:(unix) " + nextupdateTime + " (date time) " + nextdate);
 				DatabaseModel models = new DatabaseModel();
 				currencyObj.keySet().stream().forEach(key -> {
-					//if (key.toString().equals("JMD")) {
 						boolean exist = models.currencyExist(key.toString());
 						boolean rateExist = models.rateExist(date,key.toString());
-								//Double.valueOf(currencyObj.get(key).toString()));
 						if (exist == true && rateExist!=true) {
 							models.insertRate(key.toString(), currencyObj.get(key).toString(), date);
 							System.out.println(currencyObj.get(key) + "\n");
@@ -44,10 +41,8 @@ public class UpdateRate_Task extends TimerTask {
 								models.insertRunTime(key.toString(), nextdate);
 							}
 						}else {
-							System.out.println("ERROR: "+key.toString()+" Exists ");
+							System.out.println(key.toString()+" is up to date.");
 						}
-					//}
-//					System.out.println("Key: " + key + " Value: " + currencyObj.get(key));
 				});
 			} else {
 				if (ratesObj.get("result") == "error") {

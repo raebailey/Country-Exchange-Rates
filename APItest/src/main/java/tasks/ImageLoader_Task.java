@@ -58,7 +58,7 @@ public class ImageLoader_Task extends Thread implements Runnable {
 
 				label.setIcon(new ImageIcon(image.getScaledInstance(330, 111, java.awt.Image.SCALE_SMOOTH)));
 			} catch (Exception ex) {
-				label.setIcon(new ImageIcon(getClass().getClassLoader().getResource("/images/fail image.png")));
+				label.setIcon(new ImageIcon(getClass().getResource("/images/fail.png")));
 			}
 		}
 

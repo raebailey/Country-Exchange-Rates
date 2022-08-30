@@ -29,7 +29,6 @@ public class DatabaseModel {
 		return con;
 	}
 	
-	// TODO Refactor database to account for possibility of more than one country having the same currency code
 
 	public Country[] getCountries() {
 		if (con == null) {
@@ -129,7 +128,6 @@ public class DatabaseModel {
 		return rateList.toArray(new Rate[rateList.size()]);
 	}
 	
-	//TODO ADD FETCH CURRENCIES METHOD
 
 	public void insertCountry(String code, String name, String currency_code, Double longitude, Double latitude,
 			String image) {
