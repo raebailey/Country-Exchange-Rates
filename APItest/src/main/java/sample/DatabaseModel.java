@@ -36,7 +36,8 @@ public class DatabaseModel {
 		}
 		ArrayList<Country> countries = new ArrayList<Country>();
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Country;");
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Country  WHERE isactive = ?;");
+			stmt.setBoolean(1, true);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				String country_code = rs.getString("country_code");

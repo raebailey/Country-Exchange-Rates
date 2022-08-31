@@ -23,7 +23,8 @@ public class APItest {
 		long hours = (difference / (1000 * 60 * 60)) % 24;
 		long minutes = (difference / (1000 * 60)) % 60;
 		long seconds = (difference / 1000) % 60;
-		timer.schedule(task, now, 86400000);
+		//24 hr :  86400000
+		timer.schedule(task, now,1800000);
 		System.out.println("Hours until execution time:" + difference + "\n" + hours + "  hours " + minutes
 				+ " minutes " + seconds + " seconds ");
 
