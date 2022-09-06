@@ -1,6 +1,9 @@
 package sample;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -30,6 +33,16 @@ public class APItest {
 
 		new Timer().schedule(new Country_Task(), new Date());
 
+	}
+	
+	/**
+	 * Gets the local time in 24 hour format.
+	 * @return String
+	 */
+	public static String localTime() {
+		 DateTimeFormatter dtf = DateTimeFormatter.ofPattern(" hh:mm a");
+		 String time = dtf.format(LocalDateTime.now()).toString();
+		return time;
 	}
 
 }

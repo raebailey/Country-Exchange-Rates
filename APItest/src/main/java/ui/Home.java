@@ -26,6 +26,7 @@ import models.Country;
 import sample.DatabaseModel;
 import tasks.Country_Task;
 import tasks.ImageLoader_Task;
+import tasks.SearchTask;
 import tasks.UpdateRate_Task;
 
 import javax.swing.JScrollBar;
@@ -35,6 +36,9 @@ import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.ScrollPaneConstants;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.Cursor;
 
 public class Home {
 
@@ -42,7 +46,8 @@ public class Home {
 	private JScrollPane scrollPane;
 	private JPanel panel;
 	private JPanel panel_2;
-	ImageLoader_Task load;
+	private ImageLoader_Task load;
+	private SearchTask search;
 	private JPanel panel_1;
 	private JPanel panel_4;
 	private JTextField textField;
@@ -52,14 +57,18 @@ public class Home {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		Home home = new Home();
+		run(home);
+
+	}
+	
+	public static void run(Home window) {
 		try {
-			Home window = new Home();
 			window.frame.setVisible(true);
-			window.load.run();
+			window.load.start();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	/**
@@ -87,7 +96,7 @@ public class Home {
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		ScrollBarCustom scrollBarCustom = new ScrollBarCustom();
 		scrollBarCustom.setUnitIncrement(5);
-		scrollPane.setVerticalScrollBar(scrollBarCustom);;
+		scrollPane.setVerticalScrollBar(scrollBarCustom);
 		
 
 		panel_2 = new JPanel();
@@ -126,6 +135,22 @@ public class Home {
 		textField.setColumns(10);
 		
 		lblNewLabel_1 = new JLabel("Search");
+		lblNewLabel_1.setForeground(Color.WHITE);
+		lblNewLabel_1.setBackground(new Color(0, 150, 255));
+		lblNewLabel_1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblNewLabel_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.out.println("pressed");
+				String value = textField.getText().trim();
+				if(!value.isEmpty()) {
+					search.setSearchTerm(value);
+					search.run();
+				}
+				
+				
+			}
+		});
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblNewLabel_1.setBounds(209, 0, 91, 38);
@@ -135,14 +160,26 @@ public class Home {
 		Country[] countries = model.getCountries();
 		ArrayList<JLabel> cardArr = new ArrayList<JLabel>();
 		ArrayList<String> urlArr = new ArrayList<String>();
+		ArrayList<CountryCard> ccArr = new ArrayList<CountryCard>();
 		for (Country country : countries) {
 			CountryCard card = new CountryCard(country,frame);
 			cardArr.add(card.getImagelbl());
 			urlArr.add(country.getImageUrl());
+			ccArr.add(card);
 			panel_2.add(card);
 		}
 		JLabel[] cArr = new JLabel[cardArr.size()];
 		String[] uArr = new String[urlArr.size()];
 		load = new ImageLoader_Task(cardArr.toArray(cArr), urlArr.toArray(uArr));
+		search = new SearchTask(ccArr.toArray(new CountryCard[ccArr.size()]),panel_2);
 	}
+
+	public JFrame getFrame() {
+		return frame;
+	}
+
+	public ImageLoader_Task getLoad() {
+		return load;
+	}
+	
 }

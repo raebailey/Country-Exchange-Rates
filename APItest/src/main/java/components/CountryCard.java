@@ -126,8 +126,6 @@ public class CountryCard extends RoundPanel {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
-				System.out.println(country);
 				frame.dispose();
 				new Detail(country);
 				

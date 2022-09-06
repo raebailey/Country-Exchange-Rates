@@ -8,6 +8,8 @@ import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -77,7 +79,6 @@ public class Detail {
 		JLabel imageLbl = new JLabel("");
 
 		DatabaseModel model = new DatabaseModel();
-//		Country country = model.fetchCountry("JMD");
 		String imageUrl = country.getImageUrl();
 		String default_url = "https://www.freeiconspng.com/uploads/no-image-icon-6.png";
 		URL url;
@@ -90,10 +91,6 @@ public class Detail {
 			}else {
 				image = newImage;
 			}
-			
-			
-			
-			
 			if (imageUrl != null) {
 				Image newImage1 = (Image)CacheManager.getCacheItem(imageUrl);
 				if(newImage1==null) {
@@ -187,11 +184,6 @@ public class Detail {
 		panel_3.add(lblNewLabel_4);
 
 		JLabel rateEstLbl = new JLabel("");
-
-		// if (imageUrl != null) {
-		// url = new URL(imageUrl);
-		// image = ImageIO.read(url);
-		// }
 
 		try {
 			url = new URL("https://img.icons8.com/emoji/48/000000/red-triangle-pointed-down-emoji.png");
@@ -293,6 +285,23 @@ public class Detail {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		btnNewButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				 new Thread() {
+					@Override
+					public void run() {
+						Home window = new Home();
+						Home.run(window);
+					}
+				}.start();
+				
+			}
+			
+		});
 
 		heading.add(btnNewButton, BorderLayout.WEST);
 
