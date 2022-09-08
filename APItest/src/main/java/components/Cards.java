@@ -1,10 +1,13 @@
 package components;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
@@ -12,23 +15,25 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
-
-import models.ApiNotification;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
 import javax.swing.border.MatteBorder;
-import java.awt.Cursor;
+
+import components.CustomButton.ButtonStyle;
+import interfaces.CustomAnimation;
+import models.ApiNotification;
+import ui.ApiUI;
+
+import java.awt.FlowLayout;
 
 public class Cards extends JPanel {
+	private ApiUI ui;
 	private ArrayList<ApiNotification> notifs;
 	private JLabel datelabl;
 	private JLabel messagelbl;
 	private JLabel titlelbl;
 	private CustomLabel counterlbl;
 	private JPanel panel_2;
+	private CustomAnimation animation;
 
 	/**
 	 * Create the panel.
@@ -39,7 +44,7 @@ public class Cards extends JPanel {
 		notifs = new ArrayList<>();
 		notifs.add(notif);
 		init();
-
+		animation = new CustomAnimation(this);
 	}
 
 	public JLabel getDatelabl() {
@@ -86,6 +91,31 @@ public class Cards extends JPanel {
 		this.notifs = notifs;
 	}
 
+	public CustomAnimation getAnimation() {
+		return animation;
+	}
+
+	public void setAnimation(CustomAnimation animation) {
+		this.animation = animation;
+	}
+	
+	private Cards self() {
+		return this;
+	}
+	
+	
+
+	public ApiUI getUi() {
+		return ui;
+	}
+
+	public void setUi(ApiUI ui) {
+		this.ui = ui;
+	}
+
+	/**
+	 * Initializes components.
+	 */
 	private void init() {
 		ApiNotification notif = getNotif();
 		setPreferredSize(new Dimension(328, 100));
@@ -111,33 +141,73 @@ public class Cards extends JPanel {
 		panel_1.setPreferredSize(new Dimension(10, 25));
 		panel_1.setOpaque(false);
 		add(panel_1, BorderLayout.NORTH);
-		panel_1.setLayout(null);
+		
+		JPanel mainHeaderlbl = new JPanel();
+		mainHeaderlbl.setLocation(0, 0);
+		mainHeaderlbl.setSize(194, 25);
+		mainHeaderlbl.setOpaque(false);
+		FlowLayout fl_mainHeaderlbl = new FlowLayout(FlowLayout.LEFT, 10, 5);
+		fl_mainHeaderlbl.setAlignOnBaseline(true);
+		mainHeaderlbl.setLayout(fl_mainHeaderlbl);
+		panel_1.add(mainHeaderlbl);
 
 		titlelbl = new JLabel(notif.getType().getTitle());
-		titlelbl.setBounds(5, 5, 146, 19);
+		titlelbl.setForeground(new Color(255, 255, 255));
 		titlelbl.setFont(new Font("SansSerif", Font.BOLD, 14));
 		Image image = notif.getType().getPath();
 		if (image != null) {
 			titlelbl.setIcon(new ImageIcon(image));
 		}
-		panel_1.add(titlelbl);
+//		panel_1.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
+		panel_1.setLayout(null);
+		mainHeaderlbl.add(titlelbl);
 
 		datelabl = new JLabel(notif.getLastexec());
-		datelabl.setBounds(270, 7, 55, 14);
-		panel_1.add(datelabl);
+		datelabl.setFont(new Font("SansSerif", Font.PLAIN, 11));
+		datelabl.setForeground(new Color(255, 255, 255));
+		mainHeaderlbl.add(datelabl);
+		
+		JPanel panel_3 = new JPanel();
+		panel_3.setOpaque(false);
+		panel_3.setBounds(308, 6, 12, 12);
+		panel_1.add(panel_3);
+		panel_3.setLayout(new BorderLayout(0, 0));
+		
+		
+		
+		
+		CustomButton closeButton = new CustomButton();
+		closeButton.setIcon(new ImageIcon(Cards.class.getResource("/images/close_1.png")));
+		closeButton.setBounds(310, 0, 20, 20);
+
+		closeButton.setFont(new Font("SansSerif", Font.BOLD, 12));
+		closeButton.setStyle(ButtonStyle.CLOSE);
+		closeButton.setFocusable(false);
+		closeButton.setRound(20);
+		closeButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				self().remove(self());
+				ui.getPanel_3().remove(self());
+				ui.getItems().remove(self());
+			}
+			
+		});
+		panel_3.add(closeButton);
 
 		panel_2 = new JPanel();
 		panel_2.setOpaque(false);
-		panel_2.setPreferredSize(new Dimension(30, 10));
+		panel_2.setPreferredSize(new Dimension(35, 10));
 		add(panel_2, BorderLayout.EAST);
 		panel_2.setLayout(null);
 
 		counterlbl = new CustomLabel();
-		counterlbl.setFont(new Font("SansSerif", Font.PLAIN, 13));
+		counterlbl.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		counterlbl.setHorizontalTextPosition(SwingConstants.CENTER);
 		counterlbl.setHorizontalAlignment(SwingConstants.CENTER);
-		counterlbl.setBounds(5, 25, 24, 24);
-		counterlbl.setPreferredSize(new Dimension(20, 20));
+		counterlbl.setBounds(5, 25, 28, 28);
+		counterlbl.setPreferredSize(new Dimension(32, 32));
 		counterlbl.setRound(100);
 		counterlbl.setText(String.valueOf(notifs.size()));
 		counterlbl.setVisible(false);
@@ -146,8 +216,13 @@ public class Cards extends JPanel {
 			counterlbl.setVisible(true);
 		}
 		panel_2.add(counterlbl);
+		
+		
 	}
 
+	/**
+	 * Refreshes current instance of the card element to show latest changes.
+	 */
 	public void refresh() {
 		ApiNotification notif = getNotif();
 		Image image = notif.getType().getPath();

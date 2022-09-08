@@ -9,14 +9,14 @@ import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.JLabel;
 
-public class CustomLabel extends JLabel{
+public class CustomLabel extends JLabel {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private int round;
 	private String text;
-	
+
 	public CustomLabel() {
 		this.text = " ";
 		this.round = 0;
@@ -32,7 +32,8 @@ public class CustomLabel extends JLabel{
 		int width = getWidth();
 		int height = getHeight();
 		Area area = new Area(new RoundRectangle2D.Double(x, y, width, height, round, round));
-		g2.setColor(new Color(255,0,0));
+		g2.setColor(new Color(35, 64, 153));
+//		R:35 G:64 B:153
 		g2.fill(area);
 		// area.subtract(new Area(new RoundRectangle2D.Double(x + 1, y + 1, width - 2,
 		// height - 2, round, round)));
@@ -40,7 +41,7 @@ public class CustomLabel extends JLabel{
 		g2.dispose();
 		super.paintComponent(graphic);
 	}
-	
+
 	public int getRound() {
 		return round;
 	}
@@ -50,7 +51,4 @@ public class CustomLabel extends JLabel{
 		repaint();
 	}
 
-	
-	
-	
 }

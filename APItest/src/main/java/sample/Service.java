@@ -11,7 +11,11 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 public class Service {
-
+/**
+ * Fetches rate information from rates api.
+ * @return JSONObject
+ * @throws Exception
+ */
 	public static JSONObject getRate() throws Exception {
 		URL url = new URL("https://v6.exchangerate-api.com/v6/3b19aa14e7bde0f41741099a/latest/USD");
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -40,6 +44,11 @@ public class Service {
 
 	}
 
+	/**
+	 * Fetches country information from country api.
+	 * @return JSONObject
+	 * @throws Exception
+	 */
 	public static JSONArray getCountry() throws Exception {
 		URL url = new URL("https://restcountries.com/v2/all");
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();

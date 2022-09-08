@@ -22,6 +22,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -41,6 +42,7 @@ public class ApiUI {
 	private JFrame frmDataView;
 	private JPanel panel_3;
 	private ArrayList<Cards> items = new ArrayList<>();
+	Cards c;
 
 	/**
 	 * Launch the application.
@@ -66,6 +68,15 @@ public class ApiUI {
 
 	public void setItems(ArrayList<Cards> items) {
 		this.items = items;
+	}
+
+	
+	public JPanel getPanel_3() {
+		return panel_3;
+	}
+
+	public void setPanel_3(JPanel panel_3) {
+		this.panel_3 = panel_3;
 	}
 
 	/**
@@ -157,19 +168,23 @@ public class ApiUI {
 
 			@Override
 			public void componentAdded(ContainerEvent e) {
-				panel_3.repaint();
+				//c.getAnimation().start();
 				panel_3.revalidate();
-				
 			}
 
 			@Override
 			public void componentRemoved(ContainerEvent e) {
 				// TODO Auto-generated method stub
+				System.out.println("removed:");
+				panel_3.repaint();
+				panel_3.revalidate();
 				
 			}
 			
 		});
 		scrollPane.setViewportView(panel_3);
+		
+		
 	}
 
 	/**
@@ -207,13 +222,25 @@ public class ApiUI {
 		new Timer().schedule(country_task, new Date());
 	}
 
+	/**
+	 * Creates notification 
+	 * @param message The content which the notification contains.
+	 * @param dateTime The time when the notification was generated.
+	 * @param type The type of notification generated.
+	 */
 	public void addMessage(String message, String dateTime,MessageTypes type) {
 		ApiNotification notification = new ApiNotification(message, dateTime,type);
 		createCard(notification);
 	}
 
+	/**
+	 * Creates card for new notification type and adds existing types
+	 * to card that matches.
+	 * @param ApiNotification notification 
+	 */
 	private void createCard(ApiNotification notification) {
 		Cards card = new Cards(notification);
+		c = card;
 		if (items.size() > 0) {
 			for (Cards c : items) {
 				if (c.getNotif().getType().equals(notification.getType())) {
@@ -225,7 +252,9 @@ public class ApiUI {
 		} 
 			
 			items.add(card);
+			card.setUi(this);
 			panel_3.add(card);
+			
 
 		
 	}
