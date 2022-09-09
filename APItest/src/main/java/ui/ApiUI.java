@@ -212,7 +212,7 @@ public class ApiUI {
 		long seconds = (difference / 1000) % 60;
 		// 24 hr : 86400000
 	   // 30 minutes: 1800000
-//		timer.schedule(task, now, 300000);
+		timer.schedule(task, now, 300000);
 		System.out.println("Hours until execution time:" + difference + "\n" + hours + "  hours " + minutes
 				+ " minutes " + seconds + " seconds ");
 

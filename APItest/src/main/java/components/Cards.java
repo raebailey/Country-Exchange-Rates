@@ -8,6 +8,8 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
@@ -18,6 +20,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
+import org.jdesktop.animation.timing.Animator;
+import org.jdesktop.animation.timing.TimingTargetAdapter;
+
 import components.CustomButton.ButtonStyle;
 import interfaces.CustomAnimation;
 import models.ApiNotification;
@@ -25,7 +30,7 @@ import ui.ApiUI;
 
 import java.awt.FlowLayout;
 
-public class Cards extends JPanel {
+public class Cards extends RoundPanel {
 	private ApiUI ui;
 	private ArrayList<ApiNotification> notifs;
 	private JLabel datelabl;
@@ -34,6 +39,7 @@ public class Cards extends JPanel {
 	private CustomLabel counterlbl;
 	private JPanel panel_2;
 	private CustomAnimation animation;
+	private JPanel panel_4;
 
 	/**
 	 * Create the panel.
@@ -44,7 +50,10 @@ public class Cards extends JPanel {
 		notifs = new ArrayList<>();
 		notifs.add(notif);
 		init();
-		animation = new CustomAnimation(this);
+//		animation = new CustomAnimation(this);
+		
+		
+		
 	}
 
 	public JLabel getDatelabl() {
@@ -98,12 +107,10 @@ public class Cards extends JPanel {
 	public void setAnimation(CustomAnimation animation) {
 		this.animation = animation;
 	}
-	
+
 	private Cards self() {
 		return this;
 	}
-	
-	
 
 	public ApiUI getUi() {
 		return ui;
@@ -141,7 +148,7 @@ public class Cards extends JPanel {
 		panel_1.setPreferredSize(new Dimension(10, 25));
 		panel_1.setOpaque(false);
 		add(panel_1, BorderLayout.NORTH);
-		
+
 		JPanel mainHeaderlbl = new JPanel();
 		mainHeaderlbl.setLocation(0, 0);
 		mainHeaderlbl.setSize(194, 25);
@@ -166,16 +173,13 @@ public class Cards extends JPanel {
 		datelabl.setFont(new Font("SansSerif", Font.PLAIN, 11));
 		datelabl.setForeground(new Color(255, 255, 255));
 		mainHeaderlbl.add(datelabl);
-		
+
 		JPanel panel_3 = new JPanel();
 		panel_3.setOpaque(false);
 		panel_3.setBounds(308, 6, 12, 12);
 		panel_1.add(panel_3);
 		panel_3.setLayout(new BorderLayout(0, 0));
-		
-		
-		
-		
+
 		CustomButton closeButton = new CustomButton();
 		closeButton.setIcon(new ImageIcon(Cards.class.getResource("/images/close_1.png")));
 		closeButton.setBounds(310, 0, 20, 20);
@@ -188,11 +192,10 @@ public class Cards extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				self().remove(self());
 				ui.getPanel_3().remove(self());
 				ui.getItems().remove(self());
 			}
-			
+
 		});
 		panel_3.add(closeButton);
 
@@ -217,7 +220,56 @@ public class Cards extends JPanel {
 		}
 		panel_2.add(counterlbl);
 		
-		
+		panel_4 = new JPanel();
+		panel_4.setOpaque(false);
+		FlowLayout flowLayout = (FlowLayout) panel_4.getLayout();
+		flowLayout.setAlignOnBaseline(true);
+		add(panel_4, BorderLayout.SOUTH);
+		RoundPanel subbar = new RoundPanel();
+		subbar.setBackground(new Color(245, 245, 245,30));
+		subbar.setPreferredSize(new Dimension(100, 2));
+		subbar.setSize(new Dimension(200, 0));
+		// TODO modularize code for animation
+		Animator ani = new Animator(3000);
+		ani.setResolution(1);
+		ani.addTarget(new TimingTargetAdapter() {
+			@Override
+			public void timingEvent(float fraction) {
+				
+				subbar.repaint();
+			}
+		});
+		subbar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent me) {
+				if (ani.isRunning()) {
+					ani.stop();
+				}
+				subbar.setBackground(new Color(245, 245, 245));
+				ani.start();
+			}
+
+			@Override
+			public void mouseExited(MouseEvent me) {
+				if (ani.isRunning()) {
+					ani.stop();
+				}
+				subbar.setBackground(new Color(245, 245, 245,30));
+				ani.start();
+			}
+
+			@Override
+			public void mousePressed(MouseEvent me) {
+//				animationPress.start(currentStyle.background, getStyle().backgroundPress);
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent me) {
+//				animationPress.start(currentStyle.background, getStyle().background);
+			}
+		});
+		panel_4.add(subbar);
+
 	}
 
 	/**
