@@ -7,6 +7,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.Window.Type;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
 import java.io.IOException;
@@ -22,7 +24,6 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -42,6 +43,10 @@ public class ApiUI {
 	private JFrame frmDataView;
 	private JPanel panel_3;
 	private ArrayList<Cards> items = new ArrayList<>();
+	private UpdateRate_Task rateTask;
+	private Country_Task countryTask;
+	private Timer rateTimer;
+	private Timer countryTimer;
 	Cards c;
 
 	/**
@@ -53,7 +58,7 @@ public class ApiUI {
 		try {
 			ApiUI window = new ApiUI();
 			window.frmDataView.setVisible(true);
-			window.run();
+//			window.run();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -84,6 +89,7 @@ public class ApiUI {
 	 */
 	public ApiUI() {
 		initialize();
+		
 	}
 
 	/**
@@ -101,6 +107,7 @@ public class ApiUI {
 		frmDataView.getContentPane().setLayout(null);
 
 		JPanel panel = new JPanel();
+		panel.setOpaque(false);
 		panel.setBounds(0, 0, 339, 524);
 		frmDataView.getContentPane().add(panel);
 		panel.setLayout(new BorderLayout(0, 0));
@@ -121,6 +128,8 @@ public class ApiUI {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
 
 		CustomButton btnNewButton_1 = new CustomButton();
 		btnNewButton_1.setPreferredSize(new Dimension(51, 23));
@@ -139,6 +148,28 @@ public class ApiUI {
 
 		btnNewButton_1.setFocusable(false);
 		btnNewButton_1.setRound(8);
+		btnNewButton_1.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				rateTask.cancel();
+				countryTask.cancel();
+				btnNewButton.setEnabled(true);
+				btnNewButton_1.setEnabled(false);
+			}
+			
+		});
+		
+		btnNewButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				run();
+				btnNewButton.setEnabled(false);
+				btnNewButton_1.setEnabled(true);
+			}
+			
+		});
 		panel_1.add(btnNewButton_1);
 
 		btnNewButton.setFocusable(false);
@@ -191,17 +222,18 @@ public class ApiUI {
 	 * Begins timer scheduler to run update rate task and country task
 	 */
 	private void run() {
-		Timer timer = new Timer();
-		TimerTask task;
-
-		UpdateRate_Task rateTask = new UpdateRate_Task();
+		rateTimer = new Timer();
+		rateTask = new UpdateRate_Task();
 		rateTask.setFrame(this);
-		task = rateTask;
+		
+		countryTimer = new Timer();
+		countryTask = new Country_Task();
+		countryTask.setFrame(this);
+		
 		Date nextTime = new DatabaseModel().getRunTime();
 		try {
 			new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse("16/08/2022 21:05:00");
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -212,14 +244,13 @@ public class ApiUI {
 		long seconds = (difference / 1000) % 60;
 		// 24 hr : 86400000
 	   // 30 minutes: 1800000
-		timer.schedule(task, now, 300000);
+		rateTimer.schedule(rateTask, now, 300000);
 		System.out.println("Hours until execution time:" + difference + "\n" + hours + "  hours " + minutes
 				+ " minutes " + seconds + " seconds ");
 
-		Country_Task country_task = new Country_Task();
-		country_task.setFrame(this);
 		
-		new Timer().schedule(country_task, new Date());
+		
+		countryTimer.schedule(countryTask, new Date());
 	}
 
 	/**
@@ -251,7 +282,7 @@ public class ApiUI {
 			}
 		} 
 			
-			items.add(card);
+			items.add(0,card);
 			card.setUi(this);
 			panel_3.add(card);
 			

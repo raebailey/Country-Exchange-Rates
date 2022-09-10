@@ -10,7 +10,7 @@ import javax.swing.ImageIcon;
 public enum MessageTypes {
 		NOUPDATE("No Update","/images/update.png"),
 		NEWCOUNTRY("New Country"),
-		ERROR("Error"),
+		ERROR("Error","/images/warning.png"),
 		NEWRATE("Rate"),
 		REJECT("Reject","/images/reject.png");
 //		SECONDARY(new Color(203, 209, 219), new Color(58, 70, 81), new Color(81, 92, 108), new Color(230, 239, 255)),

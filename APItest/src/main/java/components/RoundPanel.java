@@ -8,6 +8,11 @@ import java.awt.RenderingHints;
 import javax.swing.JPanel;
 
 public class RoundPanel extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8657448092213436324L;
+
 	public RoundPanel() {
 		setOpaque(false);
 		setBackground(new Color(14, 14, 14));

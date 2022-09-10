@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -12,25 +13,24 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.MatteBorder;
 
-import org.jdesktop.animation.timing.Animator;
-import org.jdesktop.animation.timing.TimingTargetAdapter;
 
 import components.CustomButton.ButtonStyle;
-import interfaces.CustomAnimation;
 import models.ApiNotification;
 import ui.ApiUI;
 
-import java.awt.FlowLayout;
-
 public class Cards extends RoundPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3852771081179394052L;
 	private ApiUI ui;
 	private ArrayList<ApiNotification> notifs;
 	private JLabel datelabl;
@@ -38,22 +38,19 @@ public class Cards extends RoundPanel {
 	private JLabel titlelbl;
 	private CustomLabel counterlbl;
 	private JPanel panel_2;
-	private CustomAnimation animation;
 	private JPanel panel_4;
+	private RoundPanel subbar;
+	private JLabel messagelbl1;
+	private JLabel messagelbl2;
+	private boolean cardState = false;
 
 	/**
 	 * Create the panel.
 	 */
 	public Cards(ApiNotification notif) {
-		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		setMaximumSize(new Dimension(328, 100));
 		notifs = new ArrayList<>();
 		notifs.add(notif);
 		init();
-//		animation = new CustomAnimation(this);
-		
-		
-		
 	}
 
 	public JLabel getDatelabl() {
@@ -100,14 +97,6 @@ public class Cards extends RoundPanel {
 		this.notifs = notifs;
 	}
 
-	public CustomAnimation getAnimation() {
-		return animation;
-	}
-
-	public void setAnimation(CustomAnimation animation) {
-		this.animation = animation;
-	}
-
 	private Cards self() {
 		return this;
 	}
@@ -120,11 +109,21 @@ public class Cards extends RoundPanel {
 		this.ui = ui;
 	}
 
+	public RoundPanel getSubbar() {
+		return subbar;
+	}
+
+	public void setSubbar(RoundPanel subbar) {
+		this.subbar = subbar;
+	}
+
 	/**
 	 * Initializes components.
 	 */
 	private void init() {
 		ApiNotification notif = getNotif();
+		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		setMaximumSize(new Dimension(328, 100));
 		setPreferredSize(new Dimension(328, 100));
 		setLayout(new BorderLayout(0, 0));
 		setBorder(new MatteBorder(0, 0, 1, 0, (Color) new Color(0, 150, 255)));
@@ -135,14 +134,16 @@ public class Cards extends RoundPanel {
 		add(panel, BorderLayout.CENTER);
 
 		messagelbl = new JLabel(notif.getMessage());
-		GroupLayout gl_panel = new GroupLayout(panel);
-		gl_panel.setHorizontalGroup(
-				gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel.createSequentialGroup()
-						.addContainerGap().addComponent(messagelbl).addContainerGap(231, Short.MAX_VALUE)));
-		gl_panel.setVerticalGroup(
-				gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel.createSequentialGroup()
-						.addContainerGap().addComponent(messagelbl).addContainerGap(45, Short.MAX_VALUE)));
-		panel.setLayout(gl_panel);
+
+		messagelbl1 = new JLabel("New label");
+		messagelbl1.setForeground(new Color(255, 255, 255));
+
+		messagelbl2 = new JLabel("New label");
+		messagelbl2.setForeground(new Color(255, 255, 255));
+		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+		panel.add(messagelbl);
+		panel.add(messagelbl1);
+		panel.add(messagelbl2);
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setPreferredSize(new Dimension(10, 25));
@@ -153,7 +154,7 @@ public class Cards extends RoundPanel {
 		mainHeaderlbl.setLocation(0, 0);
 		mainHeaderlbl.setSize(194, 25);
 		mainHeaderlbl.setOpaque(false);
-		FlowLayout fl_mainHeaderlbl = new FlowLayout(FlowLayout.LEFT, 10, 5);
+		FlowLayout fl_mainHeaderlbl = new FlowLayout(FlowLayout.LEFT, 5, 5);
 		fl_mainHeaderlbl.setAlignOnBaseline(true);
 		mainHeaderlbl.setLayout(fl_mainHeaderlbl);
 		panel_1.add(mainHeaderlbl);
@@ -165,7 +166,7 @@ public class Cards extends RoundPanel {
 		if (image != null) {
 			titlelbl.setIcon(new ImageIcon(image));
 		}
-//		panel_1.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
+
 		panel_1.setLayout(null);
 		mainHeaderlbl.add(titlelbl);
 
@@ -219,53 +220,49 @@ public class Cards extends RoundPanel {
 			counterlbl.setVisible(true);
 		}
 		panel_2.add(counterlbl);
-		
+
 		panel_4 = new JPanel();
 		panel_4.setOpaque(false);
 		FlowLayout flowLayout = (FlowLayout) panel_4.getLayout();
 		flowLayout.setAlignOnBaseline(true);
 		add(panel_4, BorderLayout.SOUTH);
-		RoundPanel subbar = new RoundPanel();
-		subbar.setBackground(new Color(245, 245, 245,30));
+		subbar = new RoundPanel();
+		subbar.setBackground(new Color(245, 245, 245, 30));
 		subbar.setPreferredSize(new Dimension(100, 2));
 		subbar.setSize(new Dimension(200, 0));
-		// TODO modularize code for animation
-		Animator ani = new Animator(3000);
-		ani.setResolution(1);
-		ani.addTarget(new TimingTargetAdapter() {
-			@Override
-			public void timingEvent(float fraction) {
-				
-				subbar.repaint();
-			}
-		});
-		subbar.addMouseListener(new MouseAdapter() {
+		subbar.setVisible(false);
+		self().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent me) {
-				if (ani.isRunning()) {
-					ani.stop();
-				}
+				subbar.setVisible(true);
 				subbar.setBackground(new Color(245, 245, 245));
-				ani.start();
 			}
 
 			@Override
 			public void mouseExited(MouseEvent me) {
-				if (ani.isRunning()) {
-					ani.stop();
-				}
-				subbar.setBackground(new Color(245, 245, 245,30));
-				ani.start();
+				subbar.setVisible(false);
+				subbar.setBackground(new Color(245, 245, 245, 30));
 			}
 
 			@Override
 			public void mousePressed(MouseEvent me) {
-//				animationPress.start(currentStyle.background, getStyle().backgroundPress);
+				if (SwingUtilities.isLeftMouseButton(me)) {
+					if (cardState) {
+						setMaximumSize(new Dimension(328, 100));
+						setPreferredSize(new Dimension(328, 100));
+						cardState = false;
+					} else {
+						setMaximumSize(new Dimension(328, 150));
+						setPreferredSize(new Dimension(328, 150));
+						cardState = true;
+					}
+					repaint();
+					revalidate();
+				}
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent me) {
-//				animationPress.start(currentStyle.background, getStyle().background);
 			}
 		});
 		panel_4.add(subbar);
@@ -294,4 +291,5 @@ public class Cards extends RoundPanel {
 		}
 
 	}
+
 }
