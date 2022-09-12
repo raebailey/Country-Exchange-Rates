@@ -21,10 +21,10 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.MatteBorder;
 
-
 import components.CustomButton.ButtonStyle;
 import models.ApiNotification;
 import ui.ApiUI;
+import java.awt.Component;
 
 public class Cards extends RoundPanel {
 	/**
@@ -37,18 +37,21 @@ public class Cards extends RoundPanel {
 	private JLabel messagelbl;
 	private JLabel titlelbl;
 	private CustomLabel counterlbl;
-	private JPanel panel_2;
-	private JPanel panel_4;
+	private JPanel subbarBody;
+	private JPanel messageBody;
+	private JPanel titleBody;
 	private RoundPanel subbar;
-	private JLabel messagelbl1;
-	private JLabel messagelbl2;
+	private CardsItem cardsItem_1;
+	private CardsItem cardsItem;
 	private boolean cardState = false;
+	private ArrayList<CardsItem> cardItems;
 
 	/**
 	 * Create the panel.
 	 */
 	public Cards(ApiNotification notif) {
 		notifs = new ArrayList<>();
+		cardItems = new ArrayList<>();
 		notifs.add(notif);
 		init();
 	}
@@ -116,10 +119,13 @@ public class Cards extends RoundPanel {
 	public void setSubbar(RoundPanel subbar) {
 		this.subbar = subbar;
 	}
+	
+	
 
 	/**
 	 * Initializes components.
 	 */
+
 	private void init() {
 		ApiNotification notif = getNotif();
 		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -129,26 +135,24 @@ public class Cards extends RoundPanel {
 		setBorder(new MatteBorder(0, 0, 1, 0, (Color) new Color(0, 150, 255)));
 		setBackground(new Color(15, 15, 15));
 
-		JPanel panel = new JPanel();
-		panel.setOpaque(false);
-		add(panel, BorderLayout.CENTER);
+		messageBody = new JPanel();
+		messageBody.setOpaque(false);
+		add(messageBody, BorderLayout.CENTER);
 
-		messagelbl = new JLabel(notif.getMessage());
+		messageBody.setLayout(new BoxLayout(messageBody, BoxLayout.Y_AXIS));
 
-		messagelbl1 = new JLabel("New label");
-		messagelbl1.setForeground(new Color(255, 255, 255));
+		cardsItem = new CardsItem(notif.getMessage());
+		cardsItem.setAlignmentX(Component.LEFT_ALIGNMENT);
+		messageBody.add(cardsItem);
 
-		messagelbl2 = new JLabel("New label");
-		messagelbl2.setForeground(new Color(255, 255, 255));
-		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-		panel.add(messagelbl);
-		panel.add(messagelbl1);
-		panel.add(messagelbl2);
+		cardsItem_1 = new CardsItem("sample");
+		cardsItem_1.setAlignmentX(Component.LEFT_ALIGNMENT);
+		messageBody.add(cardsItem_1);
 
-		JPanel panel_1 = new JPanel();
-		panel_1.setPreferredSize(new Dimension(10, 25));
-		panel_1.setOpaque(false);
-		add(panel_1, BorderLayout.NORTH);
+		titleBody = new JPanel();
+		titleBody.setPreferredSize(new Dimension(10, 25));
+		titleBody.setOpaque(false);
+		add(titleBody, BorderLayout.NORTH);
 
 		JPanel mainHeaderlbl = new JPanel();
 		mainHeaderlbl.setLocation(0, 0);
@@ -157,7 +161,7 @@ public class Cards extends RoundPanel {
 		FlowLayout fl_mainHeaderlbl = new FlowLayout(FlowLayout.LEFT, 5, 5);
 		fl_mainHeaderlbl.setAlignOnBaseline(true);
 		mainHeaderlbl.setLayout(fl_mainHeaderlbl);
-		panel_1.add(mainHeaderlbl);
+		titleBody.add(mainHeaderlbl);
 
 		titlelbl = new JLabel(notif.getType().getTitle());
 		titlelbl.setForeground(new Color(255, 255, 255));
@@ -167,7 +171,7 @@ public class Cards extends RoundPanel {
 			titlelbl.setIcon(new ImageIcon(image));
 		}
 
-		panel_1.setLayout(null);
+		titleBody.setLayout(null);
 		mainHeaderlbl.add(titlelbl);
 
 		datelabl = new JLabel(notif.getLastexec());
@@ -178,7 +182,7 @@ public class Cards extends RoundPanel {
 		JPanel panel_3 = new JPanel();
 		panel_3.setOpaque(false);
 		panel_3.setBounds(308, 6, 12, 12);
-		panel_1.add(panel_3);
+		titleBody.add(panel_3);
 		panel_3.setLayout(new BorderLayout(0, 0));
 
 		CustomButton closeButton = new CustomButton();
@@ -200,32 +204,25 @@ public class Cards extends RoundPanel {
 		});
 		panel_3.add(closeButton);
 
-		panel_2 = new JPanel();
-		panel_2.setOpaque(false);
-		panel_2.setPreferredSize(new Dimension(35, 10));
-		add(panel_2, BorderLayout.EAST);
-		panel_2.setLayout(null);
-
 		counterlbl = new CustomLabel();
+		counterlbl.setBounds(217, 0, 28, 25);
+		titleBody.add(counterlbl);
 		counterlbl.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		counterlbl.setHorizontalTextPosition(SwingConstants.CENTER);
 		counterlbl.setHorizontalAlignment(SwingConstants.CENTER);
-		counterlbl.setBounds(5, 25, 28, 28);
-		counterlbl.setPreferredSize(new Dimension(32, 32));
-		counterlbl.setRound(100);
+		counterlbl.setPreferredSize(new Dimension(32, 25));
 		counterlbl.setText(String.valueOf(notifs.size()));
 		counterlbl.setVisible(false);
 
 		if (notifs.size() > 1) {
 			counterlbl.setVisible(true);
 		}
-		panel_2.add(counterlbl);
 
-		panel_4 = new JPanel();
-		panel_4.setOpaque(false);
-		FlowLayout flowLayout = (FlowLayout) panel_4.getLayout();
-		flowLayout.setAlignOnBaseline(true);
-		add(panel_4, BorderLayout.SOUTH);
+		subbarBody = new JPanel();
+		subbarBody.setOpaque(false);
+		FlowLayout fl_subbarBody = (FlowLayout) subbarBody.getLayout();
+		fl_subbarBody.setAlignOnBaseline(true);
+		add(subbarBody, BorderLayout.SOUTH);
 		subbar = new RoundPanel();
 		subbar.setBackground(new Color(245, 245, 245, 30));
 		subbar.setPreferredSize(new Dimension(100, 2));
@@ -265,7 +262,7 @@ public class Cards extends RoundPanel {
 			public void mouseReleased(MouseEvent me) {
 			}
 		});
-		panel_4.add(subbar);
+		subbarBody.add(subbar);
 
 	}
 
@@ -280,7 +277,7 @@ public class Cards extends RoundPanel {
 		}
 		getTitlelbl().setText(notif.getType().getTitle());
 		getDatelabl().setText(notif.getLastexec());
-		getMessagelbl().setText(notif.getMessage());
+		cardsItem.getMessagelbl().setText(notif.getMessage());
 		if (notifs.size() > 1) {
 			getCounterlbl().setVisible(true);
 			if (notifs.size() > 99) {
@@ -290,6 +287,14 @@ public class Cards extends RoundPanel {
 			}
 		}
 
+	}
+
+	private void generateItem() {
+		int i = 1;
+
+		while (i != 3) {
+
+		}
 	}
 
 }

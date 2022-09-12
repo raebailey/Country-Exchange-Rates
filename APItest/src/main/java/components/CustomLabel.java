@@ -32,7 +32,7 @@ public class CustomLabel extends JLabel {
 		int width = getWidth();
 		int height = getHeight();
 		Area area = new Area(new RoundRectangle2D.Double(x, y, width, height, round, round));
-		g2.setColor(new Color(35, 64, 153));
+		g2.setColor(new Color(15, 15, 15));
 //		R:35 G:64 B:153
 		g2.fill(area);
 		// area.subtract(new Area(new RoundRectangle2D.Double(x + 1, y + 1, width - 2,

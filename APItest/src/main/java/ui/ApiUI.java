@@ -185,6 +185,7 @@ public class ApiUI {
 		scrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
 		scrollPane.setBounds(0, 0, 339, 487);
 		ScrollBarCustom scrollBarCustom = new ScrollBarCustom();
+		scrollBarCustom.setOpaque(false);
 		scrollBarCustom.setUnitIncrement(5);
 		scrollPane.setVerticalScrollBar(scrollBarCustom);
 		panel_2.add(scrollPane);
