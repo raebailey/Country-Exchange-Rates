@@ -1,6 +1,7 @@
 package ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -20,6 +21,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -98,6 +100,7 @@ public class ApiUI {
 	private void initialize() {
 		FlatDarkLaf.setup();
 		frmDataView = new JFrame();
+		frmDataView.getContentPane().setBackground(new Color(0.f, 0.0f, 0.0f,0.5f));
 		frmDataView.setType(Type.UTILITY);
 		frmDataView.setAlwaysOnTop(true);
 		frmDataView.setResizable(false);
@@ -159,6 +162,7 @@ public class ApiUI {
 			}
 			
 		});
+		btnNewButton_1.setEnabled(false);
 		
 		btnNewButton.addActionListener(new ActionListener() {
 
@@ -286,6 +290,7 @@ public class ApiUI {
 			items.add(0,card);
 			card.setUi(this);
 			panel_3.add(card);
+			panel_3.add(Box.createRigidArea(new Dimension(0, 10)));
 			
 
 		

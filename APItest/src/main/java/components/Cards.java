@@ -13,6 +13,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -119,8 +120,6 @@ public class Cards extends RoundPanel {
 	public void setSubbar(RoundPanel subbar) {
 		this.subbar = subbar;
 	}
-	
-	
 
 	/**
 	 * Initializes components.
@@ -141,10 +140,11 @@ public class Cards extends RoundPanel {
 
 		messageBody.setLayout(new BoxLayout(messageBody, BoxLayout.Y_AXIS));
 
+		messageBody.add(Box.createRigidArea(new Dimension(0, 5)));
 		cardsItem = new CardsItem(notif.getMessage());
 		cardsItem.setAlignmentX(Component.LEFT_ALIGNMENT);
 		messageBody.add(cardsItem);
-
+		messageBody.add(Box.createRigidArea(new Dimension(0, 10)));
 		cardsItem_1 = new CardsItem("sample");
 		cardsItem_1.setAlignmentX(Component.LEFT_ALIGNMENT);
 		messageBody.add(cardsItem_1);
