@@ -51,6 +51,11 @@ public class Cards extends RoundPanel {
 	 * Create the panel.
 	 */
 	public Cards(ApiNotification notif) {
+//		JPanel MainCardContainer = new JPanel();
+//		MainCardContainer.setLayout(new BoxLayout(MainCardContainer, BoxLayout.Y_AXIS));
+//		MainCardContainer.add(Box.createRigidArea(new Dimension(0, 10)));
+//		MainCardContainer.add(this);
+//		MainCardContainer.add(Box.createRigidArea(new Dimension(0, 10)));
 		notifs = new ArrayList<>();
 		cardItems = new ArrayList<>();
 		notifs.add(notif);
@@ -131,7 +136,7 @@ public class Cards extends RoundPanel {
 		setMaximumSize(new Dimension(328, 100));
 		setPreferredSize(new Dimension(328, 100));
 		setLayout(new BorderLayout(0, 0));
-		setBorder(new MatteBorder(0, 0, 1, 0, (Color) new Color(0, 150, 255)));
+//		setBorder(new MatteBorder(0, 0, 1, 0, (Color) new Color(0, 150, 255)));
 		setBackground(new Color(15, 15, 15));
 
 		messageBody = new JPanel();
