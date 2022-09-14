@@ -32,8 +32,8 @@ public class CardsItem extends RoundPanel {
 		setMaximumSize(new Dimension(320, 37));
 		setLayout(new BorderLayout(0, 0));
 //		setBorder(new MatteBorder(0, 0, 1, 0, (Color) new Color(0, 150, 255)));
-//		setBackground(new Color(245, 245, 245, 30));
-		setBackground(new Color(0.15f, 0.15f, 0.15f, 0.5f));
+		setBackground(new Color(245, 245, 245, 30));
+//		setBackground(new Color(0,0,0,1));
 		JPanel panel = new JPanel();
 		panel.setMaximumSize(new Dimension(28, 28));
 		panel.setPreferredSize(new Dimension(24, 24));

@@ -204,14 +204,12 @@ public class ApiUI {
 
 			@Override
 			public void componentAdded(ContainerEvent e) {
-				//c.getAnimation().start();
+				panel_3.repaint();
 				panel_3.revalidate();
 			}
 
 			@Override
 			public void componentRemoved(ContainerEvent e) {
-				// TODO Auto-generated method stub
-				System.out.println("removed:");
 				panel_3.repaint();
 				panel_3.revalidate();
 				
