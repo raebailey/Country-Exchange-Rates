@@ -7,12 +7,14 @@ public class ApiNotification {
 	private CustomList<ApiNotification> list;
 	private MessageTypes type;
 	private String lastexec;
+	private String image;
 	
 	
-	public ApiNotification(String message,String lastexec,MessageTypes type) {
+	public ApiNotification(String message,String lastexec,MessageTypes type,String image) {
 		this.message = message;
 		this.lastexec = lastexec;
 		this.type = type;
+		this.image = image;
 	}
 
 	public String getMessage() {
@@ -45,6 +47,14 @@ public class ApiNotification {
 
 	public void setLastexec(String lastexec) {
 		this.lastexec = lastexec;
+	}
+
+	public String getImage() {
+		return this.image;
+	}
+	
+	public void setImage(String image) {
+		this.image = image;
 	}
 	
 	

@@ -34,10 +34,12 @@ import com.formdev.flatlaf.FlatDarkLaf;
 
 import components.Cards;
 import components.CustomButton;
+import components.RoundPanel;
 import components.ScrollBarCustom;
 import components.CustomTitleBar.TitleBar;
 import enums.MessageTypes;
 import models.ApiNotification;
+import models.Country;
 import sample.DatabaseModel;
 import tasks.Country_Task;
 import tasks.UpdateRate_Task;
@@ -105,10 +107,10 @@ public class ApiUI extends JFrame {
 		setAlwaysOnTop(true);
 		setResizable(false);
 		setUndecorated(true);
-		setBackground(new Color(0,0,0,0));
+		setBackground(new Color(0, 0, 0, 0));
 		setLocationByPlatform(true);
 		setTitle("Data View");
-		setBounds(100, 100, 355, 563);
+		setBounds(100, 100, 339, 525);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 
@@ -118,17 +120,17 @@ public class ApiUI extends JFrame {
 		getContentPane().add(panel);
 		panel.setLayout(new BorderLayout(0, 0));
 
-		
-		JPanel panel_1 = new JPanel();
+		RoundPanel panel_1 = new RoundPanel();
 		panel.add(panel_1, BorderLayout.NORTH);
 		FlowLayout fl_panel_1 = new FlowLayout(FlowLayout.RIGHT, 5, 5);
 		fl_panel_1.setAlignOnBaseline(true);
 		panel_1.setLayout(fl_panel_1);
-		
+
 		titleBar = new TitleBar();
+		titleBar.setOpaque(false);
 		titleBar.setPreferredSize(new Dimension(200, 29));
 		panel_1.add(titleBar);
-		
+
 		JButton btnNewButton = new JButton("Run");
 
 		try {
@@ -161,7 +163,7 @@ public class ApiUI extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				rateTask.cancel();
+				//rateTask.cancel();
 				countryTask.cancel();
 				btnNewButton.setEnabled(true);
 				btnNewButton_1.setEnabled(false);
@@ -259,7 +261,7 @@ public class ApiUI extends JFrame {
 		long seconds = (difference / 1000) % 60;
 		// 24 hr : 86400000
 		// 30 minutes: 1800000
-		rateTimer.schedule(rateTask, now, 300000);
+		//rateTimer.schedule(rateTask, now, 300000);
 		System.out.println("Hours until execution time:" + difference + "\n" + hours + "  hours " + minutes
 				+ " minutes " + seconds + " seconds ");
 
@@ -273,8 +275,8 @@ public class ApiUI extends JFrame {
 	 * @param dateTime The time when the notification was generated.
 	 * @param type     The type of notification generated.
 	 */
-	public void addMessage(String message, String dateTime, MessageTypes type) {
-		ApiNotification notification = new ApiNotification(message, dateTime, type);
+	public void addMessage(String message, String dateTime, MessageTypes type, String image) {
+		ApiNotification notification = new ApiNotification(message, dateTime, type, image);
 		createCard(notification);
 	}
 
@@ -286,20 +288,20 @@ public class ApiUI extends JFrame {
 	 */
 	private void createCard(ApiNotification notification) {
 		Cards card = new Cards(notification);
-//		if (items.size() > 0) {
-//			for (Cards c : items) {
-//				if (c.getNotif().getType().equals(notification.getType())) {
-//					c.getNotifs().add(notification);
-//					c.refresh();
-//					return;
-//				}
-//			}
-//		}
+
+		if (items.size() > 0) {
+			for (Cards c : items) {
+				if (c.getNotif().getType().equals(notification.getType())) {
+					c.getNotifs().add(notification);
+					c.refresh();
+					return;
+				}
+			}
+		}
 
 		items.add(0, card);
 		card.setUi(this);
 		panel_3.add(card);
-//		panel_3.add(Box.createRigidArea(new Dimension(0, 5)));
 
 	}
 }

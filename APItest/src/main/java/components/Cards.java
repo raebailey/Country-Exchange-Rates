@@ -61,6 +61,7 @@ public class Cards extends RoundPanel {
 		notifs.add(notif);
 		init();
 	}
+	
 
 	public JLabel getDatelabl() {
 		return datelabl;
@@ -136,7 +137,7 @@ public class Cards extends RoundPanel {
 		setMaximumSize(new Dimension(328, 100));
 		setPreferredSize(new Dimension(328, 100));
 		setLayout(new BorderLayout(0, 0));
-//		setBorder(new MatteBorder(0, 0, 1, 0, (Color) new Color(0, 150, 255)));
+		setBorder(new MatteBorder(0, 0, 1, 0, (Color) new Color(0, 150, 255)));
 		setBackground(new Color(15, 15, 15));
 
 		messageBody = new JPanel();
@@ -146,13 +147,13 @@ public class Cards extends RoundPanel {
 		messageBody.setLayout(new BoxLayout(messageBody, BoxLayout.Y_AXIS));
 
 		messageBody.add(Box.createRigidArea(new Dimension(0, 5)));
-		cardsItem = new CardsItem(notif.getMessage());
+		cardsItem = new CardsItem(notif);
 		cardsItem.setAlignmentX(Component.LEFT_ALIGNMENT);
 		messageBody.add(cardsItem);
 		messageBody.add(Box.createRigidArea(new Dimension(0, 10)));
-		cardsItem_1 = new CardsItem("sample");
-		cardsItem_1.setAlignmentX(Component.LEFT_ALIGNMENT);
-		messageBody.add(cardsItem_1);
+//		cardsItem_1 = new CardsItem("sample");
+//		cardsItem_1.setAlignmentX(Component.LEFT_ALIGNMENT);
+//		messageBody.add(cardsItem_1);
 
 		titleBody = new JPanel();
 		titleBody.setPreferredSize(new Dimension(10, 25));

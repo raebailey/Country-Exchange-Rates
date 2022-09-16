@@ -57,7 +57,7 @@ public class UpdateRate_Task extends TimerTask {
 					if (exist == true && rateExist != true) {
 						models.insertRate(key.toString(), currencyObj.get(key).toString(), date);
 						String  message = String.format("1 USD to %s at $%s.", key.toString(),currencyObj.get(key));
-						panel.addMessage(message, APItest.localTime(), MessageTypes.NEWRATE);
+						panel.addMessage(message, APItest.localTime(), MessageTypes.NEWRATE,null);
 						System.out.println(currencyObj.get(key) + "\n");
 						if (models.runTimeExist(key.toString())) {
 							models.updateRunTime(nextdate);
@@ -67,7 +67,7 @@ public class UpdateRate_Task extends TimerTask {
 					} else {
 //						System.out.println(key.toString() + " is up to date.");
 						String message = key.toString() + " is up to date.";
-						panel.addMessage(message,APItest.localTime(),MessageTypes.NOUPDATE);
+						panel.addMessage(message,APItest.localTime(),MessageTypes.NOUPDATE,null);
 					}
 				});
 				if (ratesObj.get("result") == "error") {
@@ -77,7 +77,7 @@ public class UpdateRate_Task extends TimerTask {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			panel.addMessage(e.getMessage(), APItest.localTime(), MessageTypes.ERROR);
+			panel.addMessage(e.getMessage(), APItest.localTime(), MessageTypes.ERROR,null);
 		}
 
 	}

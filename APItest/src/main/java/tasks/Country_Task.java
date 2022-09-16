@@ -8,6 +8,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import enums.MessageTypes;
+import models.Country;
 import sample.APItest;
 import sample.DatabaseModel;
 import sample.Service;
@@ -15,6 +16,7 @@ import ui.ApiUI;
 
 public class Country_Task extends TimerTask {
 	private ApiUI panel;
+	private ArrayList<Country> rejectCountries = new ArrayList<>();
 
 	public ApiUI getPanel() {
 		return panel;
@@ -27,20 +29,14 @@ public class Country_Task extends TimerTask {
 	@Override
 	public void run() {
 		int reject = 0;
-		ArrayList<String> rejectCountries = new ArrayList<String>();
+		
 		try {
 
 			// JSONObject obj
 			JSONArray json = (JSONArray) Service.getCountry();
 			for (int i = 0; i < json.size(); i++) {
 				JSONObject obj = (JSONObject) json.get(i);
-				JSONArray jsonArr = (JSONArray) obj.get("currencies");
-				if (jsonArr == null) {
-					reject += 1;
-					rejectCountries.add(obj.get("name").toString());
-					continue;
-				}
-				JSONObject currency_code = (JSONObject) jsonArr.get(0);
+				
 
 				JSONArray locationArr = (JSONArray) obj.get("latlng");
 				Double lng = (double) 0;
@@ -52,6 +48,15 @@ public class Country_Task extends TimerTask {
 
 				JSONObject flag = (JSONObject) obj.get("flags");
 				String imageUrl = (String) flag.get("png");
+				
+				JSONArray jsonArr = (JSONArray) obj.get("currencies");
+				if (jsonArr == null) {
+					reject += 1;
+					rejectCountries.add(new Country(obj.get("alpha2Code").toString(), obj.get("name").toString(), "", lng.floatValue(),
+							lat.floatValue(), imageUrl));
+					continue;
+				}
+				JSONObject currency_code = (JSONObject) jsonArr.get(0);
 
 				DatabaseModel model = new DatabaseModel();
 				String currencyCode = currency_code.get("code").toString();
@@ -66,18 +71,22 @@ public class Country_Task extends TimerTask {
 					model.insertCountry(obj.get("alpha2Code").toString(), obj.get("name").toString(), currencyCode, lng,
 							lat, imageUrl);
 					String message = obj.get("name") + " added.";
-					panel.addMessage(message, APItest.localTime(), MessageTypes.NEWCOUNTRY);
+					panel.addMessage(message, APItest.localTime(), MessageTypes.NEWCOUNTRY,null);
 				}
 			}
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			panel.addMessage(e.getMessage(), APItest.localTime(), MessageTypes.ERROR);
+			panel.addMessage(e.getMessage(), APItest.localTime(), MessageTypes.ERROR,null);
 		}
-		String message = reject + " countries rejected. Countries rejected:" + rejectCountries;
+		
 		System.out.print(reject + " countries rejected\nCountries rejected: " + rejectCountries);
-		panel.addMessage(message, APItest.localTime(), MessageTypes.REJECT);
+		for(Country country : rejectCountries) {
+			String message = String.format("Countries rejected: %s",country.getName());
+			panel.addMessage(message, APItest.localTime(), MessageTypes.REJECT,country.getImageUrl());
+		}
+		
 
 	}
 

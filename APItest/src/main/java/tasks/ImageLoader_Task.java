@@ -15,6 +15,8 @@ public class ImageLoader_Task extends Thread implements Runnable {
 
 	private String[] imageUrls;
 	private Object[] imageComponents;
+	private int width = 330;
+	private int height = 111;
 
 	/**
 	 * Creates thread to load image urls.
@@ -25,6 +27,13 @@ public class ImageLoader_Task extends Thread implements Runnable {
 	public ImageLoader_Task(Object[] components, String[] urls) {
 		imageUrls = urls;
 		imageComponents = components;
+	}
+	
+	public ImageLoader_Task(Object[] components, String[] urls,int width,int height) {
+		imageUrls = urls;
+		imageComponents = components;
+		this.width = width;
+		this.height = height;
 	}
 
 	@Override
@@ -56,7 +65,7 @@ public class ImageLoader_Task extends Thread implements Runnable {
 					}
 				}
 
-				label.setIcon(new ImageIcon(image.getScaledInstance(330, 111, java.awt.Image.SCALE_SMOOTH)));
+				label.setIcon(new ImageIcon(image.getScaledInstance(this.width,this.height, java.awt.Image.SCALE_SMOOTH)));
 			} catch (Exception ex) {
 				label.setIcon(new ImageIcon(getClass().getResource("/images/fail.png")));
 			}
