@@ -42,22 +42,14 @@ public class Cards extends RoundPanel {
 	private JPanel messageBody;
 	private JPanel titleBody;
 	private RoundPanel subbar;
-	private CardsItem cardsItem_1;
 	private CardsItem cardsItem;
 	private boolean cardState = false;
-	private ArrayList<CardsItem> cardItems;
 
 	/**
 	 * Create the panel.
 	 */
 	public Cards(ApiNotification notif) {
-//		JPanel MainCardContainer = new JPanel();
-//		MainCardContainer.setLayout(new BoxLayout(MainCardContainer, BoxLayout.Y_AXIS));
-//		MainCardContainer.add(Box.createRigidArea(new Dimension(0, 10)));
-//		MainCardContainer.add(this);
-//		MainCardContainer.add(Box.createRigidArea(new Dimension(0, 10)));
 		notifs = new ArrayList<>();
-		cardItems = new ArrayList<>();
 		notifs.add(notif);
 		init();
 	}
@@ -145,15 +137,9 @@ public class Cards extends RoundPanel {
 		add(messageBody, BorderLayout.CENTER);
 
 		messageBody.setLayout(new BoxLayout(messageBody, BoxLayout.Y_AXIS));
-
-		messageBody.add(Box.createRigidArea(new Dimension(0, 5)));
 		cardsItem = new CardsItem(notif);
 		cardsItem.setAlignmentX(Component.LEFT_ALIGNMENT);
 		messageBody.add(cardsItem);
-		messageBody.add(Box.createRigidArea(new Dimension(0, 10)));
-//		cardsItem_1 = new CardsItem("sample");
-//		cardsItem_1.setAlignmentX(Component.LEFT_ALIGNMENT);
-//		messageBody.add(cardsItem_1);
 
 		titleBody = new JPanel();
 		titleBody.setPreferredSize(new Dimension(10, 25));
@@ -293,14 +279,6 @@ public class Cards extends RoundPanel {
 			}
 		}
 
-	}
-
-	private void generateItem() {
-		int i = 1;
-
-		while (i != 3) {
-
-		}
 	}
 
 }
