@@ -161,7 +161,7 @@ public class ApiUI extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-//				rateTask.cancel();
+				rateTask.cancel();
 				countryTask.cancel();
 				btnNewButton.setEnabled(true);
 				btnNewButton_1.setEnabled(false);
@@ -259,7 +259,7 @@ public class ApiUI extends JFrame {
 		long seconds = (difference / 1000) % 60;
 		// 24 hr : 86400000
 		// 30 minutes: 1800000
-//		rateTimer.schedule(rateTask, now, 300000);
+		rateTimer.schedule(rateTask, now, 300000);
 		System.out.println("Hours until execution time:" + difference + "\n" + hours + "  hours " + minutes
 				+ " minutes " + seconds + " seconds ");
 
