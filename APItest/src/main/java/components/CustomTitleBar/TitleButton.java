@@ -15,7 +15,12 @@ import org.jdesktop.animation.timing.TimingTargetAdapter;
 
 public class TitleButton extends JButton {
 
-    public Color getHoverColor() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4448586876778767603L;
+
+	public Color getHoverColor() {
         return hoverColor;
     }
 
