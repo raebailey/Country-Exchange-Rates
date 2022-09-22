@@ -23,6 +23,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.MatteBorder;
 
 import components.CustomButton.ButtonStyle;
+import components.image.ImageHelper;
 import models.ApiNotification;
 import ui.ApiUI;
 import java.awt.Component;
@@ -130,7 +131,12 @@ public class Cards extends RoundPanel {
 		setPreferredSize(new Dimension(328, 100));
 		setLayout(new BorderLayout(0, 0));
 		setBorder(new MatteBorder(0, 0, 1, 0, (Color) new Color(0, 150, 255)));
-		setBackground(new Color(15, 15, 15));
+		Color color = notif.getType().getBackground();
+		if(color==null) {
+			setBackground(new Color(15, 15, 15));
+		}else {
+			setBackground(color);
+		}
 
 		messageBody = new JPanel();
 		messageBody.setOpaque(false);
@@ -158,7 +164,7 @@ public class Cards extends RoundPanel {
 		titlelbl = new JLabel(notif.getType().getTitle());
 		titlelbl.setForeground(new Color(255, 255, 255));
 		titlelbl.setFont(new Font("SansSerif", Font.BOLD, 14));
-		Image image = notif.getType().getPath();
+		Image image = notif.getType().getImageObj();
 		if (image != null) {
 			titlelbl.setIcon(new ImageIcon(image));
 		}
@@ -178,7 +184,7 @@ public class Cards extends RoundPanel {
 		panel_3.setLayout(new BorderLayout(0, 0));
 
 		CustomButton closeButton = new CustomButton();
-		closeButton.setIcon(new ImageIcon(Cards.class.getResource("/images/close_1.png")));
+		closeButton.setIcon(new ImageIcon(ImageHelper.readImage("/images/close_1.png",12,12)));
 		closeButton.setBounds(310, 0, 20, 20);
 
 		closeButton.setFont(new Font("SansSerif", Font.BOLD, 12));
@@ -263,10 +269,6 @@ public class Cards extends RoundPanel {
 	 */
 	public void refresh() {
 		ApiNotification notif = getNotif();
-		Image image = notif.getType().getPath();
-		if (image != null) {
-			titlelbl.setIcon(new ImageIcon(image));
-		}
 		getTitlelbl().setText(notif.getType().getTitle());
 		getDatelabl().setText(notif.getLastexec());
 		cardsItem.getMessagelbl().setText(notif.getMessage());

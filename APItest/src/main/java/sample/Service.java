@@ -37,7 +37,6 @@ public class Service {
 		scanner.close();
 
 		JSONParser parse = new JSONParser();
-//		JSONArray dataObj = (JSONArray)parse.parse(String.valueOf(information));
 
 		JSONObject jsonObj = (JSONObject) parse.parse(String.valueOf(information));
 		return jsonObj;
@@ -71,13 +70,6 @@ public class Service {
 
 		JSONParser parse = new JSONParser();
 		JSONArray dataArr = (JSONArray) parse.parse(String.valueOf(information));
-//System.exit(0);
-		// JSONObject jsonObj = (JSONObject) parse.parse(String.valueOf(information));
-//		JSONObject nameObj = (JSONObject) jsonObj.get("name");
-//		JSONObject codeObj = (JSONObject) jsonObj.get("alpha2Code");
-//		Country country = new Country(codeObj.toString(),);
-
-//		return jsonObj;
 		return dataArr;
 
 	}

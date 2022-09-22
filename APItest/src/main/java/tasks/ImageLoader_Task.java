@@ -10,6 +10,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import cache.CacheManager;
+import components.image.ImageHelper;
 
 public class ImageLoader_Task extends Thread implements Runnable {
 
@@ -28,8 +29,8 @@ public class ImageLoader_Task extends Thread implements Runnable {
 		imageUrls = urls;
 		imageComponents = components;
 	}
-	
-	public ImageLoader_Task(Object[] components, String[] urls,int width,int height) {
+
+	public ImageLoader_Task(Object[] components, String[] urls, int width, int height) {
 		imageUrls = urls;
 		imageComponents = components;
 		this.width = width;
@@ -64,10 +65,10 @@ public class ImageLoader_Task extends Thread implements Runnable {
 						CacheManager.addCache(imageUrl, image);
 					}
 				}
-
-				label.setIcon(new ImageIcon(image.getScaledInstance(this.width,this.height, java.awt.Image.SCALE_SMOOTH)));
+				image = image.getScaledInstance(this.width, this.height, java.awt.Image.SCALE_SMOOTH);
+				label.setIcon(new ImageIcon(ImageHelper.makeRoundedCorner(image, 8, this.width, this.height)));
 			} catch (Exception ex) {
-				label.setIcon(new ImageIcon(getClass().getResource("/images/fail.png")));
+				label.setIcon(new ImageIcon(ImageHelper.readImage("/images/fail.png",0,0)));
 			}
 		}
 

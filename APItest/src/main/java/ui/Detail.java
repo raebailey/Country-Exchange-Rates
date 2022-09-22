@@ -34,6 +34,7 @@ import components.LineChart;
 import components.ModelChart;
 import components.RoundPanel;
 import components.TableDark;
+import components.image.ImageHelper;
 import models.Country;
 import models.Rate;
 import net.miginfocom.swing.MigLayout;
@@ -101,7 +102,7 @@ public class Detail {
 				}
 				
 			}
-			imageLbl.setIcon(new ImageIcon(image.getScaledInstance(320, 160, java.awt.Image.SCALE_SMOOTH)));
+			imageLbl.setIcon(new ImageIcon(ImageHelper.makeRoundedCorner(image, 8, 320, 160)));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

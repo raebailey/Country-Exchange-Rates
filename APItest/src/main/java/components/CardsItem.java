@@ -1,13 +1,20 @@
 package components;
 
+import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.RoundRectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -19,6 +26,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.MatteBorder;
 
 import components.CustomTitleBar.TitleButton;
+import components.image.ImageHelper;
 import models.ApiNotification;
 import tasks.ImageLoader_Task;
 
@@ -37,9 +45,7 @@ public class CardsItem extends RoundPanel {
 		setMinimumSize(new Dimension(0, 0));
 		setMaximumSize(new Dimension(320, 37));
 		setLayout(new BorderLayout(0, 0));
-//		setBorder(new MatteBorder(0, 0, 1, 0, (Color) new Color(0, 150, 255)));
 		setBackground(new Color(245, 245, 245, 30));
-//		setBackground(new Color(0,0,0,1));
 		JPanel panel = new JPanel();
 		panel.setOpaque(false);
 		panel.setMaximumSize(new Dimension(37, 28));
@@ -47,7 +53,7 @@ public class CardsItem extends RoundPanel {
 		add(panel, BorderLayout.WEST);
 
 		JLabel lblNewLabel = new JLabel("");
-		Image img = readImage("/images/fail.png");
+		Image img = ImageHelper.readImage("/images/fail.png",0,0);
 		String imagePath = notif.getImage();
 		if (imagePath != null) {
 			JLabel[] label = { lblNewLabel };
@@ -88,16 +94,8 @@ public class CardsItem extends RoundPanel {
 		this.messagelbl = messagelbl;
 	}
 
-	private Image readImage(String path) {
-		Image img = null;
-		try {
-			img = ImageIO.read(getClass().getResource(path));
-			return img;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return img;
-	}
+	
+	
+	
 
 }

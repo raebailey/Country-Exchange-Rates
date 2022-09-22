@@ -7,35 +7,30 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import components.image.ImageHelper;
+
 public enum MessageTypes {
 		NOUPDATE("No Update","/images/update.png"),
 		NEWCOUNTRY("New Country"),
-		ERROR("Error","/images/warning.png"),
+		REJECT("Reject","/images/warning.png"),
 		NEWRATE("Rate"),
-		REJECT("Reject","/images/reject.png");
-//		SECONDARY(new Color(203, 209, 219), new Color(58, 70, 81), new Color(81, 92, 108), new Color(230, 239, 255)),
-//		DESTRUCTIVE(new Color(255, 0, 0), new Color(255, 255, 255), new Color(198, 86, 0), new Color(255, 161, 90)),
-//		CLOSE(new Color(211, 211, 211, 30), new Color(255, 255, 255), new Color(120, 120, 120), new Color(255, 0, 0),
-//				new Color(255, 255, 255));
+		ERROR("Error","/images/reject.png",new Color(201, 32, 32));
 
 		private MessageTypes(String title,String path) {
 			this.title = title;
 			Image img;
-			img = readImage(path);
+			img = ImageHelper.readImage(path,0,0);
 			img = img.getScaledInstance(18, 18, Image.SCALE_SMOOTH);
-			this.path = img;
+			this.imageObj = img;
 		}
 		
-		private Image readImage(String path) {
-			Image img = null;
-			try {
-				img = ImageIO.read(getClass().getResource(path));
-				return img;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return img;
+		private MessageTypes(String title,String path,Color color) {
+			this.title = title;
+			Image img;
+			img = ImageHelper.readImage(path,0,0);
+			img = img.getScaledInstance(18, 18, Image.SCALE_SMOOTH);
+			this.imageObj = img;
+			this.background = color;
 		}
 		
 		private MessageTypes(String title) {
@@ -44,7 +39,8 @@ public enum MessageTypes {
 
 		
 		private String title;
-		private Image path;
+		private Image imageObj;
+		private Color background;
 
 		public String getTitle() {
 			return title;
@@ -54,13 +50,23 @@ public enum MessageTypes {
 			this.title = title;
 		}
 
-		public Image getPath() {
-			return path;
+		public Image getImageObj() {
+			return imageObj;
 		}
 
-		public void setPath(Image path) {
-			this.path = path;
+		public void setImageObj(Image imageObj) {
+			this.imageObj = imageObj;
 		}
+
+		public Color getBackground() {
+			return background;
+		}
+
+		public void setBackground(Color background) {
+			this.background = background;
+		}
+		
+		
 		
 		
 		
