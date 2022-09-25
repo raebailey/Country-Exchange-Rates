@@ -9,6 +9,7 @@ import org.json.simple.JSONObject;
 import enums.MessageTypes;
 import events.CountryEvent;
 import events.CountryListener;
+import models.ApiNotification;
 import models.Country;
 import sample.APItest;
 import sample.DatabaseModel;
@@ -77,7 +78,7 @@ public class Country_Task extends TimerTask {
 
 						@Override
 						public void handleEvent(CountryEvent event) {
-							panel.addMessage(event.getNotification().getMessage(), event.getNotification().getLastexec(), event.getNotification().getType(),event.getNotification().getImage());
+							panel.addMessage(event.getNotification());
 							
 						}
 						
@@ -90,7 +91,7 @@ public class Country_Task extends TimerTask {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			panel.addMessage(e.getMessage(), APItest.localTime(), MessageTypes.ERROR,null);
+			panel.addMessage(new ApiNotification(e.getMessage(), APItest.localTime(), MessageTypes.ERROR,null));
 		}
 		
 		for(Country country : rejectCountries) {
@@ -99,7 +100,7 @@ public class Country_Task extends TimerTask {
 				@Override
 				public void handleEvent(CountryEvent event) {
 					if(event.getAction()=="Reject") {
-						panel.addMessage(event.getNotification().getMessage(), event.getNotification().getLastexec(), event.getNotification().getType(),event.getNotification().getImage());
+						panel.addMessage(event.getNotification());
 					}
 					
 				}

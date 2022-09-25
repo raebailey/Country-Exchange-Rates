@@ -14,6 +14,7 @@ import org.json.simple.JSONObject;
 import enums.MessageTypes;
 import events.RateEvent;
 import events.RateListener;
+import models.ApiNotification;
 import models.Rate;
 import sample.APItest;
 import sample.DatabaseModel;
@@ -63,7 +64,7 @@ public class UpdateRate_Task extends TimerTask {
 
 						@Override
 						public void handleEvent(RateEvent event) {
-							panel.addMessage(event.getNotification().getMessage(), event.getNotification().getLastexec(), event.getNotification().getType(),event.getNotification().getImage());
+							panel.addMessage(event.getNotification());
 						}
 						
 					});
@@ -88,7 +89,7 @@ public class UpdateRate_Task extends TimerTask {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			panel.addMessage(e.getMessage(), APItest.localTime(), MessageTypes.ERROR,null);
+			panel.addMessage(new ApiNotification(e.getMessage(), APItest.localTime(), MessageTypes.ERROR,null));
 		}
 
 	}

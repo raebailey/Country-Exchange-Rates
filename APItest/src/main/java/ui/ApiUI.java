@@ -269,12 +269,10 @@ public class ApiUI extends JFrame {
 	/**
 	 * Creates notification
 	 * 
-	 * @param message  The content which the notification contains.
-	 * @param dateTime The time when the notification was generated.
-	 * @param type     The type of notification generated.
+	 * @param notification  The notification object created when country event is fired.
 	 */
-	public void addMessage(String message, String dateTime, MessageTypes type, String image) {
-		ApiNotification notification = new ApiNotification(message, dateTime, type, image);
+	public void addMessage(ApiNotification notification) {
+		//ApiNotification notification = new ApiNotification(message, dateTime, type, image);
 		createCard(notification);
 	}
 
