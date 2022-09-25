@@ -295,7 +295,7 @@ public class ApiUI extends JFrame {
 			}
 		}
 
-		items.add(0, card);
+		items.add(card);
 		card.setUi(this);
 		panel_3.add(card);
 

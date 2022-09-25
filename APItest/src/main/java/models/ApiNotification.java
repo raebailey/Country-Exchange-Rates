@@ -4,7 +4,6 @@ import enums.MessageTypes;
 
 public class ApiNotification {
 	private String message;
-	private CustomList<ApiNotification> list;
 	private MessageTypes type;
 	private String lastexec;
 	private String image;
@@ -23,14 +22,6 @@ public class ApiNotification {
 
 	public void setMessage(String message) {
 		this.message = message;
-	}
-
-	public CustomList<ApiNotification> getList() {
-		return list;
-	}
-
-	public void setList(CustomList<ApiNotification> list) {
-		this.list = list;
 	}
 
 	public MessageTypes getType() {

@@ -70,8 +70,6 @@ public class Country_Task extends TimerTask {
 				}
 				boolean exists = model.countryExist(obj.get("alpha2Code").toString());
 				if (exists != true) {
-//					model.insertCountry(obj.get("alpha2Code").toString(), obj.get("name").toString(), currencyCode, lng,
-//							lat, imageUrl);
 					Country country = new Country(obj.get("alpha2Code").toString(), obj.get("name").toString(), currencyCode, lng,
 							lat, imageUrl);
 					country.addListener(new CountryListener() {
@@ -84,8 +82,6 @@ public class Country_Task extends TimerTask {
 						
 					});
 					country.save();
-//					String message = String.format("%s added.",obj.get("name"));
-//					panel.addMessage(message, APItest.localTime(), MessageTypes.NEWCOUNTRY,null);
 				}
 			}
 
