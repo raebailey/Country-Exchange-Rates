@@ -155,14 +155,14 @@ public class DatabaseModel {
 
 	}
 
-	public void insertRate(String key,String value, String last_update) {
+	public void insertRate(String key,Double value, String last_update) {
 		if (con == null) {
 			con = getConnection();
 		}
 		try {
 			PreparedStatement stmt = con.prepareStatement("INSERT INTO Rates VALUES(?,?,?)");
 			stmt.setString(1, key);
-			stmt.setDouble(2, Double.valueOf(value));
+			stmt.setDouble(2, value);
 			stmt.setString(3, last_update);
 			stmt.execute();
 			stmt.close();

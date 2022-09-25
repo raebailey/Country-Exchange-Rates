@@ -1,6 +1,5 @@
 package tasks;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.TimerTask;
 
@@ -8,6 +7,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import enums.MessageTypes;
+import events.CountryEvent;
+import events.CountryListener;
 import models.Country;
 import sample.APItest;
 import sample.DatabaseModel;
@@ -68,26 +69,44 @@ public class Country_Task extends TimerTask {
 				}
 				boolean exists = model.countryExist(obj.get("alpha2Code").toString());
 				if (exists != true) {
-					model.insertCountry(obj.get("alpha2Code").toString(), obj.get("name").toString(), currencyCode, lng,
+//					model.insertCountry(obj.get("alpha2Code").toString(), obj.get("name").toString(), currencyCode, lng,
+//							lat, imageUrl);
+					Country country = new Country(obj.get("alpha2Code").toString(), obj.get("name").toString(), currencyCode, lng,
 							lat, imageUrl);
-					String message = obj.get("name") + " added.";
-					panel.addMessage(message, APItest.localTime(), MessageTypes.NEWCOUNTRY,null);
+					country.addListener(new CountryListener() {
+
+						@Override
+						public void handleEvent(CountryEvent event) {
+							panel.addMessage(event.getNotification().getMessage(), event.getNotification().getLastexec(), event.getNotification().getType(),event.getNotification().getImage());
+							
+						}
+						
+					});
+					country.save();
+//					String message = String.format("%s added.",obj.get("name"));
+//					panel.addMessage(message, APItest.localTime(), MessageTypes.NEWCOUNTRY,null);
 				}
 			}
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			panel.addMessage(e.getMessage(), APItest.localTime(), MessageTypes.ERROR,null);
 		}
 		
-		System.out.print(reject + " countries rejected\nCountries rejected: " + rejectCountries);
 		for(Country country : rejectCountries) {
-			String message = String.format("Countries rejected: %s",country.getName());
-			panel.addMessage(message, APItest.localTime(), MessageTypes.REJECT,country.getImageUrl());
-		}
-		
+			country.addListener(new CountryListener() {
 
+				@Override
+				public void handleEvent(CountryEvent event) {
+					if(event.getAction()=="Reject") {
+						panel.addMessage(event.getNotification().getMessage(), event.getNotification().getLastexec(), event.getNotification().getType(),event.getNotification().getImage());
+					}
+					
+				}
+				
+			});
+			country.reject();
+		}
 	}
 
 }

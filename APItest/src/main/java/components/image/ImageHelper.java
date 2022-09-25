@@ -31,8 +31,6 @@ public class ImageHelper {
 	    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	    g2.setColor(Color.WHITE);
 	    g2.fill(new RoundRectangle2D.Float(0, 0, w, h, radius, radius));
-
-//	    g2.setComposite(AlphaComposite.SrcAtop);
 	    g2.setComposite(AlphaComposite.SrcIn);
 	    g2.drawImage(image, 0, 0, null);
 	    
@@ -49,7 +47,7 @@ public class ImageHelper {
 	public static Image readImage(String path,int width,int height) {
 		Image img = null;
 		try {
-			if(width==0&&height==0) {
+			if(width==0||height==0) {
 				width = height = 24;
 			}
 			img = ImageIO.read(ImageHelper.class.getResource(path));

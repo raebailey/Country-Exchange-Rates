@@ -1,23 +1,36 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import enums.MessageTypes;
+import events.CountryEvent;
+import events.CountryListener;
+import sample.APItest;
+import sample.DatabaseModel;
+import ui.ApiUI;
 
 public class Country {
 	private String countryCode;
 	private String name;
 	private String currencyCode;
-	private float longitude;
-	private float latitude;
+	private double longitude;
+	private double latitude;
 	private String imageUrl;
 	private Rate[] rate;
+	private DatabaseModel model;
+	
+	private ArrayList<CountryListener> listeners = new ArrayList<CountryListener>();
 
-	public Country(String countryCode, String name, String currency, float longitude, float latitude, String imageUrl) {
+	public Country(String countryCode, String name, String currency, double longitude, double latitude, String imageUrl) {
 		this.countryCode = countryCode;
 		this.name = name;
 		this.currencyCode = currency;
 		this.longitude = longitude;
 		this.latitude = latitude;
 		this.imageUrl = imageUrl;
+		this.model = new DatabaseModel();
 	}
 
 	public Country() {
@@ -58,19 +71,19 @@ public class Country {
 		this.currencyCode = currencyCode;
 	}
 
-	public float getLongitude() {
+	public double getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(float longitude) {
+	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
 
-	public float getLatitude() {
+	public double getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(float latitude) {
+	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
 
@@ -80,6 +93,39 @@ public class Country {
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+	
+	public synchronized void addListener(CountryListener listener) {
+		listeners.add(listener);
+	}
+
+	public synchronized void removeListener(CountryListener listener) {
+		listeners.remove(listener);
+	}
+	
+	public void save() {
+		model.insertCountry(countryCode, name, currencyCode, longitude, latitude, imageUrl);
+		String message = String.format("%s added.",name);
+		processCountryEvent(new CountryEvent(this, "Save", new ApiNotification(message, APItest.localTime(), MessageTypes.NEWCOUNTRY, imageUrl)));
+	}
+	
+	public void reject() {
+		String message = String.format("Countries rejected: %s",name);
+		processCountryEvent(new CountryEvent(this, "Reject", new ApiNotification(message, APItest.localTime(), MessageTypes.REJECT, imageUrl)));
+	}
+	
+	private void processCountryEvent(CountryEvent countryEvent) {
+		ArrayList<CountryListener> tempList;
+
+		synchronized (this) {
+			if (listeners.size() == 0)
+				return;
+			tempList = (ArrayList<CountryListener>)listeners.clone();
+		}
+
+		for (CountryListener listener : tempList) {
+			listener.handleEvent(countryEvent);
+		}
 	}
 
 	@Override

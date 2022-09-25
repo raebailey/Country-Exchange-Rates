@@ -12,6 +12,9 @@ import javax.swing.JPanel;
 import org.json.simple.JSONObject;
 
 import enums.MessageTypes;
+import events.RateEvent;
+import events.RateListener;
+import models.Rate;
 import sample.APItest;
 import sample.DatabaseModel;
 import sample.Service;
@@ -54,10 +57,20 @@ public class UpdateRate_Task extends TimerTask {
 				currencyObj.keySet().stream().forEach(key -> {
 					boolean exist = models.currencyExist(key.toString());
 					boolean rateExist = models.rateExist(date, key.toString());
+					
+					Rate rate = new Rate(key.toString(), Double.valueOf(currencyObj.get(key).toString()), date);
+					rate.addListener(new RateListener() {
+
+						@Override
+						public void handleEvent(RateEvent event) {
+							panel.addMessage(event.getNotification().getMessage(), event.getNotification().getLastexec(), event.getNotification().getType(),event.getNotification().getImage());
+						}
+						
+					});
 					if (exist == true && rateExist != true) {
-						models.insertRate(key.toString(), currencyObj.get(key).toString(), date);
+						rate.save();
 						String  message = String.format("1 USD to %s at $%s.", key.toString(),currencyObj.get(key));
-						panel.addMessage(message, APItest.localTime(), MessageTypes.NEWRATE,null);
+						
 						System.out.println(currencyObj.get(key) + "\n");
 						if (models.runTimeExist(key.toString())) {
 							models.updateRunTime(nextdate);
@@ -65,9 +78,7 @@ public class UpdateRate_Task extends TimerTask {
 							models.insertRunTime(key.toString(), nextdate);
 						}
 					} else {
-//						System.out.println(key.toString() + " is up to date.");
-						String message = key.toString() + " is up to date.";
-						panel.addMessage(message,APItest.localTime(),MessageTypes.NOUPDATE,null);
+						rate.noUpdate();
 					}
 				});
 				if (ratesObj.get("result") == "error") {
