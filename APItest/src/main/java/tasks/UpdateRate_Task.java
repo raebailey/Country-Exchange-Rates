@@ -54,7 +54,6 @@ public class UpdateRate_Task extends TimerTask {
 				System.out.println("Update Time:(unix) " + lastupdateObj + " (date time) " + date);
 				System.out.println("Next Update Time:(unix) " + nextupdateTime + " (date time) " + nextdate);
 				DatabaseModel models = new DatabaseModel();
-				int numCountries = 0;
 				currencyObj.keySet().stream().forEach(key -> {
 					boolean exist = models.currencyExist(key.toString());
 					boolean rateExist = models.rateExist(date, key.toString());
@@ -70,7 +69,6 @@ public class UpdateRate_Task extends TimerTask {
 					});
 					if (exist == true && rateExist != true) {
 						rate.save();
-						String  message = String.format("1 USD to %s at $%s.", key.toString(),currencyObj.get(key));
 						
 						System.out.println(currencyObj.get(key) + "\n");
 						if (models.runTimeExist(key.toString())) {

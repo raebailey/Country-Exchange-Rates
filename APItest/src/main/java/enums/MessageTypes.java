@@ -13,7 +13,7 @@ public enum MessageTypes {
 		NOUPDATE("No Update","/images/update.png"),
 		NEWCOUNTRY("New Country"),
 		REJECT("Reject","/images/warning.png"),
-		NEWRATE("Rate"),
+		NEWRATE("New Rate"),
 		ERROR("Error","/images/reject.png",new Color(201, 32, 32));
 
 		private MessageTypes(String title,String path) {
