@@ -38,8 +38,11 @@ import components.RoundPanel;
 import components.ScrollBarCustom;
 import components.CustomTitleBar.TitleBar;
 import enums.MessageTypes;
+import events.CardsUpdateTimeEvent;
+import events.CardsUpdateTimeListener;
 import models.ApiNotification;
 import models.Country;
+import sample.APItest;
 import sample.DatabaseModel;
 import tasks.Country_Task;
 import tasks.UpdateRate_Task;
@@ -47,7 +50,7 @@ import javax.swing.border.MatteBorder;
 import java.awt.Frame;
 import java.awt.Rectangle;
 
-public class ApiUI extends JFrame {
+public class ApiUI extends JFrame implements ActionListener {
 
 	private JPanel panel_3;
 	private ArrayList<Cards> items = new ArrayList<>();
@@ -56,6 +59,7 @@ public class ApiUI extends JFrame {
 	private Timer rateTimer;
 	private Timer countryTimer;
 	private TitleBar titleBar;
+	private javax.swing.Timer timer;
 
 	/**
 	 * Launch the application.
@@ -97,6 +101,9 @@ public class ApiUI extends JFrame {
 		getContentPane().setMaximumSize(new Dimension(339, 524));
 		initialize();
 		titleBar.init(this);
+		timer = new javax.swing.Timer(60000,this);
+		timer.start();
+
 	}
 
 	/**
@@ -299,5 +306,16 @@ public class ApiUI extends JFrame {
 		card.setUi(this);
 		panel_3.add(card);
 
+	}
+	
+	@Override
+    public void actionPerformed(ActionEvent e) {
+		if(items.size()>0) {
+			for(Cards card:items) {
+				card.updateTime();
+				
+			}
+		}
+		
 	}
 }
