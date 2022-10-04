@@ -27,11 +27,14 @@ import javax.swing.border.MatteBorder;
 
 import components.CustomButton.ButtonStyle;
 import components.image.ImageHelper;
+import events.AddCardsItemEvent;
+import events.AddCardsItemListener;
 import events.CardsUpdateTimeEvent;
 import events.CardsUpdateTimeListener;
 import events.CountryEvent;
 import events.CountryListener;
 import models.ApiNotification;
+import sample.APItest;
 import ui.ApiUI;
 import java.awt.Component;
 
@@ -53,7 +56,8 @@ public class Cards extends RoundPanel {
 	private CardsItem cardsItem;
 	private boolean cardState = false;
 
-	private ArrayList<CardsUpdateTimeListener> listeners = new ArrayList<CardsUpdateTimeListener>();
+	private ArrayList<CardsUpdateTimeListener> CardsUpdateTimelisteners = new ArrayList<CardsUpdateTimeListener>();
+	private ArrayList<AddCardsItemListener> AddCardsItemlisteners = new ArrayList<AddCardsItemListener>();
 	/**
 	 * Create the panel.
 	 */
@@ -269,25 +273,30 @@ public class Cards extends RoundPanel {
 			}
 		});
 		subbarBody.add(subbar);
-		this.addListener(new CardsUpdateTimeListener() {
-
+		this.addCardsUpdateTimeListener(new CardsUpdateTimeListener() {
 			@Override
 			public void update(CardsUpdateTimeEvent event) {
 				self().getDatelabl().setText(event.getTimeMessage());
 			}
 			
 		});
+		this.addCardsItemListener(new AddCardsItemListener() {
+			@Override
+			public void add(AddCardsItemEvent event) {
+				self().refresh(event.getNotification());
+			}
+		});
+		
 
 	}
 
 	/**
 	 * Refreshes current instance of the card element to show latest changes.
 	 */
-	public void refresh() {
-		ApiNotification notif = getNotif();
-		getTitlelbl().setText(notif.getType().getTitle());
-		getDatelabl().setText(notif.getLastexec());
-		cardsItem.getMessagelbl().setText(notif.getMessage());
+	private void refresh(ApiNotification notification ) {
+		getTitlelbl().setText(notification.getType().getTitle());
+		getDatelabl().setText(notification.getLastexec());
+		cardsItem.getMessagelbl().setText(notification.getMessage());
 		if (notifs.size() > 1) {
 			getCounterlbl().setVisible(true);
 			if (notifs.size() > 99) {
@@ -298,28 +307,59 @@ public class Cards extends RoundPanel {
 		}
 
 	}
-	public synchronized void addListener(CardsUpdateTimeListener listener) {
-		listeners.add(listener);
+	
+	public void addItem(ApiNotification notification) {
+		getNotifs().add(notification);
+		processAddCardsItemEvent(new AddCardsItemEvent(this,notification));
+		
+	}
+	
+	private void processAddCardsItemEvent(AddCardsItemEvent event) {
+		ArrayList<AddCardsItemListener> tempList;
+
+		synchronized (this) {
+			if (AddCardsItemlisteners.size() == 0)
+				return;
+			tempList = (ArrayList<AddCardsItemListener>)AddCardsItemlisteners.clone();
+		}
+
+		for (AddCardsItemListener listener : tempList) {
+			listener.add(event);
+		}
+	}
+	
+	public synchronized void addCardsUpdateTimeListener(CardsUpdateTimeListener listener) {
+		CardsUpdateTimelisteners.add(listener);
 	}
 
-	public synchronized void removeListener(CardsUpdateTimeListener listener) {
-		listeners.remove(listener);
+	public synchronized void removeCardsUpdateTimeListener(CardsUpdateTimeListener listener) {
+		CardsUpdateTimelisteners.remove(listener);
+	}
+	
+	public synchronized void addCardsItemListener(AddCardsItemListener listener) {
+		AddCardsItemlisteners.add(listener);
+	}
+
+	public synchronized void removeCardsItemListener(AddCardsItemListener listener) {
+		AddCardsItemlisteners.remove(listener);
 	}
 	
 	public void updateTime() {
 		try {
 			Date exec = new SimpleDateFormat("hh:mm a").parse(this.getNotif().getLastexec());
-			Date now = new Date();
+			Date now = new SimpleDateFormat("hh:mm a").parse(APItest.localTime());
 			long difference = now.getTime() - exec.getTime();
+			System.out.println("Now time: "+now+" Exec time: "+exec);
 			long minutes = (difference / (1000 * 60)) % 60;
-			System.out.println("difference: "+difference);
+			long hour = (difference / (1000 * 60 * 60)) % 24;
+			System.out.println("difference: "+hour);
 			
 			String message = " ";
 			
-			if(minutes>=60) {
-				long hours = minutes%60;
-				 message = hours==1?String.format("%d hour ago", hours):String.format("%d hours ago", hours);
-			}else {
+			if(hour>=1) {
+				//long hours = minutes%60;
+				 message = hour==1?String.format("%d hour ago", hour):String.format("%d hours ago", hour);
+			}else if(minutes!=0){
 				 message = minutes==1?String.format("%d minute ago", minutes):String.format("%d minutes ago", minutes);
 			}
 			processCardsUpdateTimeEvent(new CardsUpdateTimeEvent(this,message));
@@ -333,14 +373,16 @@ public class Cards extends RoundPanel {
 		ArrayList<CardsUpdateTimeListener> tempList;
 
 		synchronized (this) {
-			if (listeners.size() == 0)
+			if (CardsUpdateTimelisteners.size() == 0)
 				return;
-			tempList = (ArrayList<CardsUpdateTimeListener>)listeners.clone();
+			tempList = (ArrayList<CardsUpdateTimeListener>)CardsUpdateTimelisteners.clone();
 		}
 
 		for (CardsUpdateTimeListener listener : tempList) {
 			listener.update(event);
 		}
 	}
+	
+	
 
 }

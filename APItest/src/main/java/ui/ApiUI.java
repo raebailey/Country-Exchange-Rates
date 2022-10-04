@@ -295,8 +295,7 @@ public class ApiUI extends JFrame implements ActionListener {
 		if (items.size() > 0) {
 			for (Cards c : items) {
 				if (c.getNotif().getType().equals(notification.getType())) {
-					c.getNotifs().add(notification);
-					c.refresh();
+					c.addItem(notification);
 					return;
 				}
 			}
