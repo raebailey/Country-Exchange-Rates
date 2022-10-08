@@ -2,6 +2,7 @@ package components;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -16,7 +17,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -31,12 +31,9 @@ import events.AddCardsItemEvent;
 import events.AddCardsItemListener;
 import events.CardsUpdateTimeEvent;
 import events.CardsUpdateTimeListener;
-import events.CountryEvent;
-import events.CountryListener;
 import models.ApiNotification;
 import sample.APItest;
 import ui.ApiUI;
-import java.awt.Component;
 
 public class Cards extends RoundPanel {
 	/**
@@ -238,6 +235,7 @@ public class Cards extends RoundPanel {
 		subbar.setPreferredSize(new Dimension(100, 2));
 		subbar.setSize(new Dimension(200, 0));
 		subbar.setVisible(false);
+		
 		self().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent me) {
@@ -296,7 +294,7 @@ public class Cards extends RoundPanel {
 	private void refresh(ApiNotification notification ) {
 		getTitlelbl().setText(notification.getType().getTitle());
 		getDatelabl().setText(notification.getLastexec());
-		cardsItem.getMessagelbl().setText(notification.getMessage());
+		cardsItem.getMessagelbl().setText(notification.getMessage()+" "+notification.getLastexec());
 		if (notifs.size() > 1) {
 			getCounterlbl().setVisible(true);
 			if (notifs.size() > 99) {
@@ -349,10 +347,10 @@ public class Cards extends RoundPanel {
 			Date exec = new SimpleDateFormat("hh:mm a").parse(this.getNotif().getLastexec());
 			Date now = new SimpleDateFormat("hh:mm a").parse(APItest.localTime());
 			long difference = now.getTime() - exec.getTime();
-			System.out.println("Now time: "+now+" Exec time: "+exec);
+//			System.out.println("Now time: "+now+" Exec time: "+exec);
 			long minutes = (difference / (1000 * 60)) % 60;
 			long hour = (difference / (1000 * 60 * 60)) % 24;
-			System.out.println("difference: "+hour);
+//			System.out.println("difference: "+hour);
 			
 			String message = " ";
 			
@@ -361,10 +359,11 @@ public class Cards extends RoundPanel {
 				 message = hour==1?String.format("%d hour ago", hour):String.format("%d hours ago", hour);
 			}else if(minutes!=0){
 				 message = minutes==1?String.format("%d minute ago", minutes):String.format("%d minutes ago", minutes);
+			}else {
+				message = this.getNotif().getLastexec();
 			}
 			processCardsUpdateTimeEvent(new CardsUpdateTimeEvent(this,message));
 		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	}

@@ -7,7 +7,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
-import java.awt.Window.Type;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ContainerEvent;
@@ -18,17 +18,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.border.MatteBorder;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 
@@ -37,21 +35,17 @@ import components.CustomButton;
 import components.RoundPanel;
 import components.ScrollBarCustom;
 import components.CustomTitleBar.TitleBar;
-import enums.MessageTypes;
-import events.CardsUpdateTimeEvent;
-import events.CardsUpdateTimeListener;
 import models.ApiNotification;
-import models.Country;
-import sample.APItest;
 import sample.DatabaseModel;
 import tasks.Country_Task;
 import tasks.UpdateRate_Task;
-import javax.swing.border.MatteBorder;
-import java.awt.Frame;
-import java.awt.Rectangle;
 
 public class ApiUI extends JFrame implements ActionListener {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel panel_3;
 	private ArrayList<Cards> items = new ArrayList<>();
 	private UpdateRate_Task rateTask;
@@ -68,6 +62,9 @@ public class ApiUI extends JFrame implements ActionListener {
 		try {
 			ApiUI window = new ApiUI();
 			window.setVisible(true);
+			String str = "An :grinning:awesome :smiley:string &#128516;with a few :wink:emojis!";
+			String result = EmojiParser.parseToUnicode(str);
+			System.out.println(result);
 
 		} catch (Exception e) {
 			e.printStackTrace();

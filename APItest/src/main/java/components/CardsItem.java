@@ -79,7 +79,7 @@ public class CardsItem extends RoundPanel {
 		flowLayout.setAlignment(FlowLayout.LEADING);
 		add(panel_1, BorderLayout.CENTER);
 
-		messagelbl = new JLabel(notif.getMessage());
+		messagelbl = new JLabel(notif.getMessage()+" "+notif.getLastexec());
 		messagelbl.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 		messagelbl.setMinimumSize(new Dimension(103, 18));
 		messagelbl.setMaximumSize(new Dimension(103, 18));
