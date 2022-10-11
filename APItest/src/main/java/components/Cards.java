@@ -25,6 +25,8 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.MatteBorder;
 
+import com.vdurmont.emoji.EmojiParser;
+
 import components.CustomButton.ButtonStyle;
 import components.image.ImageHelper;
 import events.AddCardsItemEvent;
@@ -34,6 +36,9 @@ import events.CardsUpdateTimeListener;
 import models.ApiNotification;
 import sample.APItest;
 import ui.ApiUI;
+import net.miginfocom.swing.MigLayout;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 
 public class Cards extends RoundPanel {
 	/**
@@ -55,6 +60,7 @@ public class Cards extends RoundPanel {
 
 	private ArrayList<CardsUpdateTimeListener> CardsUpdateTimelisteners = new ArrayList<CardsUpdateTimeListener>();
 	private ArrayList<AddCardsItemListener> AddCardsItemlisteners = new ArrayList<AddCardsItemListener>();
+	private RoundPanel panel;
 	/**
 	 * Create the panel.
 	 */
@@ -162,13 +168,10 @@ public class Cards extends RoundPanel {
 		add(titleBody, BorderLayout.NORTH);
 
 		JPanel mainHeaderlbl = new JPanel();
-		mainHeaderlbl.setLocation(0, 0);
-		mainHeaderlbl.setSize(194, 25);
 		mainHeaderlbl.setOpaque(false);
 		FlowLayout fl_mainHeaderlbl = new FlowLayout(FlowLayout.LEFT, 5, 5);
 		fl_mainHeaderlbl.setAlignOnBaseline(true);
 		mainHeaderlbl.setLayout(fl_mainHeaderlbl);
-		titleBody.add(mainHeaderlbl);
 
 		titlelbl = new JLabel(notif.getType().getTitle());
 		titlelbl.setForeground(new Color(255, 255, 255));
@@ -177,8 +180,6 @@ public class Cards extends RoundPanel {
 		if (image != null) {
 			titlelbl.setIcon(new ImageIcon(image));
 		}
-
-		titleBody.setLayout(null);
 		mainHeaderlbl.add(titlelbl);
 
 		datelabl = new JLabel(notif.getLastexec());
@@ -188,8 +189,6 @@ public class Cards extends RoundPanel {
 
 		JPanel panel_3 = new JPanel();
 		panel_3.setOpaque(false);
-		panel_3.setBounds(308, 6, 12, 12);
-		titleBody.add(panel_3);
 		panel_3.setLayout(new BorderLayout(0, 0));
 
 		CustomButton closeButton = new CustomButton();
@@ -210,19 +209,49 @@ public class Cards extends RoundPanel {
 
 		});
 		panel_3.add(closeButton);
+		
+		panel = new RoundPanel();
+		panel.setBackground(new Color(0, 150, 255));
+		panel.setRound(100);
+		panel.setLayout(new BorderLayout(0, 0));
 
 		counterlbl = new CustomLabel();
-		counterlbl.setBounds(217, 0, 28, 25);
-		titleBody.add(counterlbl);
+		counterlbl.setForeground(new Color(255, 255, 255));
+		panel.add(counterlbl);
 		counterlbl.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		counterlbl.setHorizontalTextPosition(SwingConstants.CENTER);
 		counterlbl.setHorizontalAlignment(SwingConstants.CENTER);
-		counterlbl.setPreferredSize(new Dimension(32, 25));
 		counterlbl.setText(String.valueOf(notifs.size()));
+		GroupLayout gl_titleBody = new GroupLayout(titleBody);
+		gl_titleBody.setHorizontalGroup(
+			gl_titleBody.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_titleBody.createSequentialGroup()
+					.addComponent(mainHeaderlbl, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
+					.addGap(23)
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
+					.addGap(64)
+					.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 12, GroupLayout.PREFERRED_SIZE))
+		);
+		gl_titleBody.setVerticalGroup(
+			gl_titleBody.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_titleBody.createSequentialGroup()
+					.addGroup(gl_titleBody.createParallelGroup(Alignment.LEADING)
+						.addComponent(mainHeaderlbl, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_titleBody.createSequentialGroup()
+							.addGap(6)
+							.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 12, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_titleBody.createSequentialGroup()
+							.addGap(2)
+							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
+		titleBody.setLayout(gl_titleBody);
 		counterlbl.setVisible(false);
+		panel.setVisible(false);
 
 		if (notifs.size() > 1) {
 			counterlbl.setVisible(true);
+			panel.setVisible(true);
 		}
 
 		subbarBody = new JPanel();
@@ -294,22 +323,23 @@ public class Cards extends RoundPanel {
 	private void refresh(ApiNotification notification ) {
 		getTitlelbl().setText(notification.getType().getTitle());
 		getDatelabl().setText(notification.getLastexec());
-		cardsItem.getMessagelbl().setText(notification.getMessage()+" "+notification.getLastexec());
+		cardsItem.getMessagelbl().setText(notification.getMessage());
 		if (notifs.size() > 1) {
 			getCounterlbl().setVisible(true);
-			if (notifs.size() > 99) {
-				getCounterlbl().setText("99+");
-			} else {
+			panel.setVisible(true);
+//			if (notifs.size() > 99) {
+//				getCounterlbl().setText("99+");
+//			} else {
 				getCounterlbl().setText(String.valueOf(notifs.size()));
-			}
+				getCounterlbl().revalidate();
+				panel.revalidate();
+//			}
 		}
-
 	}
 	
 	public void addItem(ApiNotification notification) {
 		getNotifs().add(notification);
 		processAddCardsItemEvent(new AddCardsItemEvent(this,notification));
-		
 	}
 	
 	private void processAddCardsItemEvent(AddCardsItemEvent event) {
@@ -357,7 +387,7 @@ public class Cards extends RoundPanel {
 			if(hour>=1) {
 				//long hours = minutes%60;
 				 message = hour==1?String.format("%d hour ago", hour):String.format("%d hours ago", hour);
-			}else if(minutes!=0){
+			}else if(minutes>0){
 				 message = minutes==1?String.format("%d minute ago", minutes):String.format("%d minutes ago", minutes);
 			}else {
 				message = this.getNotif().getLastexec();

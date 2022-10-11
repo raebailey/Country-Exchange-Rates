@@ -29,6 +29,7 @@ import javax.swing.JScrollPane;
 import javax.swing.border.MatteBorder;
 
 import com.formdev.flatlaf.FlatDarkLaf;
+import com.vdurmont.emoji.EmojiParser;
 
 import components.Cards;
 import components.CustomButton;
@@ -62,7 +63,7 @@ public class ApiUI extends JFrame implements ActionListener {
 		try {
 			ApiUI window = new ApiUI();
 			window.setVisible(true);
-			String str = "An :grinning:awesome :smiley:string &#128516;with a few :wink:emojis!";
+			String str = "An :grinning:awesome :white_check_mark:string &#128516;with a few :wink:emojis!";
 			String result = EmojiParser.parseToUnicode(str);
 			System.out.println(result);
 
