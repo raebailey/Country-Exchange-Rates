@@ -36,7 +36,7 @@ import components.CustomButton;
 import components.RoundPanel;
 import components.ScrollBarCustom;
 import components.CustomTitleBar.TitleBar;
-import models.ApiNotification;
+import models.apinotifications.ApiNotification;
 import sample.DatabaseModel;
 import tasks.Country_Task;
 import tasks.UpdateRate_Task;

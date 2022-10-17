@@ -3,7 +3,7 @@ package events;
 import java.util.EventObject;
 
 import components.Cards;
-import models.ApiNotification;
+import models.apinotifications.ApiNotification;
 
 public class AddCardsItemEvent extends EventObject {
 	

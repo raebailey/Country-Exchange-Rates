@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import enums.MessageTypes;
 import events.RateEvent;
 import events.RateListener;
+import models.apinotifications.ApiNotification;
 import sample.APItest;
 import sample.DatabaseModel;
 

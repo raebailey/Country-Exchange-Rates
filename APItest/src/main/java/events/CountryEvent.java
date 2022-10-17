@@ -2,8 +2,8 @@ package events;
 
 import java.util.EventObject;
 
-import models.ApiNotification;
 import models.Country;
+import models.apinotifications.ApiNotification;
 
 public class CountryEvent extends EventObject{
 

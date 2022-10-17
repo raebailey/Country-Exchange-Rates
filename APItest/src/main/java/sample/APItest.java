@@ -17,9 +17,19 @@ public class APItest {
 	 * @return String
 	 */
 	public static String localTime() {
-		 DateTimeFormatter dtf = DateTimeFormatter.ofPattern(" hh:mm a");
+		 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm a");
 		 String time = dtf.format(LocalDateTime.now()).toString();
 		return time;
+	}
+	
+	/**
+	 * Splits date time string into two parts date and time.
+	 * @param datetime The date time string.  
+	 * @return String[]
+	 */
+	public static String[] dateAndtime(String datetime) {
+		String split[] = datetime.split(" ", 2);
+		return split;
 	}
 
 }

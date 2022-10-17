@@ -28,17 +28,20 @@ import javax.swing.border.MatteBorder;
 import com.vdurmont.emoji.EmojiParser;
 
 import components.CustomButton.ButtonStyle;
+import components.apinotification.buttons.RejectButtonBar;
 import components.image.ImageHelper;
+import enums.MessageTypes;
 import events.AddCardsItemEvent;
 import events.AddCardsItemListener;
 import events.CardsUpdateTimeEvent;
 import events.CardsUpdateTimeListener;
-import models.ApiNotification;
+import models.apinotifications.ApiNotification;
 import sample.APItest;
 import ui.ApiUI;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class Cards extends RoundPanel {
 	/**
@@ -61,6 +64,8 @@ public class Cards extends RoundPanel {
 	private ArrayList<CardsUpdateTimeListener> CardsUpdateTimelisteners = new ArrayList<CardsUpdateTimeListener>();
 	private ArrayList<AddCardsItemListener> AddCardsItemlisteners = new ArrayList<AddCardsItemListener>();
 	private RoundPanel panel;
+	private JPanel panelx;
+
 	/**
 	 * Create the panel.
 	 */
@@ -69,7 +74,6 @@ public class Cards extends RoundPanel {
 		notifs.add(notif);
 		init();
 	}
-	
 
 	public JLabel getDatelabl() {
 		return datelabl;
@@ -147,21 +151,34 @@ public class Cards extends RoundPanel {
 		setLayout(new BorderLayout(0, 0));
 		setBorder(new MatteBorder(0, 0, 1, 0, (Color) new Color(0, 150, 255)));
 		Color color = notif.getType().getBackground();
-		if(color==null) {
+		if (color == null) {
 			setBackground(new Color(15, 15, 15));
-		}else {
+		} else {
 			setBackground(color);
 		}
 
 		messageBody = new JPanel();
-		messageBody.setOpaque(false);
-		add(messageBody, BorderLayout.CENTER);
-
 		messageBody.setLayout(new BoxLayout(messageBody, BoxLayout.Y_AXIS));
+		messageBody.setPreferredSize(new Dimension(328, 62));
+		messageBody.setOpaque(false);
+		
 		cardsItem = new CardsItem(notif);
 		cardsItem.setAlignmentX(Component.LEFT_ALIGNMENT);
 		messageBody.add(cardsItem);
+		
+		panelx = new JPanel();
+		panelx.setOpaque(false);
+		panelx.setMaximumSize(new Dimension(328, 32767));
+		panelx.setMinimumSize(new Dimension(328, 10));
+		FlowLayout fl_panelx = new FlowLayout(FlowLayout.LEFT, 0, 0);
+		fl_panelx.setAlignOnBaseline(true);
+		panelx.setLayout(fl_panelx);
+		panelx.add(messageBody);
+		add(panelx, BorderLayout.CENTER);
 
+		
+		
+		
 		titleBody = new JPanel();
 		titleBody.setPreferredSize(new Dimension(10, 25));
 		titleBody.setOpaque(false);
@@ -182,17 +199,18 @@ public class Cards extends RoundPanel {
 		}
 		mainHeaderlbl.add(titlelbl);
 
-		datelabl = new JLabel(notif.getLastexec());
+		datelabl = new JLabel(APItest.dateAndtime(notif.getLastexec())[1]);
 		datelabl.setFont(new Font("SansSerif", Font.PLAIN, 11));
 		datelabl.setForeground(new Color(255, 255, 255));
 		mainHeaderlbl.add(datelabl);
 
 		JPanel panel_3 = new JPanel();
+		panel_3.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		panel_3.setOpaque(false);
 		panel_3.setLayout(new BorderLayout(0, 0));
 
 		CustomButton closeButton = new CustomButton();
-		closeButton.setIcon(new ImageIcon(ImageHelper.readImage("/images/close_1.png",12,12)));
+		closeButton.setIcon(new ImageIcon(ImageHelper.readImage("/images/close_1.png", 12, 12)));
 		closeButton.setBounds(310, 0, 20, 20);
 
 		closeButton.setFont(new Font("SansSerif", Font.BOLD, 12));
@@ -209,7 +227,7 @@ public class Cards extends RoundPanel {
 
 		});
 		panel_3.add(closeButton);
-		
+
 		panel = new RoundPanel();
 		panel.setBackground(new Color(0, 150, 255));
 		panel.setRound(100);
@@ -223,28 +241,21 @@ public class Cards extends RoundPanel {
 		counterlbl.setHorizontalAlignment(SwingConstants.CENTER);
 		counterlbl.setText(String.valueOf(notifs.size()));
 		GroupLayout gl_titleBody = new GroupLayout(titleBody);
-		gl_titleBody.setHorizontalGroup(
-			gl_titleBody.createParallelGroup(Alignment.LEADING)
+		gl_titleBody.setHorizontalGroup(gl_titleBody.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_titleBody.createSequentialGroup()
-					.addComponent(mainHeaderlbl, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
-					.addGap(23)
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
-					.addGap(64)
-					.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 12, GroupLayout.PREFERRED_SIZE))
-		);
-		gl_titleBody.setVerticalGroup(
-			gl_titleBody.createParallelGroup(Alignment.LEADING)
+						.addComponent(mainHeaderlbl, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
+						.addGap(23).addComponent(panel, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
+						.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 12, GroupLayout.PREFERRED_SIZE).addGap(8)));
+		gl_titleBody.setVerticalGroup(gl_titleBody.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_titleBody.createSequentialGroup()
-					.addGroup(gl_titleBody.createParallelGroup(Alignment.LEADING)
-						.addComponent(mainHeaderlbl, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_titleBody.createSequentialGroup()
-							.addGap(6)
-							.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 12, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_titleBody.createSequentialGroup()
-							.addGap(2)
-							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-		);
+						.addGroup(gl_titleBody.createParallelGroup(Alignment.LEADING)
+								.addComponent(mainHeaderlbl, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_titleBody.createSequentialGroup().addGap(6).addComponent(panel_3,
+										GroupLayout.PREFERRED_SIZE, 12, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_titleBody.createSequentialGroup().addGap(2).addComponent(panel,
+										GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)))
+						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 		titleBody.setLayout(gl_titleBody);
 		counterlbl.setVisible(false);
 		panel.setVisible(false);
@@ -264,7 +275,7 @@ public class Cards extends RoundPanel {
 		subbar.setPreferredSize(new Dimension(100, 2));
 		subbar.setSize(new Dimension(200, 0));
 		subbar.setVisible(false);
-		
+
 		self().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent me) {
@@ -284,10 +295,12 @@ public class Cards extends RoundPanel {
 					if (cardState) {
 						setMaximumSize(new Dimension(328, 100));
 						setPreferredSize(new Dimension(328, 100));
+						//panelx.setVisible(false);
 						cardState = false;
 					} else {
 						setMaximumSize(new Dimension(328, 150));
 						setPreferredSize(new Dimension(328, 150));
+						//panelx.setVisible(true);
 						cardState = true;
 					}
 					repaint();
@@ -305,7 +318,7 @@ public class Cards extends RoundPanel {
 			public void update(CardsUpdateTimeEvent event) {
 				self().getDatelabl().setText(event.getTimeMessage());
 			}
-			
+
 		});
 		this.addCardsItemListener(new AddCardsItemListener() {
 			@Override
@@ -313,16 +326,17 @@ public class Cards extends RoundPanel {
 				self().refresh(event.getNotification());
 			}
 		});
-		
+		addButtonBar(notif);
 
 	}
 
 	/**
 	 * Refreshes current instance of the card element to show latest changes.
 	 */
-	private void refresh(ApiNotification notification ) {
+	private void refresh(ApiNotification notification) {
+		String split[] = APItest.dateAndtime(notification.getLastexec());
 		getTitlelbl().setText(notification.getType().getTitle());
-		getDatelabl().setText(notification.getLastexec());
+		getDatelabl().setText(split[1]);
 		cardsItem.getMessagelbl().setText(notification.getMessage());
 		if (notifs.size() > 1) {
 			getCounterlbl().setVisible(true);
@@ -330,32 +344,53 @@ public class Cards extends RoundPanel {
 //			if (notifs.size() > 99) {
 //				getCounterlbl().setText("99+");
 //			} else {
-				getCounterlbl().setText(String.valueOf(notifs.size()));
-				getCounterlbl().revalidate();
-				panel.revalidate();
+			getCounterlbl().setText(String.valueOf(notifs.size()));
+			getCounterlbl().revalidate();
+			panel.revalidate();
 //			}
 		}
 	}
-	
+
+	private void addButtonBar(ApiNotification notif) {
+		switch (notif.getType()) {
+		case REJECT:
+			panelx.add(new RejectButtonBar(notif));
+			break;
+		case NEWCOUNTRY:
+			panelx.add(new RejectButtonBar(notif));
+			break;
+		case NOUPDATE:
+			//btnBar.add(new RejectButtonBar());
+			break;
+		case ERROR:
+			//btnBar.add(new RejectButtonBar());
+			break;
+
+		default:
+			break;
+		}
+
+	}
+
 	public void addItem(ApiNotification notification) {
 		getNotifs().add(notification);
-		processAddCardsItemEvent(new AddCardsItemEvent(this,notification));
+		processAddCardsItemEvent(new AddCardsItemEvent(this, notification));
 	}
-	
+
 	private void processAddCardsItemEvent(AddCardsItemEvent event) {
 		ArrayList<AddCardsItemListener> tempList;
 
 		synchronized (this) {
 			if (AddCardsItemlisteners.size() == 0)
 				return;
-			tempList = (ArrayList<AddCardsItemListener>)AddCardsItemlisteners.clone();
+			tempList = (ArrayList<AddCardsItemListener>) AddCardsItemlisteners.clone();
 		}
 
 		for (AddCardsItemListener listener : tempList) {
 			listener.add(event);
 		}
 	}
-	
+
 	public synchronized void addCardsUpdateTimeListener(CardsUpdateTimeListener listener) {
 		CardsUpdateTimelisteners.add(listener);
 	}
@@ -363,7 +398,7 @@ public class Cards extends RoundPanel {
 	public synchronized void removeCardsUpdateTimeListener(CardsUpdateTimeListener listener) {
 		CardsUpdateTimelisteners.remove(listener);
 	}
-	
+
 	public synchronized void addCardsItemListener(AddCardsItemListener listener) {
 		AddCardsItemlisteners.add(listener);
 	}
@@ -371,47 +406,52 @@ public class Cards extends RoundPanel {
 	public synchronized void removeCardsItemListener(AddCardsItemListener listener) {
 		AddCardsItemlisteners.remove(listener);
 	}
-	
+
 	public void updateTime() {
 		try {
-			Date exec = new SimpleDateFormat("hh:mm a").parse(this.getNotif().getLastexec());
-			Date now = new SimpleDateFormat("hh:mm a").parse(APItest.localTime());
+			String split[] = APItest.dateAndtime(this.getNotif().getLastexec());
+			String datetimenow = APItest.localTime();
+			String split2[] = APItest.dateAndtime(datetimenow);
+
+			Date exec = new SimpleDateFormat("dd/MM/yyyy hh:mm a").parse(this.getNotif().getLastexec());
+			Date now = new SimpleDateFormat("dd/MM/yyyy hh:mm a").parse(datetimenow);
 			long difference = now.getTime() - exec.getTime();
-//			System.out.println("Now time: "+now+" Exec time: "+exec);
 			long minutes = (difference / (1000 * 60)) % 60;
 			long hour = (difference / (1000 * 60 * 60)) % 24;
-//			System.out.println("difference: "+hour);
-			
+			System.out.println(split[0] + " " + split2[0]);
 			String message = " ";
-			
-			if(hour>=1) {
-				//long hours = minutes%60;
-				 message = hour==1?String.format("%d hour ago", hour):String.format("%d hours ago", hour);
-			}else if(minutes>0){
-				 message = minutes==1?String.format("%d minute ago", minutes):String.format("%d minutes ago", minutes);
-			}else {
-				message = this.getNotif().getLastexec();
+			if (split[0].equals(split2[0])) {
+				if (hour >= 1) {
+					// long hours = minutes%60;
+					message = hour == 1 ? String.format("%d hour ago", hour) : String.format("%d hours ago", hour);
+				} else if (minutes > 0) {
+					message = minutes == 1 ? String.format("%d minute ago", minutes)
+							: String.format("%d minutes ago", minutes);
+				} else {
+					message = split[1];
+				}
+			} else {
+				message = split[0];
 			}
-			processCardsUpdateTimeEvent(new CardsUpdateTimeEvent(this,message));
+
+			processCardsUpdateTimeEvent(new CardsUpdateTimeEvent(this, message));
 		} catch (ParseException e1) {
 			e1.printStackTrace();
 		}
 	}
-	
+
 	private void processCardsUpdateTimeEvent(CardsUpdateTimeEvent event) {
 		ArrayList<CardsUpdateTimeListener> tempList;
 
 		synchronized (this) {
 			if (CardsUpdateTimelisteners.size() == 0)
 				return;
-			tempList = (ArrayList<CardsUpdateTimeListener>)CardsUpdateTimelisteners.clone();
+			tempList = (ArrayList<CardsUpdateTimeListener>) CardsUpdateTimelisteners.clone();
 		}
 
 		for (CardsUpdateTimeListener listener : tempList) {
 			listener.update(event);
 		}
 	}
-	
-	
 
 }

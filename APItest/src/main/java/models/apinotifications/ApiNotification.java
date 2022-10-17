@@ -1,4 +1,4 @@
-package models;
+package models.apinotifications;
 
 import enums.MessageTypes;
 
@@ -46,6 +46,12 @@ public class ApiNotification {
 	
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	@Override
+	public String toString() {
+		return "ApiNotification [message=" + message + ", type=" + type + ", lastexec=" + lastexec + ", image=" + image
+				+ "]";
 	}
 	
 	

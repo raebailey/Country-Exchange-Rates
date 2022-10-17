@@ -27,7 +27,7 @@ import javax.swing.border.MatteBorder;
 
 import components.CustomTitleBar.TitleButton;
 import components.image.ImageHelper;
-import models.ApiNotification;
+import models.apinotifications.ApiNotification;
 import tasks.ImageLoader_Task;
 
 public class CardsItem extends RoundPanel {
