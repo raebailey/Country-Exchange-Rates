@@ -28,6 +28,7 @@ import javax.swing.border.MatteBorder;
 import com.vdurmont.emoji.EmojiParser;
 
 import components.CustomButton.ButtonStyle;
+import components.apinotification.buttons.NoUpdateButtonBar;
 import components.apinotification.buttons.RejectButtonBar;
 import components.image.ImageHelper;
 import enums.MessageTypes;
@@ -275,8 +276,9 @@ public class Cards extends RoundPanel {
 		subbar.setPreferredSize(new Dimension(100, 2));
 		subbar.setSize(new Dimension(200, 0));
 		subbar.setVisible(false);
-
-		self().addMouseListener(new MouseAdapter() {
+		subbarBody.add(subbar);
+		
+		this.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent me) {
 				subbar.setVisible(true);
@@ -312,7 +314,6 @@ public class Cards extends RoundPanel {
 			public void mouseReleased(MouseEvent me) {
 			}
 		});
-		subbarBody.add(subbar);
 		this.addCardsUpdateTimeListener(new CardsUpdateTimeListener() {
 			@Override
 			public void update(CardsUpdateTimeEvent event) {
@@ -326,7 +327,7 @@ public class Cards extends RoundPanel {
 				self().refresh(event.getNotification());
 			}
 		});
-		addButtonBar(notif);
+		addButtonBar(notifs);
 
 	}
 
@@ -345,22 +346,21 @@ public class Cards extends RoundPanel {
 //				getCounterlbl().setText("99+");
 //			} else {
 			getCounterlbl().setText(String.valueOf(notifs.size()));
-			getCounterlbl().revalidate();
-			panel.revalidate();
+			//panel.revalidate();
 //			}
 		}
 	}
 
-	private void addButtonBar(ApiNotification notif) {
-		switch (notif.getType()) {
+	private void addButtonBar(ArrayList<ApiNotification> notif) {
+		switch (getNotif().getType()) {
 		case REJECT:
 			panelx.add(new RejectButtonBar(notif));
 			break;
 		case NEWCOUNTRY:
-			panelx.add(new RejectButtonBar(notif));
+			panelx.add(new NoUpdateButtonBar(notif));
 			break;
 		case NOUPDATE:
-			//btnBar.add(new RejectButtonBar());
+			panelx.add(new NoUpdateButtonBar(notif));
 			break;
 		case ERROR:
 			//btnBar.add(new RejectButtonBar());
