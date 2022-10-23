@@ -365,6 +365,9 @@ public class Cards extends RoundPanel {
 		case ERROR:
 			//btnBar.add(new RejectButtonBar());
 			break;
+		case NEWRATE:
+			panelx.add(new NoUpdateButtonBar(notif));
+			break;
 
 		default:
 			break;
