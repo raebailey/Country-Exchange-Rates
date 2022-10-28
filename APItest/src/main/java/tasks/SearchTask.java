@@ -36,7 +36,9 @@ public class SearchTask extends Thread implements Runnable {
 				}else {
 					panel.add(new JLabel("No results found. Please try again."));
 				}
+				panel.revalidate();
 			}
+			
 		}
 	}
 	

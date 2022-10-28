@@ -10,6 +10,7 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.BeanProperty;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -36,13 +37,13 @@ import components.RoundPanel;
 import components.TableDark;
 import components.image.ImageHelper;
 import models.Country;
+import models.Page;
 import models.Rate;
 import net.miginfocom.swing.MigLayout;
 import sample.DatabaseModel;
 
-public class Detail {
+public class Detail extends JFrame{
 
-	private JFrame frame;
 	private JTextField textField;
 
 
@@ -51,7 +52,7 @@ public class Detail {
 	 */
 	public Detail(Country country) {
 		initialize(country);
-		frame.setVisible(true);
+		setVisible(true);
 	}
 
 	/**
@@ -59,18 +60,17 @@ public class Detail {
 	 */
 	private void initialize(Country country) {
 		FlatDarkLaf.setup();
-		frame = new JFrame();
-		frame.getContentPane().setSize(new Dimension(1280, 0));
-		frame.getContentPane().setPreferredSize(new Dimension(1280, 0));
-		frame.getContentPane().setMinimumSize(new Dimension(1280, 0));
-		frame.setPreferredSize(new Dimension(1280, 0));
-		frame.setMinimumSize(new Dimension(1280, 0));
-		frame.setBounds(100, 100, 1280, 720);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new BorderLayout(0, 0));
+		getContentPane().setSize(new Dimension(1280, 0));
+		getContentPane().setPreferredSize(new Dimension(1280, 0));
+		getContentPane().setMinimumSize(new Dimension(1280, 0));
+		setPreferredSize(new Dimension(1280, 0));
+		setMinimumSize(new Dimension(1280, 0));
+		setBounds(100, 100, 1280, 720);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getContentPane().setLayout(new BorderLayout(0, 0));
 
 		JPanel body = new JPanel();
-		frame.getContentPane().add(body);
+		getContentPane().add(body);
 		body.setLayout(new BorderLayout(0, 0));
 
 		JPanel panel_8 = new JPanel();
@@ -268,7 +268,7 @@ public class Detail {
 		JPanel heading = new JPanel();
 		heading.setBackground(new Color(14, 14, 14));
 		heading.setPreferredSize(new Dimension(10, 40));
-		frame.getContentPane().add(heading, BorderLayout.NORTH);
+		getContentPane().add(heading, BorderLayout.NORTH);
 		heading.setLayout(new BorderLayout(0, 0));
 
 		CustomButton btnNewButton = new CustomButton();
@@ -291,12 +291,13 @@ public class Detail {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
+				Page.getInstance().getPagefactory().closePage(self());
 				 new Thread() {
 					@Override
 					public void run() {
-						Home window = new Home();
-						Home.run(window);
+//						Home window = new Home();
+//						Home.run(window);
+						Page.getInstance().getPagefactory().getHome().setVisible(true);
 					}
 				}.start();
 				
@@ -325,12 +326,8 @@ public class Detail {
 		panel.add(lblNewLabel);
 	}
 
-	public JFrame getFrame() {
-		return frame;
-	}
-
-	public void setFrame(JFrame frame) {
-		this.frame = frame;
+	public JFrame self() {
+		return this;
 	}
 
 	public JTextField getTextField() {

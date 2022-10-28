@@ -20,6 +20,7 @@ import cache.CacheManager;
 import components.CustomButton.ButtonStyle;
 import components.notification.Notification;
 import models.Country;
+import models.Page;
 import ui.Detail;
 
 public class CountryCard extends RoundPanel {
@@ -123,8 +124,9 @@ public class CountryCard extends RoundPanel {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				frame.dispose();
-				new Detail(country);
+				Page.getInstance().getPagefactory().closePage(frame);
+//				new Detail(country);
+				Page.getInstance().getPagefactory().getDetail(country).setVisible(true);
 				
 				
 			}

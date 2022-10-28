@@ -22,6 +22,7 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import components.CountryCard;
 import components.ScrollBarCustom;
 import components.TableDark;
+import layouts.WrapLayout;
 import models.Country;
 import sample.DatabaseModel;
 import tasks.Country_Task;
@@ -40,9 +41,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Cursor;
 
-public class Home {
+public class Home extends JFrame{
 
-	private JFrame frame;
 	private JScrollPane scrollPane;
 	private JPanel panel;
 	private JPanel panel_2;
@@ -53,29 +53,10 @@ public class Home {
 	private JTextField textField;
 	private JLabel lblNewLabel_1;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		Home home = new Home();
-		run(home);
-
-	}
 	
-	public static void run(Home window) {
-		try {
-			window.frame.setVisible(true);
-			window.load.start();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Create the application.
-	 */
 	public Home() {
 		initialize();
+		load.start();
 
 	}
 
@@ -84,12 +65,11 @@ public class Home {
 	 */
 	private void initialize() {
 		FlatDarkLaf.setup();
-		frame = new JFrame();
-		frame.setBounds(100, 100, 1280, 720);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new BorderLayout(0, 0));
+		setBounds(100, 100, 1280, 720);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getContentPane().setLayout(new BorderLayout(0, 0));
 		panel = new JPanel();
-		frame.getContentPane().add(panel);
+		getContentPane().add(panel);
 		panel.setLayout(new BorderLayout(0, 0));
 		
 		scrollPane = new JScrollPane();
@@ -97,24 +77,12 @@ public class Home {
 		ScrollBarCustom scrollBarCustom = new ScrollBarCustom();
 		scrollBarCustom.setUnitIncrement(5);
 		scrollPane.setVerticalScrollBar(scrollBarCustom);
-		
+		panel.add(scrollPane);
 
 		panel_2 = new JPanel();
-//		panel_2.setPreferredSize(new Dimension(1000, 10));
-		panel_2.setPreferredSize(new Dimension(1200, 12000));
 		
-//		scrollPane.setCorner(JScrollPane.UPPER_RIGHT_CORNER, panel_2);
-		panel.add(scrollPane);
-		
-//		panel_2.setMinimumSize(new Dimension(1280, 10));
-//		panel_2.setSize(new Dimension(1280, 0));
-//		panel_2.setMaximumSize(new Dimension(1280, 32767));
-		panel_2.setAutoscrolls(true);
-		FlowLayout flowLayout = (FlowLayout) panel_2.getLayout();
-		flowLayout.setAlignment(FlowLayout.LEADING);
-		flowLayout.setVgap(20);
-		flowLayout.setHgap(20);
-		flowLayout.setAlignOnBaseline(true);
+		WrapLayout wraplayout = new WrapLayout(WrapLayout.LEFT,20,20);
+		panel_2.setLayout(wraplayout);
 		scrollPane.setViewportView(panel_2);
 		
 		
@@ -162,7 +130,7 @@ public class Home {
 		ArrayList<String> urlArr = new ArrayList<String>();
 		ArrayList<CountryCard> ccArr = new ArrayList<CountryCard>();
 		for (Country country : countries) {
-			CountryCard card = new CountryCard(country,frame);
+			CountryCard card = new CountryCard(country,this);
 			cardArr.add(card.getImagelbl());
 			urlArr.add(country.getImageUrl());
 			ccArr.add(card);
@@ -174,9 +142,6 @@ public class Home {
 		search = new SearchTask(ccArr.toArray(new CountryCard[ccArr.size()]),panel_2);
 	}
 
-	public JFrame getFrame() {
-		return frame;
-	}
 
 	public ImageLoader_Task getLoad() {
 		return load;
