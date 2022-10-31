@@ -45,6 +45,18 @@ import sample.DatabaseModel;
 public class Detail extends JFrame{
 
 	private JTextField textField;
+	private JPanel body;
+	private JPanel panel_8;
+	private JLabel imageLbl;
+	private JPanel panel_2;
+	private JLabel nameLbl;
+	private JLabel lblNewLabel_1;
+	private JPanel panel_4;
+	private JLabel lblNewLabel_5;
+	private JPanel panel_5;
+	private JLabel latLbl;
+	private JLabel lblNewLabel_7;
+	private JLabel longLbl;
 
 
 	/**
@@ -69,15 +81,15 @@ public class Detail extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 
-		JPanel body = new JPanel();
+		body = new JPanel();
 		getContentPane().add(body);
 		body.setLayout(new BorderLayout(0, 0));
 
-		JPanel panel_8 = new JPanel();
+		panel_8= new JPanel();
 		body.add(panel_8, BorderLayout.NORTH);
 		panel_8.setLayout(new FlowLayout(FlowLayout.LEADING, 30, 10));
 
-		JLabel imageLbl = new JLabel("");
+		imageLbl = new JLabel("");
 
 		DatabaseModel model = new DatabaseModel();
 		String imageUrl = country.getImageUrl();
@@ -115,34 +127,34 @@ public class Detail extends JFrame{
 		imageLbl.setHorizontalTextPosition(SwingConstants.CENTER);
 		imageLbl.setHorizontalAlignment(SwingConstants.CENTER);
 
-		JPanel panel_2 = new JPanel();
+		panel_2 = new JPanel();
 		panel_8.add(panel_2);
 		panel_2.setLayout(new MigLayout("", "[200px][46px,grow]", "[22px][grow][][grow]"));
 
-		JLabel nameLbl = new JLabel(country.getName());
+		nameLbl = new JLabel(country.getName());
 		nameLbl.setFont(new Font("SansSerif", Font.BOLD, 24));
 		nameLbl.setPreferredSize(new Dimension(200, 20));
 		panel_2.add(nameLbl, "cell 0 0,alignx left,aligny top");
 
-		JLabel lblNewLabel_1 = new JLabel("Geo Coordinates");
+		lblNewLabel_1 = new JLabel("Geo Coordinates");
 		lblNewLabel_1.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		panel_2.add(lblNewLabel_1, "cell 0 1,alignx left,aligny bottom");
 
-		JPanel panel_4 = new JPanel();
+		panel_4 = new JPanel();
 		panel_2.add(panel_4, "cell 1 1,alignx left,aligny bottom");
 		FlowLayout fl_panel_4 = new FlowLayout(FlowLayout.LEFT, 5, 0);
 		fl_panel_4.setAlignOnBaseline(true);
 		panel_4.setLayout(fl_panel_4);
 
-		JPanel panel_5 = new JPanel();
+		panel_5 = new JPanel();
 		panel_4.add(panel_5);
 		panel_5.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
 
-		JLabel lblNewLabel_5 = new JLabel("Latitude:");
+		lblNewLabel_5 = new JLabel("Latitude:");
 		lblNewLabel_5.setFont(new Font("SansSerif", Font.PLAIN, 12));
 		panel_5.add(lblNewLabel_5);
 
-		JLabel latLbl = new JLabel(String.valueOf(country.getLatitude()));
+		latLbl = new JLabel(String.valueOf(country.getLatitude()));
 		latLbl.setFont(new Font("SansSerif", Font.PLAIN, 12));
 		panel_5.add(latLbl);
 
@@ -152,11 +164,11 @@ public class Detail extends JFrame{
 		fl_panel_6.setAlignOnBaseline(true);
 		panel_6.setLayout(fl_panel_6);
 
-		JLabel lblNewLabel_7 = new JLabel("Longitude:");
+		lblNewLabel_7 = new JLabel("Longitude:");
 		lblNewLabel_7.setFont(new Font("SansSerif", Font.PLAIN, 12));
 		panel_6.add(lblNewLabel_7);
 
-		JLabel longLbl = new JLabel(String.valueOf(country.getLongitude()));
+		longLbl = new JLabel(String.valueOf(country.getLongitude()));
 		longLbl.setFont(new Font("SansSerif", Font.PLAIN, 12));
 		panel_6.add(longLbl);
 
