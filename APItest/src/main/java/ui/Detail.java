@@ -57,6 +57,7 @@ public class Detail extends JFrame{
 	private JLabel latLbl;
 	private JLabel lblNewLabel_7;
 	private JLabel longLbl;
+	private LineChart linechart;
 
 
 	/**
@@ -256,7 +257,7 @@ public class Detail extends JFrame{
 		roundPanel.setPreferredSize(new Dimension(1240, 370));
 		roundPanel.setLayout(new MigLayout("", "[1000px]", "[360px]"));
 
-		LineChart linechart = new LineChart();
+	    linechart = new LineChart();
 		linechart.setPreferredSize(new Dimension(1000, 360));
 		roundPanel.add(linechart, "cell 0 0,alignx left,aligny top");
 		Rate[] rate = model.fetchRates(country.getCurrencyCode());

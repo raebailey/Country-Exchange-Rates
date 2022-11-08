@@ -112,6 +112,15 @@ public class ApiUI extends JFrame implements ActionListener {
 		setAlwaysOnTop(true);
 		setResizable(false);
 		setUndecorated(true);
+		Image image;
+		try {
+			image = ImageIO.read(getClass().getResource("/images/dataview icon.png"));
+			setIconImage(image);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		setBackground(new Color(0, 0, 0, 0));
 		setLocationByPlatform(true);
 		setTitle("Data View");
