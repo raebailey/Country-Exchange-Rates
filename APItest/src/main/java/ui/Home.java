@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -39,9 +40,10 @@ import javax.swing.SwingConstants;
 import javax.swing.ScrollPaneConstants;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.awt.Cursor;
 
-public class Home extends JFrame{
+public class Home extends CustomWindow{
 
 	private JScrollPane scrollPane;
 	private JPanel panel;
@@ -64,10 +66,7 @@ public class Home extends JFrame{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		FlatDarkLaf.setup();
-		setBounds(100, 100, 1280, 720);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		getContentPane().setLayout(new BorderLayout(0, 0));
+		
 		panel = new JPanel();
 		getContentPane().add(panel);
 		panel.setLayout(new BorderLayout(0, 0));
@@ -115,8 +114,6 @@ public class Home extends JFrame{
 					search.setSearchTerm(value);
 					search.run();
 				}
-				
-				
 			}
 		});
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);

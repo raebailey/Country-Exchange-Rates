@@ -421,7 +421,7 @@ public class Cards extends RoundPanel {
 			long difference = now.getTime() - exec.getTime();
 			long minutes = (difference / (1000 * 60)) % 60;
 			long hour = (difference / (1000 * 60 * 60)) % 24;
-			System.out.println(split[0] + " " + split2[0]);
+			//System.out.println(split[0] + " " + split2[0]);
 			String message = " ";
 			if (split[0].equals(split2[0])) {
 				if (hour >= 1) {

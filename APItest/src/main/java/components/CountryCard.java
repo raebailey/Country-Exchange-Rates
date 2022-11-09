@@ -21,6 +21,7 @@ import components.CustomButton.ButtonStyle;
 import components.notification.Notification;
 import models.Country;
 import models.Page;
+import ui.CustomWindow;
 import ui.Detail;
 
 public class CountryCard extends RoundPanel {
@@ -33,9 +34,9 @@ public class CountryCard extends RoundPanel {
 	private JLabel imagelbl;
 	private JLabel namelbl;
 	private CustomButton gotoBtn;
-	private JFrame frame;
+	private CustomWindow frame;
 
-	public CountryCard(Country country,JFrame frame) {
+	public CountryCard(Country country,CustomWindow frame) {
 		initialize();
 		this.frame = frame;
 		setSize(new Dimension(350, 200));
@@ -126,7 +127,7 @@ public class CountryCard extends RoundPanel {
 			public void mouseClicked(MouseEvent e) {
 				Page.getInstance().getPagefactory().closePage(frame);
 //				new Detail(country);
-				Page.getInstance().getPagefactory().getDetail(country).setVisible(true);
+				Page.getInstance().getPagefactory().getDetail(country);
 				
 				
 			}

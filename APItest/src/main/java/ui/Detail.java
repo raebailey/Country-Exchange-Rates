@@ -42,7 +42,7 @@ import models.Rate;
 import net.miginfocom.swing.MigLayout;
 import sample.DatabaseModel;
 
-public class Detail extends JFrame{
+public class Detail extends CustomWindow{
 
 	private JTextField textField;
 	private JPanel body;
@@ -65,23 +65,13 @@ public class Detail extends JFrame{
 	 */
 	public Detail(Country country) {
 		initialize(country);
-		setVisible(true);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize(Country country) {
-		FlatDarkLaf.setup();
-		getContentPane().setSize(new Dimension(1280, 0));
-		getContentPane().setPreferredSize(new Dimension(1280, 0));
-		getContentPane().setMinimumSize(new Dimension(1280, 0));
-		setPreferredSize(new Dimension(1280, 0));
-		setMinimumSize(new Dimension(1280, 0));
-		setBounds(100, 100, 1280, 720);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		getContentPane().setLayout(new BorderLayout(0, 0));
-
+		
 		body = new JPanel();
 		getContentPane().add(body);
 		body.setLayout(new BorderLayout(0, 0));
@@ -305,15 +295,7 @@ public class Detail extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Page.getInstance().getPagefactory().closePage(self());
-				 new Thread() {
-					@Override
-					public void run() {
-//						Home window = new Home();
-//						Home.run(window);
-						Page.getInstance().getPagefactory().getHome().setVisible(true);
-					}
-				}.start();
-				
+				Page.getInstance().getPagefactory().getHome();				
 			}
 			
 		});
@@ -339,7 +321,7 @@ public class Detail extends JFrame{
 		panel.add(lblNewLabel);
 	}
 
-	public JFrame self() {
+	public CustomWindow self() {
 		return this;
 	}
 

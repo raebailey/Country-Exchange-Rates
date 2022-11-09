@@ -2,6 +2,7 @@ package models;
 
 import javax.swing.JFrame;
 
+import ui.CustomWindow;
 import ui.Detail;
 import ui.Home;
 
@@ -17,6 +18,7 @@ public class PageFactory {
 		if (homepage == null) {
 			homepage = new Home();
 		}
+		homepage.setVisible(true);
 		return homepage;
 	}
 
@@ -24,10 +26,11 @@ public class PageFactory {
 //		if (detailpage == null) {
 			detailpage = new Detail(country);
 //		}
+			detailpage.setVisible(true);
 		return detailpage;
 	}
 	
-	public void closePage(JFrame frame) {
+	public void closePage(CustomWindow frame) {
 		frame.dispose();
 	}
 
