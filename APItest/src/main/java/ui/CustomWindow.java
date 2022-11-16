@@ -9,6 +9,11 @@ import com.formdev.flatlaf.FlatDarkLaf;
 
 public class CustomWindow extends JFrame{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9153467656675809168L;
+
 	public CustomWindow() {
 		initialize();
 	}
