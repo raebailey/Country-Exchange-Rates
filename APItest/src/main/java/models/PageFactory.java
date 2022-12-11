@@ -23,10 +23,12 @@ public class PageFactory {
 	}
 
 	public JFrame getDetail(Country country) {
-//		if (detailpage == null) {
-			detailpage = new Detail(country);
-//		}
-			detailpage.setVisible(true);
+		if (detailpage == null) {
+			detailpage = new Detail();
+		}
+		detailpage.setCountry(country);
+//		detailpage.setVisible(true);
+			
 		return detailpage;
 	}
 	

@@ -16,6 +16,10 @@ import models.Rate;
 public class DatabaseModel {
 	private Connection con;
 
+	/**
+	 * Establishes a connection with database
+	 * @return Connection object
+	 */
 	private Connection getConnection() {
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -29,7 +33,10 @@ public class DatabaseModel {
 		return con;
 	}
 	
-
+	/**
+	 * Gets all countries
+	 * @return An array of countries
+	 */
 	public Country[] getCountries() {
 		if (con == null) {
 			con = getConnection();
@@ -60,7 +67,12 @@ public class DatabaseModel {
 		return countries.toArray(new Country[countries.size()]);
 
 	}
-
+	
+	/**
+	 * Gets a specific country using the country code
+	 * @param code The code for a specific country
+	 * @return A country object
+	 */
 	public Country fetchCountry(String code) {
 		PreparedStatement stmt;
 		Country country = null;
@@ -97,6 +109,11 @@ public class DatabaseModel {
 		return country;
 	}
 
+	/**
+	 * Gets all the rates for a specific country
+	 * @param code The code for a specific country 
+	 * @return An array of Rates
+	 */
 	public Rate[] fetchRates(String code) {
 		ArrayList<Rate> rateList = new ArrayList<Rate>();
 		PreparedStatement stmt;
@@ -128,10 +145,17 @@ public class DatabaseModel {
 
 		return rateList.toArray(new Rate[rateList.size()]);
 	}
-	
 
-	public void insertCountry(String code, String name, String currency_code, Double longitude, Double latitude,
-			String image) {
+	/**
+	 * Inserts a country to Country table
+	 * @param code The code of a specific country
+	 * @param name The name of the country 
+	 * @param currency_code The currency code of that country
+	 * @param longitude The longitudinal coordinate of country
+	 * @param latitude The lattitudinal coordinate of country
+	 * @param image The image url of country flag
+	 */
+	public void insertCountry(String code, String name, String currency_code, Double longitude, Double latitude,String image) {
 		if (con == null) {
 			con = getConnection();
 		}
@@ -155,6 +179,12 @@ public class DatabaseModel {
 
 	}
 
+	/**
+	 * Inserts rate into Rate table
+	 * @param key The currency code of a country
+	 * @param value The rate value
+	 * @param last_update The time and date that the rate was retrieved
+	 */
 	public void insertRate(String key,Double value, String last_update) {
 		if (con == null) {
 			con = getConnection();
@@ -176,6 +206,12 @@ public class DatabaseModel {
 
 	}
 	
+	/**
+	 * Inserts currency in Currency table
+	 * @param currency_code The code used to represent a particular country
+	 * @param name The name of the currency
+	 * @param symbol The symbol used to represent currency
+	 */
 	public void insertCurrency(String currency_code,String name, String symbol) {
 		if (con == null) {
 			con = getConnection();
@@ -197,6 +233,12 @@ public class DatabaseModel {
 
 	}
 
+	/**
+	 * Checks to see if a rate exist for a particular country on a specific date and time
+	 * @param date The date and time of the rate
+	 * @param code The country code of which the rate matches
+	 * @return boolean 
+	 */
 	public boolean rateExist(String date,String code) {
 		boolean exist = false;
 		if (con == null) {
@@ -226,6 +268,11 @@ public class DatabaseModel {
 
 	}
 
+	/**
+	 * Checks if a country exists
+	 * @param code The code for a country
+	 * @return boolean 
+	 */
 	public boolean countryExist(String code) {
 		boolean exist = false;
 		if (con == null) {
@@ -252,6 +299,11 @@ public class DatabaseModel {
 
 	}
 	
+	/**
+	 * Checks if a currency already exists
+	 * @param code The code for a currency
+	 * @return boolean
+	 */
 	public boolean currencyExist(String code) {
 		boolean exist = false;
 		if (con == null) {
@@ -278,6 +330,10 @@ public class DatabaseModel {
 
 	}
 
+	/**
+	 * Gets the next execution for fetching rates
+	 * @return Date object
+	 */
 	public Date getRunTime() {
 		Date date = null;
 		if (con == null) {
@@ -302,6 +358,10 @@ public class DatabaseModel {
 		return date;
 	}
 
+	/**
+	 * Updates the next run time to fetch rates from API
+	 * @param nextRun The date and time for the next execution
+	 */
 	public void updateRunTime(String nextRun) {
 		if (con == null) {
 			con = getConnection();
@@ -320,6 +380,11 @@ public class DatabaseModel {
 		}
 	}
 
+	/**
+	 * Inserts the next runtime in the NextUpdate table
+	 * @param id The id of the currency code 
+	 * @param time The date and time of the next runtime
+	 */
 	public void insertRunTime(String id, String time) {
 		if (con == null) {
 			con = getConnection();
@@ -339,6 +404,11 @@ public class DatabaseModel {
 		}
 	}
 
+	/**
+	 * Checks to see if run time for a specific currency exists
+	 * @param code The currency code 
+	 * @return boolean
+	 */
 	public boolean runTimeExist(String code) {
 		boolean exist = false;
 		if (con == null) {

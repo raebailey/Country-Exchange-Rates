@@ -1,18 +1,22 @@
 package tasks;
 
+import java.awt.Image;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import cache.CacheManager;
 import components.CountryCard;
+import components.notification.Notification;
 
 public class SearchTask extends Thread implements Runnable {
 	private String searchTerm;
 	private CountryCard[] cards;
 	private CountryCard[] cardArr = null;
 	private JPanel panel;
+	private JFrame frame;
 
 	@Override
 	public void run() {
@@ -28,13 +32,18 @@ public class SearchTask extends Thread implements Runnable {
 				for (CountryCard card : cards) {
 					if (card.getCountry().getName().contains(searchTerm)) {
 						cardList.add(card);
+						System.out.println(card.getCountry().getName()+"index: "+cardList.indexOf(card));
+						panel.add(card,0);
 					}
 				}
 				if(cardList.size()>0) {
 					cardArr = new CountryCard[cardList.size()];
 					CacheManager.addCache(searchTerm, cardList.toArray(cardArr));
+					//panel.removeAll();
+					
 				}else {
-					panel.add(new JLabel("No results found. Please try again."));
+//					panel.add(new JLabel("No results found. Please try again."));
+					new Notification(frame,Notification.Type.WARNING,Notification.Location.BOTTOM_RIGHT,"No results found. Please try again.",null).showNotification();
 				}
 				panel.revalidate();
 			}
@@ -46,10 +55,10 @@ public class SearchTask extends Thread implements Runnable {
 		return cardArr;
 	}
 
-	public SearchTask(CountryCard[] cards,JPanel panel) {
+	public SearchTask(CountryCard[] cards,JPanel panel,JFrame frame) {
 		this.cards = cards;
-		
 		this.panel = panel;
+		this.frame = frame;
 	}
 	public void setSearchTerm(String searchTerm) {
 		this.searchTerm = searchTerm;

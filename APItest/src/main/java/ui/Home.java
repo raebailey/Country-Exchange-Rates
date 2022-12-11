@@ -110,6 +110,9 @@ public class Home extends CustomWindow{
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("pressed");
 				String value = textField.getText().trim();
+				if(search.isAlive()) {
+					search.interrupt();
+				}
 				if(!value.isEmpty()) {
 					search.setSearchTerm(value);
 					search.run();
@@ -136,7 +139,7 @@ public class Home extends CustomWindow{
 		JLabel[] cArr = new JLabel[cardArr.size()];
 		String[] uArr = new String[urlArr.size()];
 		load = new ImageLoader_Task(cardArr.toArray(cArr), urlArr.toArray(uArr));
-		search = new SearchTask(ccArr.toArray(new CountryCard[ccArr.size()]),panel_2);
+		search = new SearchTask(ccArr.toArray(new CountryCard[ccArr.size()]),panel_2,this);
 	}
 
 

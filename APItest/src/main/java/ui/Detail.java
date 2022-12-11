@@ -58,19 +58,23 @@ public class Detail extends CustomWindow{
 	private JLabel lblNewLabel_7;
 	private JLabel longLbl;
 	private LineChart linechart;
+	private JLabel currCodeLbl;
+	private JLabel rateEstLbl;
+	private TableDark table;
+	private DatabaseModel model = new DatabaseModel();
 
 
 	/**
 	 * Create the application.
 	 */
-	public Detail(Country country) {
-		initialize(country);
+	public Detail() {
+		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize(Country country) {
+	private void initialize() {
 		
 		body = new JPanel();
 		getContentPane().add(body);
@@ -82,36 +86,6 @@ public class Detail extends CustomWindow{
 
 		imageLbl = new JLabel("");
 
-		DatabaseModel model = new DatabaseModel();
-		String imageUrl = country.getImageUrl();
-		String default_url = "https://www.freeiconspng.com/uploads/no-image-icon-6.png";
-		URL url;
-		Image image;
-		try {
-			Image newImage = (Image)CacheManager.getCacheItem(default_url);
-			if(newImage==null) {
-				url = new URL(default_url);
-				image = ImageIO.read(url);
-			}else {
-				image = newImage;
-			}
-			if (imageUrl != null) {
-				Image newImage1 = (Image)CacheManager.getCacheItem(imageUrl);
-				if(newImage1==null) {
-					url = new URL(imageUrl);
-					image = ImageIO.read(url);
-				}else {
-					image = newImage1;
-				}
-				
-			}
-			imageLbl.setIcon(new ImageIcon(ImageHelper.makeRoundedCorner(image, 8, 320, 160)));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			imageLbl.setIcon(new ImageIcon(getClass().getResource("/images/fail.png")));
-		}
-
 		imageLbl.setPreferredSize(new Dimension(320, 180));
 		imageLbl.setSize(new Dimension(320, 0));
 		panel_8.add(imageLbl);
@@ -122,7 +96,7 @@ public class Detail extends CustomWindow{
 		panel_8.add(panel_2);
 		panel_2.setLayout(new MigLayout("", "[200px][46px,grow]", "[22px][grow][][grow]"));
 
-		nameLbl = new JLabel(country.getName());
+		nameLbl = new JLabel();
 		nameLbl.setFont(new Font("SansSerif", Font.BOLD, 24));
 		nameLbl.setPreferredSize(new Dimension(200, 20));
 		panel_2.add(nameLbl, "cell 0 0,alignx left,aligny top");
@@ -145,7 +119,7 @@ public class Detail extends CustomWindow{
 		lblNewLabel_5.setFont(new Font("SansSerif", Font.PLAIN, 12));
 		panel_5.add(lblNewLabel_5);
 
-		latLbl = new JLabel(String.valueOf(country.getLatitude()));
+		latLbl = new JLabel();
 		latLbl.setFont(new Font("SansSerif", Font.PLAIN, 12));
 		panel_5.add(latLbl);
 
@@ -159,7 +133,7 @@ public class Detail extends CustomWindow{
 		lblNewLabel_7.setFont(new Font("SansSerif", Font.PLAIN, 12));
 		panel_6.add(lblNewLabel_7);
 
-		longLbl = new JLabel(String.valueOf(country.getLongitude()));
+		longLbl = new JLabel();
 		longLbl.setFont(new Font("SansSerif", Font.PLAIN, 12));
 		panel_6.add(longLbl);
 
@@ -171,7 +145,7 @@ public class Detail extends CustomWindow{
 		panel_2.add(panel_7, "cell 1 2,grow");
 		panel_7.setLayout(new MigLayout("", "[46px,grow]", "[]"));
 
-		JLabel currCodeLbl = new JLabel(country.getCurrencyCode().toUpperCase());
+		currCodeLbl = new JLabel();
 		panel_7.add(currCodeLbl, "cell 0 0");
 
 		JLabel lblNewLabel_3 = new JLabel("Rate Earnings");
@@ -187,19 +161,9 @@ public class Detail extends CustomWindow{
 		JLabel lblNewLabel_4 = new JLabel("- 0.24%");
 		panel_3.add(lblNewLabel_4);
 
-		JLabel rateEstLbl = new JLabel("");
+		rateEstLbl = new JLabel("");
 
-		try {
-			url = new URL("https://img.icons8.com/emoji/48/000000/red-triangle-pointed-down-emoji.png");
-			image = ImageIO.read(url);
-			rateEstLbl.setIcon(new ImageIcon(image.getScaledInstance(22, 22, java.awt.Image.SCALE_SMOOTH)));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		panel_3.add(rateEstLbl);
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -211,7 +175,7 @@ public class Detail extends CustomWindow{
 
 		RoundPanel roundPanel1 = new RoundPanel();
 		roundPanel1.setPreferredSize(new Dimension(1240, 500));
-		TableDark table = new TableDark();
+		table = new TableDark();
 		table.setSize(new Dimension(1240, 600));
 		table.setPreferredSize(new Dimension(1240, 600));
 		table.setAutoCreateRowSorter(true);
@@ -237,12 +201,7 @@ public class Detail extends CustomWindow{
 		pane.add(table, "cell 0 0,grow");
 		scrollpane.setViewportView(pane);
 		table.fixTable(scrollpane);
-		DefaultTableModel mode = (DefaultTableModel) table.getModel();
-		int count = 1;
-		for (Rate r : model.fetchRates(country.getCurrencyCode())) {
-			mode.addRow(new Object[] { count, r.getRateVal(), r.getDate().split(" ")[0] });
-			count += 1;
-		}
+		
 		RoundPanel roundPanel = new RoundPanel();
 		roundPanel.setPreferredSize(new Dimension(1240, 370));
 		roundPanel.setLayout(new MigLayout("", "[1000px]", "[360px]"));
@@ -250,14 +209,7 @@ public class Detail extends CustomWindow{
 	    linechart = new LineChart();
 		linechart.setPreferredSize(new Dimension(1000, 360));
 		roundPanel.add(linechart, "cell 0 0,alignx left,aligny top");
-		Rate[] rate = model.fetchRates(country.getCurrencyCode());
-
-		linechart.addLegend(country.getName(), new Color(12, 84, 175), new Color(0, 108, 247));
-		for (Rate r : rate) {
-			linechart.addData(new ModelChart(r.getDate().split(" ")[0], new double[] { r.getRateVal() }));
-		}
-
-		linechart.start();
+		
 
 		panel_1.setPreferredSize(new Dimension(10, 1000));
 		panel_1.setSize(new Dimension(0, 600));
@@ -331,6 +283,72 @@ public class Detail extends CustomWindow{
 
 	public void setTextField(JTextField textField) {
 		this.textField = textField;
+	}
+
+	public void setCountry(Country country) {
+		
+		String imageUrl = country.getImageUrl();
+		String default_url = "https://www.freeiconspng.com/uploads/no-image-icon-6.png";
+		URL url;
+		Image image;
+		try {
+			Image newImage = (Image)CacheManager.getCacheItem(default_url);
+			if(newImage==null) {
+				url = new URL(default_url);
+				image = ImageIO.read(url);
+			}else {
+				image = newImage;
+			}
+			if (imageUrl != null) {
+				Image newImage1 = (Image)CacheManager.getCacheItem(imageUrl);
+				if(newImage1==null) {
+					url = new URL(imageUrl);
+					image = ImageIO.read(url);
+				}else {
+					image = newImage1;
+				}
+				
+			}
+			imageLbl.setIcon(new ImageIcon(ImageHelper.makeRoundedCorner(image, 8, 320, 160)));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			imageLbl.setIcon(new ImageIcon(getClass().getResource("/images/fail.png")));
+		}
+		nameLbl.setText(country.getName());
+		latLbl.setText(String.valueOf(country.getLatitude()));
+		longLbl.setText(String.valueOf(country.getLongitude()));
+		currCodeLbl.setText(country.getCurrencyCode().toUpperCase());
+		
+		try {
+			url = new URL("https://img.icons8.com/emoji/48/000000/red-triangle-pointed-down-emoji.png");
+			image = ImageIO.read(url);
+			rateEstLbl.setIcon(new ImageIcon(image.getScaledInstance(22, 22, java.awt.Image.SCALE_SMOOTH)));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		DefaultTableModel mode = (DefaultTableModel) table.getModel();
+		int count = 1;
+		Rate[] rates = model.fetchRates(country.getCurrencyCode());
+		for (Rate r : rates) {
+			mode.addRow(new Object[] { count, r.getRateVal(), r.getDate().split(" ")[0] });
+			count += 1;
+		}
+//		Rate[] rate = model.fetchRates(country.getCurrencyCode());
+
+//		linechart.addLegend(country.getName(), new Color(12, 84, 175), new Color(0, 108, 247));
+//		for (Rate r : rates) {
+//			linechart.addData(new ModelChart(r.getDate().split(" ")[0], new double[] { r.getRateVal() }));
+//		}
+
+//		linechart.start();
+		self().setVisible(true);
+		
 	}
 	
 	

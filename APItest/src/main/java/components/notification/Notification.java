@@ -30,6 +30,14 @@ public class Notification extends javax.swing.JComponent {
     private Type type;
     private Location location;
 
+    /**
+     * Initializes notification class
+     * @param fram Window which the notification will show on
+     * @param type The type notification 
+     * @param location Where on the window will the notification appear
+     * @param message The message the notification will display
+     * @param image The image icon of notification
+     */
     public Notification(Frame fram, Type type, Location location, String message,Image image) {
         this.fram = fram;
         this.type = type;
@@ -55,7 +63,7 @@ public class Notification extends javax.swing.JComponent {
             lbIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/info.png")));
             lbMessage.setText("Info");
         } else {
-            lbIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/fail.png")));
+            lbIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/error-404.png")));
             lbMessage.setText("Warning");
         }
         if(image!=null) {
@@ -198,7 +206,7 @@ public class Notification extends javax.swing.JComponent {
         } else if (type == Type.INFO) {
             g2.setColor(new Color(28, 139, 206));
         } else {
-            g2.setColor(new Color(241, 196, 15));
+            g2.setColor(new Color(255, 0, 0));
         }
         g2.fillRect(6, 5, 5, getHeight() - shadowSize * 2 + 1);
         g2.dispose();
@@ -247,8 +255,6 @@ public class Notification extends javax.swing.JComponent {
 
         lbMessageText.setForeground(new java.awt.Color(127, 127, 127));
         lbMessageText.setText("Message Text");
-        
-        lblNewLabel = new JLabel("New label");
 
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panelLayout.setHorizontalGroup(
@@ -257,11 +263,8 @@ public class Notification extends javax.swing.JComponent {
         			.addContainerGap()
         			.addGroup(panelLayout.createParallelGroup(Alignment.LEADING)
         				.addComponent(lbMessage)
-        				.addGroup(panelLayout.createSequentialGroup()
-        					.addComponent(lbMessageText)
-        					.addGap(10)
-        					.addComponent(lblNewLabel)))
-        			.addContainerGap(173, Short.MAX_VALUE))
+        				.addComponent(lbMessageText))
+        			.addContainerGap(232, Short.MAX_VALUE))
         );
         panelLayout.setVerticalGroup(
         	panelLayout.createParallelGroup(Alignment.LEADING)
@@ -269,14 +272,12 @@ public class Notification extends javax.swing.JComponent {
         			.addContainerGap()
         			.addComponent(lbMessage)
         			.addGap(3)
-        			.addGroup(panelLayout.createParallelGroup(Alignment.BASELINE)
-        				.addComponent(lbMessageText)
-        				.addComponent(lblNewLabel))
+        			.addComponent(lbMessageText)
         			.addContainerGap())
         );
         panel.setLayout(panelLayout);
 
-        cmdClose.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/fail.png"))); // NOI18N
+        //cmdClose.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/fail.png"))); // NOI18N
         cmdClose.setBorder(null);
         cmdClose.setContentAreaFilled(false);
         cmdClose.setFocusable(false);
@@ -329,5 +330,4 @@ public class Notification extends javax.swing.JComponent {
     private javax.swing.JLabel lbMessage;
     private javax.swing.JLabel lbMessageText;
     private javax.swing.JPanel panel;
-    private JLabel lblNewLabel;
 }
