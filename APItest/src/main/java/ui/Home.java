@@ -23,6 +23,9 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import components.CountryCard;
 import components.ScrollBarCustom;
 import components.TableDark;
+import components.search.EventCallBack;
+import components.search.EventTextField;
+import components.search.SearchTextField;
 import layouts.WrapLayout;
 import models.Country;
 import sample.DatabaseModel;
@@ -52,8 +55,7 @@ public class Home extends CustomWindow{
 	private SearchTask search;
 	private JPanel panel_1;
 	private JPanel panel_4;
-	private JTextField textField;
-	private JLabel lblNewLabel_1;
+	private SearchTextField textField;
 
 	
 	public Home() {
@@ -66,6 +68,11 @@ public class Home extends CustomWindow{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		DatabaseModel model = new DatabaseModel();
+		Country[] countries = model.getCountries();
+		ArrayList<JLabel> cardArr = new ArrayList<JLabel>();
+		ArrayList<String> urlArr = new ArrayList<String>();
+		ArrayList<CountryCard> ccArr = new ArrayList<CountryCard>();
 		
 		panel = new JPanel();
 		getContentPane().add(panel);
@@ -83,7 +90,17 @@ public class Home extends CustomWindow{
 		WrapLayout wraplayout = new WrapLayout(WrapLayout.LEFT,20,20);
 		panel_2.setLayout(wraplayout);
 		scrollPane.setViewportView(panel_2);
-		
+		for (Country country : countries) {
+			CountryCard card = new CountryCard(country,this);
+			cardArr.add(card.getImagelbl());
+			urlArr.add(country.getImageUrl());
+			ccArr.add(card);
+			panel_2.add(card);
+		}
+		JLabel[] cArr = new JLabel[cardArr.size()];
+		String[] uArr = new String[urlArr.size()];
+		load = new ImageLoader_Task(cardArr.toArray(cArr), urlArr.toArray(uArr));
+		search = new SearchTask(ccArr.toArray(new CountryCard[ccArr.size()]),panel_2,this);
 		
 		panel_1 = new JPanel();
 		panel_1.setPreferredSize(new Dimension(10, 40));
@@ -96,50 +113,12 @@ public class Home extends CustomWindow{
 		panel_4.setBackground(new Color(53, 57, 53));
 		panel_4.setLayout(null);
 		
-		textField = new JTextField();
-		textField.setBounds(0, 0, 210, 40);
+		textField = new SearchTextField(search);
+		textField.setHintText("Search Country");
+		
+		textField.setBounds(0, 0, 300, 40);
 		panel_4.add(textField);
 		textField.setColumns(10);
-		
-		lblNewLabel_1 = new JLabel("Search");
-		lblNewLabel_1.setForeground(Color.WHITE);
-		lblNewLabel_1.setBackground(new Color(0, 150, 255));
-		lblNewLabel_1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		lblNewLabel_1.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				System.out.println("pressed");
-				String value = textField.getText().trim();
-				if(search.isAlive()) {
-					search.interrupt();
-				}
-				if(!value.isEmpty()) {
-					search.setSearchTerm(value);
-					search.run();
-				}
-			}
-		});
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblNewLabel_1.setBounds(209, 0, 91, 38);
-		panel_4.add(lblNewLabel_1);
-
-		DatabaseModel model = new DatabaseModel();
-		Country[] countries = model.getCountries();
-		ArrayList<JLabel> cardArr = new ArrayList<JLabel>();
-		ArrayList<String> urlArr = new ArrayList<String>();
-		ArrayList<CountryCard> ccArr = new ArrayList<CountryCard>();
-		for (Country country : countries) {
-			CountryCard card = new CountryCard(country,this);
-			cardArr.add(card.getImagelbl());
-			urlArr.add(country.getImageUrl());
-			ccArr.add(card);
-			panel_2.add(card);
-		}
-		JLabel[] cArr = new JLabel[cardArr.size()];
-		String[] uArr = new String[urlArr.size()];
-		load = new ImageLoader_Task(cardArr.toArray(cArr), urlArr.toArray(uArr));
-		search = new SearchTask(ccArr.toArray(new CountryCard[ccArr.size()]),panel_2,this);
 	}
 
 

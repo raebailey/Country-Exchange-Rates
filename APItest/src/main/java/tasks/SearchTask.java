@@ -1,5 +1,7 @@
 package tasks;
 
+import java.awt.Cursor;
+import java.awt.Font;
 import java.awt.Image;
 import java.util.ArrayList;
 
@@ -9,6 +11,8 @@ import javax.swing.JPanel;
 
 import cache.CacheManager;
 import components.CountryCard;
+import components.CustomButton;
+import components.CustomButton.ButtonStyle;
 import components.notification.Notification;
 
 public class SearchTask extends Thread implements Runnable {
@@ -29,6 +33,7 @@ public class SearchTask extends Thread implements Runnable {
 				}
 			} else {
 				ArrayList<CountryCard> cardList = new ArrayList<CountryCard>();
+//				panel.removeAll();
 				for (CountryCard card : cards) {
 					if (card.getCountry().getName().contains(searchTerm)) {
 						cardList.add(card);
@@ -36,10 +41,10 @@ public class SearchTask extends Thread implements Runnable {
 						panel.add(card,0);
 					}
 				}
+				
 				if(cardList.size()>0) {
 					cardArr = new CountryCard[cardList.size()];
 					CacheManager.addCache(searchTerm, cardList.toArray(cardArr));
-					//panel.removeAll();
 					
 				}else {
 //					panel.add(new JLabel("No results found. Please try again."));
