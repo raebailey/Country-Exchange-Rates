@@ -2,6 +2,7 @@ package components.search;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.FontMetrics;
 import java.awt.GradientPaint;
@@ -16,6 +17,8 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.RoundRectangle2D;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -26,7 +29,9 @@ import javax.swing.border.EmptyBorder;
 import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTarget;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
+import models.Country;
 import tasks.SearchTask;
 
 public class SearchTextField extends JTextField implements EventTextField {
@@ -41,6 +46,7 @@ public class SearchTextField extends JTextField implements EventTextField {
 	private EventCallBack callBack;
 	private SearchTask thread;
 	private final Animator animator;
+	private List<String> itemSuggestion = new ArrayList<>();
 
 	public SearchTextField(SearchTask thread) {
 		this.thread = thread;
@@ -79,19 +85,14 @@ public class SearchTextField extends JTextField implements EventTextField {
 							animator.start();
 							onCancel();
 						} else {
-							setEditable(false);
-							show = true;
-							location = getWidth();
-							animator.start();
-//							if (event != null) {
-//								thread = new Thread(new Runnable() {
-							// @Override
-//									public void run() {
-							onPressed(callBack);
-//									}
-//								});
-//								thread.start();
-//							}
+							if (!getText().trim().isEmpty()) {
+								setEditable(false);
+								show = true;
+								location = getWidth();
+								animator.start();
+								onPressed(callBack);
+							}
+
 						}
 					}
 				}
@@ -126,6 +127,7 @@ public class SearchTextField extends JTextField implements EventTextField {
 		animator.setResolution(0);
 		animator.setAcceleration(0.5f);
 		animator.setDeceleration(0.5f);
+		AutoCompleteDecorator.decorate(this,itemSuggestion,false);
 	}
 
 	@Override
@@ -230,14 +232,31 @@ public class SearchTextField extends JTextField implements EventTextField {
 	public void setHintText(String text) {
 		this.hintText = text;
 	}
+	
+	// Make this an abstract method 
+	public void setSuggestionItems(Country[] countries) {
+		for(Country country: countries) {
+			addSuggestionItem(country.getName());
+		}
+		
+	}
+	
+	private void addSuggestionItem(String word) {
+		itemSuggestion.add(word);
+	}
+	
+	public List<String> getItemSuggestion(){
+		return itemSuggestion;
+	}
 
 	@Override
 	public void setBackground(Color color) {
 		this.backgroundColor = color;
 	}
-	
+
 	/**
 	 * Set the color of the animation
+	 * 
 	 * @param color The desired color of the animation
 	 */
 	public void setAnimatorColor(Color color) {

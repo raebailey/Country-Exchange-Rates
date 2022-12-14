@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -114,8 +115,8 @@ public class Home extends CustomWindow{
 		panel_4.setLayout(null);
 		
 		textField = new SearchTextField(search);
-		textField.setHintText("Search Country");
-		
+		textField.setHintText("Search Country "+"("+countries.length+")");
+		textField.setSuggestionItems(countries);
 		textField.setBounds(0, 0, 300, 40);
 		panel_4.add(textField);
 		textField.setColumns(10);

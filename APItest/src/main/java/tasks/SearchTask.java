@@ -47,7 +47,6 @@ public class SearchTask extends Thread implements Runnable {
 					CacheManager.addCache(searchTerm, cardList.toArray(cardArr));
 					
 				}else {
-//					panel.add(new JLabel("No results found. Please try again."));
 					new Notification(frame,Notification.Type.WARNING,Notification.Location.BOTTOM_RIGHT,"No results found. Please try again.",null).showNotification();
 				}
 				panel.revalidate();
