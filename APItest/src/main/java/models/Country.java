@@ -20,17 +20,20 @@ public class Country {
 	private double latitude;
 	private String imageUrl;
 	private Rate[] rate;
+	private boolean visible;
 	private DatabaseModel model;
-	
+
 	private ArrayList<CountryListener> listeners = new ArrayList<CountryListener>();
 
-	public Country(String countryCode, String name, String currency, double longitude, double latitude, String imageUrl) {
+	public Country(String countryCode, String name, String currency, double longitude, double latitude, String imageUrl,
+			boolean visible) {
 		this.countryCode = countryCode;
 		this.name = name;
 		this.currencyCode = currency;
 		this.longitude = longitude;
 		this.latitude = latitude;
 		this.imageUrl = imageUrl;
+		this.visible = visible;
 		this.model = new DatabaseModel();
 	}
 
@@ -95,7 +98,15 @@ public class Country {
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
 	}
-	
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+
 	public synchronized void addListener(CountryListener listener) {
 		listeners.add(listener);
 	}
@@ -103,25 +114,37 @@ public class Country {
 	public synchronized void removeListener(CountryListener listener) {
 		listeners.remove(listener);
 	}
-	
+
 	public void save() {
 		model.insertCountry(countryCode, name, currencyCode, longitude, latitude, imageUrl);
-		String message = String.format("%s added.",name);
-		processCountryEvent(new CountryEvent(this, "Save", new ApiNotification(message, APItest.localTime(), MessageTypes.NEWCOUNTRY, imageUrl)));
+		String message = String.format("%s added.", name);
+		processCountryEvent(new CountryEvent(this, "Save",
+				new ApiNotification(message, APItest.localTime(), MessageTypes.NEWCOUNTRY, imageUrl)));
+
 	}
-	
+
+	public void update(Country country) {
+		System.out.println("Updated: "+country);
+		model.updateCountry(country);
+		String message = String.format("%s updated.", name);
+		processCountryEvent(new CountryEvent(this, "Update",
+				new ApiNotification(message, APItest.localTime(), MessageTypes.UPDATECOUNTRY, imageUrl)));
+
+	}
+
 	public void reject() {
-		String message = String.format("Countries rejected: %s",name);
-		processCountryEvent(new CountryEvent(this, "Reject", new ApiNotification(message, APItest.localTime(), MessageTypes.REJECT, imageUrl)));
+		String message = String.format("Countries rejected: %s", name);
+		processCountryEvent(new CountryEvent(this, "Reject",
+				new ApiNotification(message, APItest.localTime(), MessageTypes.REJECT, imageUrl)));
 	}
-	
+
 	private void processCountryEvent(CountryEvent countryEvent) {
 		ArrayList<CountryListener> tempList;
 
 		synchronized (this) {
 			if (listeners.size() == 0)
 				return;
-			tempList = (ArrayList<CountryListener>)listeners.clone();
+			tempList = (ArrayList<CountryListener>) listeners.clone();
 		}
 
 		for (CountryListener listener : tempList) {
@@ -133,7 +156,7 @@ public class Country {
 	public String toString() {
 		return "Country [countryCode=" + countryCode + ", name=" + name + ", currencyCode=" + currencyCode
 				+ ", longitude=" + longitude + ", latitude=" + latitude + ", imageUrl=" + imageUrl + ", rate="
-				+ Arrays.toString(rate) + "]";
+				+ Arrays.toString(rate) + ", visible=" + visible + "]";
 	}
 
 }

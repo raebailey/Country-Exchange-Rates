@@ -197,6 +197,11 @@ public class SearchTextField extends JTextField implements EventTextField {
 		return animationColor;
 	}
 
+	/**
+	 * Set the color of the animation
+	 * 
+	 * @param color The desired color of the animation
+	 */
 	public void setAnimationColor(Color animationColor) {
 		this.animationColor = animationColor;
 	}
@@ -252,15 +257,6 @@ public class SearchTextField extends JTextField implements EventTextField {
 	@Override
 	public void setBackground(Color color) {
 		this.backgroundColor = color;
-	}
-
-	/**
-	 * Set the color of the animation
-	 * 
-	 * @param color The desired color of the animation
-	 */
-	public void setAnimatorColor(Color color) {
-		this.animationColor = color;
 	}
 
 	@Override

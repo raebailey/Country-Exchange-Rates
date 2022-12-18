@@ -118,8 +118,8 @@ public class Home extends CustomWindow{
 		textField.setHintText("Search Country "+"("+countries.length+")");
 		textField.setSuggestionItems(countries);
 		textField.setBounds(0, 0, 300, 40);
-		panel_4.add(textField);
 		textField.setColumns(10);
+		panel_4.add(textField);
 	}
 
 

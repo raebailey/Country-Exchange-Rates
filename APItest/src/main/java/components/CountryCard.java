@@ -11,18 +11,18 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.SwingConstants;
 
 import cache.CacheManager;
 import components.CustomButton.ButtonStyle;
+import components.icon.ActionInterface;
+import components.icon.CustomIcon;
 import components.notification.Notification;
 import models.Country;
 import models.Page;
 import ui.CustomWindow;
-import ui.Detail;
 
 public class CountryCard extends RoundPanel {
 	/**
@@ -34,7 +34,9 @@ public class CountryCard extends RoundPanel {
 	private JLabel imagelbl;
 	private JLabel namelbl;
 	private CustomButton gotoBtn;
+	private CustomIcon icon;
 	private CustomWindow frame;
+
 
 	public CountryCard(Country country,CustomWindow frame) {
 		initialize();
@@ -44,8 +46,9 @@ public class CountryCard extends RoundPanel {
 		setMaximumSize(new Dimension(350, 200));
 		setMinimumSize(new Dimension(350, 200));
 		this.country = country;
-
+		icon.setShow(country.isVisible());
 		namelbl.setText(country.getName());
+		
 
 	}
 
@@ -133,6 +136,29 @@ public class CountryCard extends RoundPanel {
 			}
 		});
 		add(gotoBtn);
+		
+		icon = new CustomIcon();
+		icon.setLocation(10, 158);
+		icon.setSize(25, 25);
+		icon.addActionInterface(new ActionInterface() {
+
+			@Override
+			public void action() {
+				if(!icon.isShow()) {
+					country.setVisible(false);
+					country.update(country);
+					
+				}else {
+					country.setVisible(true);
+					country.update(country);
+				}
+				
+				setEnabled(!icon.isShow());
+			}
+			
+		});
+		add(icon);
+		
 		setLayout(null);
 
 	}

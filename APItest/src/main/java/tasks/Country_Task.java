@@ -55,7 +55,7 @@ public class Country_Task extends TimerTask {
 				if (jsonArr == null) {
 					reject += 1;
 					rejectCountries.add(new Country(obj.get("alpha2Code").toString(), obj.get("name").toString(), "", lng.floatValue(),
-							lat.floatValue(), imageUrl));
+							lat.floatValue(), imageUrl,true));
 					continue;
 				}
 				JSONObject currency_code = (JSONObject) jsonArr.get(0);
@@ -71,7 +71,7 @@ public class Country_Task extends TimerTask {
 				boolean exists = model.countryExist(obj.get("alpha2Code").toString());
 				if (exists != true) {
 					Country country = new Country(obj.get("alpha2Code").toString(), obj.get("name").toString(), currencyCode, lng,
-							lat, imageUrl);
+							lat, imageUrl,true);
 					country.addListener(new CountryListener() {
 
 						@Override

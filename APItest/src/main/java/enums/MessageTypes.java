@@ -12,6 +12,7 @@ import components.image.ImageHelper;
 public enum MessageTypes {
 		NOUPDATE("No Update","/images/update.png"),
 		NEWCOUNTRY("New Country"),
+		UPDATECOUNTRY("Update Country"),
 		REJECT("Reject","/images/warning.png"),
 		NEWRATE("New Rate","/images/money.png"),
 		ERROR("Error","/images/reject.png",new Color(201, 32, 32));

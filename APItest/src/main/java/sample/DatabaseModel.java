@@ -43,8 +43,8 @@ public class DatabaseModel {
 		}
 		ArrayList<Country> countries = new ArrayList<Country>();
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Country  WHERE isactive = ?;");
-			stmt.setBoolean(1, true);
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Country  ;");
+//			stmt.setBoolean(1, true);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				String country_code = rs.getString("country_code");
@@ -53,7 +53,8 @@ public class DatabaseModel {
 				float longitude = rs.getFloat("longitude");
 				float latitude = rs.getFloat("latitude");
 				String image = rs.getString("image");
-				Country country = new Country(country_code, name, currency_code, longitude, latitude, image);
+				boolean visible = rs.getBoolean("isactive");
+				Country country = new Country(country_code, name, currency_code, longitude, latitude, image,visible);
 				countries.add(country);
 			}
 			rs.close();
@@ -92,7 +93,8 @@ public class DatabaseModel {
 				float longitude = rs.getFloat("longitude");
 				float latitude = rs.getFloat("latitude");
 				String image = rs.getString("image");
-				country = new Country(country_code, name, currency_code, longitude, latitude, image);
+				boolean visible = rs.getBoolean("isactive");
+				country = new Country(country_code, name, currency_code, longitude, latitude, image,visible);
 				// System.out.println("Code = " + country_code);
 			}
 			rs.close();
@@ -433,6 +435,36 @@ public class DatabaseModel {
 		}
 		return exist;
 
+	}
+/**
+ * Updates a specific country in database
+ * @param country The country object that was updated
+ */
+	public void updateCountry(Country country) {
+		if (con == null) {
+			con = getConnection();
+		}
+		try {
+			PreparedStatement stmt = con.prepareStatement("UPDATE Country SET country_code = ?,name = ?,currency_code = ?,latitude =?,longitude = ?,image = ?,isactive = ? WHERE country_code = ?;");
+			stmt.setString(1, country.getCountryCode());
+			stmt.setString(2, country.getName());
+			stmt.setString(3, country.getCurrencyCode());
+			stmt.setDouble(4, country.getLatitude());
+			stmt.setDouble(5, country.getLongitude());
+			stmt.setString(6, country.getImageUrl());
+			stmt.setInt(7, (country.isVisible())?1:0);
+			stmt.setString(8, country.getCountryCode());
+			
+			System.out.println("update is: "+stmt.executeUpdate());
+			stmt.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			con = null;
+		}
+		
 	}
 
 }
