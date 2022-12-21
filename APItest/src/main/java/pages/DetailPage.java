@@ -1,23 +1,20 @@
-package ui;
+package pages;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.BeanProperty;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -26,25 +23,21 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
-import com.formdev.flatlaf.FlatDarkLaf;
-
 import cache.CacheManager;
 import components.CustomButton;
-import components.CustomButton.ButtonStyle;
 import components.LineChart;
-import components.ModelChart;
 import components.RoundPanel;
 import components.TableDark;
+import components.CustomButton.ButtonStyle;
 import components.image.ImageHelper;
 import models.Country;
 import models.Page;
 import models.Rate;
 import net.miginfocom.swing.MigLayout;
 import sample.DatabaseModel;
+import ui.CustomWindow;
 
-public class Detail extends CustomWindow{
-
-	private JTextField textField;
+public class DetailPage extends JPanel {
 	private JPanel body;
 	private JPanel panel_8;
 	private JLabel imageLbl;
@@ -63,11 +56,11 @@ public class Detail extends CustomWindow{
 	private TableDark table;
 	private DatabaseModel model = new DatabaseModel();
 
-
 	/**
 	 * Create the application.
 	 */
-	public Detail() {
+	public DetailPage() {
+		setSize(new Dimension(1280, 720));
 		initialize();
 	}
 
@@ -75,12 +68,14 @@ public class Detail extends CustomWindow{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		
+		setLayout(null);
+
 		body = new JPanel();
-		getContentPane().add(body);
+		body.setBounds(0, 0, 1280, 720);
+		add(body);
 		body.setLayout(new BorderLayout(0, 0));
 
-		panel_8= new JPanel();
+		panel_8 = new JPanel();
 		body.add(panel_8, BorderLayout.NORTH);
 		panel_8.setLayout(new FlowLayout(FlowLayout.LEADING, 30, 10));
 
@@ -95,6 +90,22 @@ public class Detail extends CustomWindow{
 		panel_2 = new JPanel();
 		panel_8.add(panel_2);
 		panel_2.setLayout(new MigLayout("", "[200px][46px,grow]", "[22px][grow][][grow]"));
+		
+		CustomButton back = new CustomButton();
+		back.setForeground(Color.WHITE);
+		back.setFont(new Font("SansSerif", Font.BOLD, 14));
+		back.setRound(8);
+		back.setText("Home");
+		back.setSize(62, 25);
+		back.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Page.getInstance().getPagefactory().back();
+				
+			}
+		});
+		panel_8.add(back);
 
 		nameLbl = new JLabel();
 		nameLbl.setFont(new Font("SansSerif", Font.BOLD, 24));
@@ -163,7 +174,6 @@ public class Detail extends CustomWindow{
 
 		rateEstLbl = new JLabel("");
 
-		
 		panel_3.add(rateEstLbl);
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -201,15 +211,14 @@ public class Detail extends CustomWindow{
 		pane.add(table, "cell 0 0,grow");
 		scrollpane.setViewportView(pane);
 		table.fixTable(scrollpane);
-		
+
 		RoundPanel roundPanel = new RoundPanel();
 		roundPanel.setPreferredSize(new Dimension(1240, 370));
 		roundPanel.setLayout(new MigLayout("", "[1000px]", "[360px]"));
 
-	    linechart = new LineChart();
+		linechart = new LineChart();
 		linechart.setPreferredSize(new Dimension(1000, 360));
 		roundPanel.add(linechart, "cell 0 0,alignx left,aligny top");
-		
 
 		panel_1.setPreferredSize(new Dimension(10, 1000));
 		panel_1.setSize(new Dimension(0, 600));
@@ -220,98 +229,43 @@ public class Detail extends CustomWindow{
 		roundPanel1.add(scrollpane, "cell 0 0,grow");
 		panel_1.add(roundPanel, "cell 0 1,alignx left,aligny top");
 
-		JPanel heading = new JPanel();
-		heading.setBackground(new Color(14, 14, 14));
-		heading.setPreferredSize(new Dimension(10, 40));
-		getContentPane().add(heading, BorderLayout.NORTH);
-		heading.setLayout(new BorderLayout(0, 0));
-
-		CustomButton btnNewButton = new CustomButton();
-		btnNewButton.setStyle(ButtonStyle.SECONDARY);
-		btnNewButton.setRound(100);
-		btnNewButton.setPreferredSize(new Dimension(40, 30));
-		btnNewButton.setFocusable(false);
-		btnNewButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
 		try {
 			URL rightUrl = new URL("https://img.icons8.com/material-sharp/24/000000/double-left.png");
 			Image rightImage = ImageIO.read(rightUrl);
-			btnNewButton.setIcon(new ImageIcon(rightImage));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		btnNewButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-//				Page.getInstance().getPagefactory().closePage(self());
-				Page.getInstance().getPagefactory().back();				
-			}
-			
-		});
-
-		heading.add(btnNewButton, BorderLayout.WEST);
-
-		JPanel panel = new JPanel();
-		panel.setBackground(new Color(53, 57, 53));
-		panel.setBorder(null);
-		panel.setPreferredSize(new Dimension(300, 10));
-		heading.add(panel, BorderLayout.EAST);
-		panel.setLayout(null);
-
-		textField = new JTextField();
-		textField.setBounds(80, 3, 210, 35);
-		panel.add(textField);
-		textField.setColumns(10);
-
-		JLabel lblNewLabel = new JLabel("Search");
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(24, 2, 46, 35);
-		panel.add(lblNewLabel);
 	}
 
-	public CustomWindow self() {
+	public DetailPage self() {
 		return this;
 	}
 
-	public JTextField getTextField() {
-		return textField;
-	}
-
-	public void setTextField(JTextField textField) {
-		this.textField = textField;
-	}
-	
-	public JPanel getMainPanel() {
-		return body;
-	}
 
 	public void setCountry(Country country) {
-		
+
 		String imageUrl = country.getImageUrl();
 		String default_url = "https://www.freeiconspng.com/uploads/no-image-icon-6.png";
 		URL url;
 		Image image;
 		try {
-			Image newImage = (Image)CacheManager.getCacheItem(default_url);
-			if(newImage==null) {
+			Image newImage = (Image) CacheManager.getCacheItem(default_url);
+			if (newImage == null) {
 				url = new URL(default_url);
 				image = ImageIO.read(url);
-			}else {
+			} else {
 				image = newImage;
 			}
 			if (imageUrl != null) {
-				Image newImage1 = (Image)CacheManager.getCacheItem(imageUrl);
-				if(newImage1==null) {
+				Image newImage1 = (Image) CacheManager.getCacheItem(imageUrl);
+				if (newImage1 == null) {
 					url = new URL(imageUrl);
 					image = ImageIO.read(url);
-				}else {
+				} else {
 					image = newImage1;
 				}
-				
+
 			}
 			imageLbl.setIcon(new ImageIcon(ImageHelper.makeRoundedCorner(image, 8, 320, 160)));
 		} catch (Exception e) {
@@ -323,7 +277,7 @@ public class Detail extends CustomWindow{
 		latLbl.setText(String.valueOf(country.getLatitude()));
 		longLbl.setText(String.valueOf(country.getLongitude()));
 		currCodeLbl.setText(country.getCurrencyCode().toUpperCase());
-		
+
 		try {
 			url = new URL("https://img.icons8.com/emoji/48/000000/red-triangle-pointed-down-emoji.png");
 			image = ImageIO.read(url);
@@ -335,9 +289,8 @@ public class Detail extends CustomWindow{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		DefaultTableModel mode = (DefaultTableModel) table.getModel();
-		mode.setRowCount(0);
 		int count = 1;
 		Rate[] rates = model.fetchRates(country.getCurrencyCode());
 		for (Rate r : rates) {
@@ -353,9 +306,5 @@ public class Detail extends CustomWindow{
 
 //		linechart.start();
 		self().setVisible(true);
-		
 	}
-	
-	
-
 }

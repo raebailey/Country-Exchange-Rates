@@ -20,6 +20,8 @@ import components.CustomButton.ButtonStyle;
 import components.icon.ActionInterface;
 import components.icon.CustomIcon;
 import components.notification.Notification;
+import events.CountryEvent;
+import events.CountryListener;
 import models.Country;
 import models.Page;
 import ui.CustomWindow;
@@ -47,6 +49,7 @@ public class CountryCard extends RoundPanel {
 		setMinimumSize(new Dimension(350, 200));
 		this.country = country;
 		icon.setShow(country.isVisible());
+		gotoBtn.setVisible(country.isVisible());
 		namelbl.setText(country.getName());
 		
 
@@ -128,7 +131,7 @@ public class CountryCard extends RoundPanel {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Page.getInstance().getPagefactory().closePage(frame);
+//				Page.getInstance().getPagefactory().closePage(frame);
 //				new Detail(country);
 				Page.getInstance().getPagefactory().getDetail(country);
 				
@@ -146,14 +149,11 @@ public class CountryCard extends RoundPanel {
 			public void action() {
 				if(!icon.isShow()) {
 					country.setVisible(false);
-					country.update(country);
-					
 				}else {
 					country.setVisible(true);
-					country.update(country);
 				}
-				
-				setEnabled(!icon.isShow());
+				country.update(country);
+				gotoBtn.setVisible(icon.isShow());
 			}
 			
 		});

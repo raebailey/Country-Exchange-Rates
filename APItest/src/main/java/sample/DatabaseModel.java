@@ -454,8 +454,7 @@ public class DatabaseModel {
 			stmt.setString(6, country.getImageUrl());
 			stmt.setInt(7, (country.isVisible())?1:0);
 			stmt.setString(8, country.getCountryCode());
-			
-			System.out.println("update is: "+stmt.executeUpdate());
+			stmt.executeUpdate();
 			stmt.close();
 			con.close();
 		} catch (SQLException e) {

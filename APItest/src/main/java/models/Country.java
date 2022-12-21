@@ -124,7 +124,6 @@ public class Country {
 	}
 
 	public void update(Country country) {
-		System.out.println("Updated: "+country);
 		model.updateCountry(country);
 		String message = String.format("%s updated.", name);
 		processCountryEvent(new CountryEvent(this, "Update",

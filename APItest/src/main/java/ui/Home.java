@@ -62,7 +62,6 @@ public class Home extends CustomWindow{
 	public Home() {
 		initialize();
 		load.start();
-
 	}
 
 	/**
@@ -126,5 +125,10 @@ public class Home extends CustomWindow{
 	public ImageLoader_Task getLoad() {
 		return load;
 	}
+
+
+		public JPanel getMainPanel() {
+			return panel;
+		}
 	
 }
