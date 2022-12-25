@@ -7,6 +7,8 @@ import javax.swing.JFrame;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 
+import pages.CustomPage;
+
 public class CustomWindow extends JFrame{
 	
 	/**
@@ -25,6 +27,13 @@ public class CustomWindow extends JFrame{
 		setBounds(100, 100, 1280, 720);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
+	}
+	
+	public void setPage(CustomPage page) {
+		getContentPane().removeAll();
+		getContentPane().add(page);
+		revalidate();
+		repaint();
 	}
 
 }

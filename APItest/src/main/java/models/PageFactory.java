@@ -3,7 +3,9 @@ package models;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import pages.CustomPage;
 import pages.DetailPage;
+import pages.HomePage;
 import ui.CustomWindow;
 import ui.Detail;
 import ui.Home;
@@ -11,45 +13,50 @@ import ui.Home;
 public class PageFactory {
 
 	private Home homepage;
-	private Detail detailpage;
-	private JPanel previouspage;
-	private JPanel currentpage;
+	private CustomPage previouspage;
+	private CustomPage currentpage;
 
 	public PageFactory() {
+		
 	}
-
-	public JFrame getHome() {
+	
+	
+	public void getHome() {
 		if (homepage == null) {
 			homepage = new Home();
 		}
-		currentpage = (JPanel)homepage.getMainPanel();
+		currentpage = new HomePage();
+		homepage.setPage(currentpage);
 		homepage.setVisible(true);
-		return homepage;
 	}
 
 	public void getDetail(Country country) {
+		previouspage = currentpage;
+		previouspage.setIsactive(false);
+		currentpage = new DetailPage(country);
+		currentpage.setName("Detail_Page");
+		homepage.setPage(currentpage);
+		System.out.println("current page is: "+currentpage);
+		
+//		if (detailpage == null) {
+//			detailpage = new Detail();
+//		}
+//		
 //		homepage.getContentPane().removeAll();
 //		previouspage = currentpage;
-//		currentpage = new DetailPage();
+//		detailpage.setCountry(country);
+//		currentpage = detailpage.getMainPanel();
 //		homepage.getContentPane().add(currentpage);
 //		homepage.repaint();
 //		homepage.revalidate();
 		
-		if (detailpage == null) {
-			detailpage = new Detail();
-		}
-		
-		homepage.getContentPane().removeAll();
-		previouspage = currentpage;
-		detailpage.setCountry(country);
-		currentpage = detailpage.getMainPanel();
-		homepage.getContentPane().add(currentpage);
-		homepage.repaint();
-		homepage.revalidate();
-		
 //		detailpage.setVisible(true);
 //			
 //		return detailpage;
+	}
+	
+	public Home getWindow() {
+		return homepage;
 	}
 	
 	public void back() {

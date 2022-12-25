@@ -27,6 +27,7 @@ import cache.CacheManager;
 import components.CustomButton;
 import components.LineChart;
 import components.RoundPanel;
+import components.ScrollBarCustom;
 import components.TableDark;
 import components.CustomButton.ButtonStyle;
 import components.image.ImageHelper;
@@ -36,8 +37,11 @@ import models.Rate;
 import net.miginfocom.swing.MigLayout;
 import sample.DatabaseModel;
 import ui.CustomWindow;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.JTable;
 
-public class DetailPage extends JPanel {
+public class DetailPage extends CustomPage {
 	private JPanel body;
 	private JPanel panel_8;
 	private JLabel imageLbl;
@@ -50,32 +54,40 @@ public class DetailPage extends JPanel {
 	private JLabel latLbl;
 	private JLabel lblNewLabel_7;
 	private JLabel longLbl;
-	private LineChart linechart;
 	private JLabel currCodeLbl;
 	private JLabel rateEstLbl;
-	private TableDark table;
 	private DatabaseModel model = new DatabaseModel();
+	private JScrollPane scrollPane;
+	private TableDark table;
 
 	/**
 	 * Create the application.
 	 */
-	public DetailPage() {
-		setSize(new Dimension(1280, 720));
+	public DetailPage(Country country) {
+		super();
+		setBackground(new Color(255, 0, 0));
+		setPreferredSize(new Dimension(1280, 720));
 		initialize();
+		setCountry(country);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		setLayout(null);
+		setLayout(new BorderLayout(0, 0));
 
 		body = new JPanel();
-		body.setBounds(0, 0, 1280, 720);
+		body.setPreferredSize(new Dimension(1280, 720));
+		body.setMinimumSize(new Dimension(1280, 720));
 		add(body);
 		body.setLayout(new BorderLayout(0, 0));
 
 		panel_8 = new JPanel();
+		panel_8.setBackground(new Color(14, 14, 14));
+		panel_8.setMinimumSize(new Dimension(1280, 7200));
+		panel_8.setSize(new Dimension(1280, 720));
+		panel_8.setBorder(new LineBorder(new Color(0, 0, 0)));
 		body.add(panel_8, BorderLayout.NORTH);
 		panel_8.setLayout(new FlowLayout(FlowLayout.LEADING, 30, 10));
 
@@ -92,6 +104,7 @@ public class DetailPage extends JPanel {
 		panel_2.setLayout(new MigLayout("", "[200px][46px,grow]", "[22px][grow][][grow]"));
 		
 		CustomButton back = new CustomButton();
+		back.setPreferredSize(new Dimension(100, 30));
 		back.setForeground(Color.WHITE);
 		back.setFont(new Font("SansSerif", Font.BOLD, 14));
 		back.setRound(8);
@@ -175,19 +188,15 @@ public class DetailPage extends JPanel {
 		rateEstLbl = new JLabel("");
 
 		panel_3.add(rateEstLbl);
-
-		JScrollPane scrollPane = new JScrollPane();
+		
+		scrollPane = new JScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		ScrollBarCustom scrollBarCustom = new ScrollBarCustom();
+		scrollBarCustom.setUnitIncrement(5);
+		scrollPane.setVerticalScrollBar(scrollBarCustom);
 		body.add(scrollPane, BorderLayout.CENTER);
-
-		JPanel panel_1 = new JPanel();
-		panel_1.setMinimumSize(new Dimension(700, 10));
-
-		RoundPanel roundPanel1 = new RoundPanel();
-		roundPanel1.setPreferredSize(new Dimension(1240, 500));
+		
 		table = new TableDark();
-		table.setSize(new Dimension(1240, 600));
-		table.setPreferredSize(new Dimension(1240, 600));
 		table.setAutoCreateRowSorter(true);
 		table.setRowSelectionAllowed(false);
 		table.setShowGrid(false);
@@ -202,32 +211,7 @@ public class DetailPage extends JPanel {
 				return canEdit[columnIndex];
 			}
 		});
-		JScrollPane scrollpane = new JScrollPane();
-		scrollpane.setViewportBorder(null);
-		scrollpane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollpane.setPreferredSize(new Dimension(1225, 480));
-		JPanel pane = new JPanel();
-		pane.setLayout(new MigLayout("", "[225px]", "[1px]"));
-		pane.add(table, "cell 0 0,grow");
-		scrollpane.setViewportView(pane);
-		table.fixTable(scrollpane);
-
-		RoundPanel roundPanel = new RoundPanel();
-		roundPanel.setPreferredSize(new Dimension(1240, 370));
-		roundPanel.setLayout(new MigLayout("", "[1000px]", "[360px]"));
-
-		linechart = new LineChart();
-		linechart.setPreferredSize(new Dimension(1000, 360));
-		roundPanel.add(linechart, "cell 0 0,alignx left,aligny top");
-
-		panel_1.setPreferredSize(new Dimension(10, 1000));
-		panel_1.setSize(new Dimension(0, 600));
-		scrollPane.setViewportView(panel_1);
-		panel_1.setLayout(new MigLayout("", "[100%]", "[500px][370px]"));
-		panel_1.add(roundPanel1, "cell 0 0,grow");
-		roundPanel1.setLayout(new MigLayout("", "[1225px]", "[480px]"));
-		roundPanel1.add(scrollpane, "cell 0 0,grow");
-		panel_1.add(roundPanel, "cell 0 1,alignx left,aligny top");
+		scrollPane.setViewportView(table);
 
 		try {
 			URL rightUrl = new URL("https://img.icons8.com/material-sharp/24/000000/double-left.png");
@@ -243,7 +227,7 @@ public class DetailPage extends JPanel {
 	}
 
 
-	public void setCountry(Country country) {
+	private void setCountry(Country country) {
 
 		String imageUrl = country.getImageUrl();
 		String default_url = "https://www.freeiconspng.com/uploads/no-image-icon-6.png";
@@ -305,6 +289,5 @@ public class DetailPage extends JPanel {
 //		}
 
 //		linechart.start();
-		self().setVisible(true);
 	}
 }
