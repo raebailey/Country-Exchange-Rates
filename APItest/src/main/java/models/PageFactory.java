@@ -34,25 +34,7 @@ public class PageFactory {
 		previouspage = currentpage;
 		previouspage.setIsactive(false);
 		currentpage = new DetailPage(country);
-		currentpage.setName("Detail_Page");
 		homepage.setPage(currentpage);
-		System.out.println("current page is: "+currentpage);
-		
-//		if (detailpage == null) {
-//			detailpage = new Detail();
-//		}
-//		
-//		homepage.getContentPane().removeAll();
-//		previouspage = currentpage;
-//		detailpage.setCountry(country);
-//		currentpage = detailpage.getMainPanel();
-//		homepage.getContentPane().add(currentpage);
-//		homepage.repaint();
-//		homepage.revalidate();
-		
-//		detailpage.setVisible(true);
-//			
-//		return detailpage;
 	}
 	
 	public Home getWindow() {
@@ -64,16 +46,11 @@ public class PageFactory {
 			homepage.getContentPane().removeAll();
 			currentpage = previouspage;
 			previouspage = null;
-			homepage.getContentPane().add(currentpage);
-			homepage.repaint();
-			homepage.revalidate();
+			homepage.setPage(currentpage);
 		}
 	}
 	
 	public void closePage(CustomWindow frame) {
 		frame.dispose();
 	}
-
-//	frame.setContentPane(newContents());
-//	frame.revalidate(); // frame.pack() if you want to resize.
 }

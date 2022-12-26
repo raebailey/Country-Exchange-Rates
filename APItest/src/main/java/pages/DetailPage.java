@@ -66,6 +66,7 @@ public class DetailPage extends CustomPage {
 	public DetailPage(Country country) {
 		super();
 		setBackground(new Color(255, 0, 0));
+		this.setName("Detail_Page");
 		setPreferredSize(new Dimension(1280, 720));
 		initialize();
 		setCountry(country);
@@ -102,7 +103,7 @@ public class DetailPage extends CustomPage {
 		panel_2 = new JPanel();
 		panel_8.add(panel_2);
 		panel_2.setLayout(new MigLayout("", "[200px][46px,grow]", "[22px][grow][][grow]"));
-		
+
 		CustomButton back = new CustomButton();
 		back.setPreferredSize(new Dimension(100, 30));
 		back.setForeground(Color.WHITE);
@@ -111,11 +112,11 @@ public class DetailPage extends CustomPage {
 		back.setText("Home");
 		back.setSize(62, 25);
 		back.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Page.getInstance().getPagefactory().back();
-				
+
 			}
 		});
 		panel_8.add(back);
@@ -188,14 +189,14 @@ public class DetailPage extends CustomPage {
 		rateEstLbl = new JLabel("");
 
 		panel_3.add(rateEstLbl);
-		
+
 		scrollPane = new JScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		ScrollBarCustom scrollBarCustom = new ScrollBarCustom();
 		scrollBarCustom.setUnitIncrement(5);
 		scrollPane.setVerticalScrollBar(scrollBarCustom);
 		body.add(scrollPane, BorderLayout.CENTER);
-		
+
 		table = new TableDark();
 		table.setAutoCreateRowSorter(true);
 		table.setRowSelectionAllowed(false);
@@ -225,7 +226,6 @@ public class DetailPage extends CustomPage {
 	public DetailPage self() {
 		return this;
 	}
-
 
 	private void setCountry(Country country) {
 
@@ -277,8 +277,10 @@ public class DetailPage extends CustomPage {
 		DefaultTableModel mode = (DefaultTableModel) table.getModel();
 		int count = 1;
 		Rate[] rates = model.fetchRates(country.getCurrencyCode());
+		
 		for (Rate r : rates) {
-			mode.addRow(new Object[] { count, r.getRateVal(), r.getDate().split(" ")[0] });
+			String formatedRate = String.format("(%1$s)%2$s", country.getCurrency().getSymbol(), r.getRateVal());
+			mode.addRow(new Object[] { count, formatedRate, r.getDate().split(" ")[0] });
 			count += 1;
 		}
 //		Rate[] rate = model.fetchRates(country.getCurrencyCode());

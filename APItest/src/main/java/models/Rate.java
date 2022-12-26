@@ -13,7 +13,6 @@ public class Rate {
 	private String currencyCode;
 	private Double rateVal;
 	private String date;
-	private long id;
 	private DatabaseModel model;
 	private ArrayList<RateListener> listeners = new ArrayList<RateListener>();
 
@@ -40,13 +39,7 @@ public class Rate {
 		this.date = date;
 	}
 	
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
+	
 
 	public String getCurrencyCode() {
 		return currencyCode;
@@ -101,7 +94,7 @@ public class Rate {
 
 	@Override
 	public String toString() {
-		return "Rate [currencyCode=" + currencyCode + ", rateVal=" + rateVal + ", date=" + date + ", id=" + id + "]";
+		return "Rate [currencyCode=" + currencyCode + ", rateVal=" + rateVal + ", date=" + date +  "]";
 	}
 
 }

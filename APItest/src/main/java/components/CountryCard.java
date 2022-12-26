@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -14,6 +15,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import cache.CacheManager;
 import components.CustomButton.ButtonStyle;
@@ -39,8 +41,7 @@ public class CountryCard extends RoundPanel {
 	private CustomIcon icon;
 	private CustomWindow frame;
 
-
-	public CountryCard(Country country,CustomWindow frame) {
+	public CountryCard(Country country, CustomWindow frame) {
 		initialize();
 		this.frame = frame;
 		setSize(new Dimension(350, 200));
@@ -51,7 +52,6 @@ public class CountryCard extends RoundPanel {
 		icon.setShow(country.isVisible());
 		gotoBtn.setVisible(country.isVisible());
 		namelbl.setText(country.getName());
-		
 
 	}
 
@@ -73,10 +73,12 @@ public class CountryCard extends RoundPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new Notification(frame,Notification.Type.INFO,Notification.Location.BOTTOM_RIGHT,"pressed "+country.getName(),(Image)CacheManager.getCacheItem(country.getImageUrl())).showNotification();
-				
+				new Notification(frame, Notification.Type.INFO, Notification.Location.BOTTOM_RIGHT,
+						"pressed " + country.getName(), (Image) CacheManager.getCacheItem(country.getImageUrl()))
+						.showNotification();
+
 			}
-			
+
 		});
 		layeredPane.add(closeButton);
 		imagelbl = new JLabel();
@@ -84,9 +86,7 @@ public class CountryCard extends RoundPanel {
 		imagelbl.setHorizontalAlignment(SwingConstants.CENTER);
 		layeredPane.setLayer(imagelbl, 0);
 		imagelbl.setSize(330, 111);
-		imagelbl.setIcon(
-				new ImageIcon(getClass().getResource("/images/loading3 new.gif"))
-				);
+		imagelbl.setIcon(new ImageIcon(getClass().getResource("/images/loading3 new.gif")));
 
 		layeredPane.add(imagelbl);
 
@@ -103,43 +103,23 @@ public class CountryCard extends RoundPanel {
 		gotoBtn.setText("Go to");
 		gotoBtn.setSize(62, 25);
 		gotoBtn.setLocation(269, 158);
-		gotoBtn.addMouseListener(new MouseListener() {
-			
+		gotoBtn.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-//				Page.getInstance().getPagefactory().closePage(frame);
-//				new Detail(country);
-				Page.getInstance().getPagefactory().getDetail(country);
-				
-				
+			public void mousePressed(MouseEvent event) {
+				if (SwingUtilities.isLeftMouseButton(event)) {
+					new Thread(new Runnable() {
+
+						@Override
+						public void run() {
+							Page.getInstance().getPagefactory().getDetail(country);
+						}
+
+					}).start();
+				}
 			}
 		});
 		add(gotoBtn);
-		
+
 		icon = new CustomIcon();
 		icon.setLocation(10, 158);
 		icon.setSize(25, 25);
@@ -147,18 +127,18 @@ public class CountryCard extends RoundPanel {
 
 			@Override
 			public void action() {
-				if(!icon.isShow()) {
+				if (!icon.isShow()) {
 					country.setVisible(false);
-				}else {
+				} else {
 					country.setVisible(true);
 				}
 				country.update(country);
 				gotoBtn.setVisible(icon.isShow());
 			}
-			
+
 		});
 		add(icon);
-		
+
 		setLayout(null);
 
 	}

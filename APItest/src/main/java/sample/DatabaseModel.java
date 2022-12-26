@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import models.Country;
+import models.Currency;
 import models.Rate;
 
 public class DatabaseModel {
@@ -43,8 +44,7 @@ public class DatabaseModel {
 		}
 		ArrayList<Country> countries = new ArrayList<Country>();
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Country  ;");
-//			stmt.setBoolean(1, true);
+			PreparedStatement stmt = con.prepareStatement("SELECT Country.*,Currency.name as curr_name,Currency.symbol from Country INNER JOIN Currency on Country.currency_code = Currency.currency_code;");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				String country_code = rs.getString("country_code");
@@ -54,7 +54,7 @@ public class DatabaseModel {
 				float latitude = rs.getFloat("latitude");
 				String image = rs.getString("image");
 				boolean visible = rs.getBoolean("isactive");
-				Country country = new Country(country_code, name, currency_code, longitude, latitude, image,visible);
+				Country country = new Country(country_code, name, currency_code, longitude, latitude, image,visible,currency_code,rs.getString("curr_name"),rs.getString("symbol"));
 				countries.add(country);
 			}
 			rs.close();
@@ -83,7 +83,7 @@ public class DatabaseModel {
 		}
 
 		try {
-			stmt = con.prepareStatement("SELECT * FROM Country where currency_code = ?");
+			stmt = con.prepareStatement("SELECT Country.*,Currency.name as curr_name,Currency.symbol from Country INNER JOIN Currency on Country.currency_code = Currency.currency_code where country_code = ?");
 			stmt.setString(1, code);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -94,8 +94,7 @@ public class DatabaseModel {
 				float latitude = rs.getFloat("latitude");
 				String image = rs.getString("image");
 				boolean visible = rs.getBoolean("isactive");
-				country = new Country(country_code, name, currency_code, longitude, latitude, image,visible);
-				// System.out.println("Code = " + country_code);
+				country = new Country(country_code, name, currency_code, longitude, latitude, image,visible,currency_code,rs.getString("curr_name"),rs.getString("symbol"));
 			}
 			rs.close();
 			stmt.close();
@@ -233,6 +232,43 @@ public class DatabaseModel {
 			con = null;
 		}
 
+	}
+	
+	/**
+	 * Gets Currency information for a specific country
+	 * @param code The currency code for a specific country 
+	 * @return A Currency object
+	 */
+	public Currency fetchCurrency(String code) {
+		PreparedStatement stmt;
+		Currency currency = null;
+
+		if (con == null) {
+			con = getConnection();
+		}
+		try {
+			stmt = con.prepareStatement("SELECT * FROM Currency where currency_code = ?");
+			stmt.setString(1, code);
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				String currency_code = rs.getString("currency_code");
+				String name = rs.getString("name");
+				String symbol = rs.getString("symbol");
+				currency = new Currency(currency_code, name, symbol);
+			}
+			rs.close();
+			stmt.close();
+			con.close();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			//con = null;
+		}
+
+		return currency;
 	}
 
 	/**
@@ -445,15 +481,9 @@ public class DatabaseModel {
 			con = getConnection();
 		}
 		try {
-			PreparedStatement stmt = con.prepareStatement("UPDATE Country SET country_code = ?,name = ?,currency_code = ?,latitude =?,longitude = ?,image = ?,isactive = ? WHERE country_code = ?;");
-			stmt.setString(1, country.getCountryCode());
-			stmt.setString(2, country.getName());
-			stmt.setString(3, country.getCurrencyCode());
-			stmt.setDouble(4, country.getLatitude());
-			stmt.setDouble(5, country.getLongitude());
-			stmt.setString(6, country.getImageUrl());
-			stmt.setInt(7, (country.isVisible())?1:0);
-			stmt.setString(8, country.getCountryCode());
+			PreparedStatement stmt = con.prepareStatement("UPDATE Country SET isactive = ? WHERE country_code = ?;");
+			stmt.setInt(1, (country.isVisible())?1:0);
+			stmt.setString(2, country.getCountryCode());
 			stmt.executeUpdate();
 			stmt.close();
 			con.close();

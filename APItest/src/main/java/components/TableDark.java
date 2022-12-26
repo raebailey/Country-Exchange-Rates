@@ -103,6 +103,11 @@ public class TableDark extends JTable {
 					com.setBackground(new Color(30, 30, 30));
 				}
 			}
+			if (jtable.getModel().getRowCount() == 0) {
+				JLabel lbl = new JLabel("No data to display");
+				lbl.setHorizontalAlignment(JLabel.CENTER);
+				return lbl;
+			}
 			com.setForeground(new Color(200, 200, 200));
 			setBorder(new EmptyBorder(0, 5, 0, 5));
 			if (alignment.containsKey(column)) {

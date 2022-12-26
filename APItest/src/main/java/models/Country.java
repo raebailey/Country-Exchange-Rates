@@ -19,21 +19,33 @@ public class Country {
 	private double longitude;
 	private double latitude;
 	private String imageUrl;
+	private Currency currency;
 	private Rate[] rate;
 	private boolean visible;
 	private DatabaseModel model;
 
 	private ArrayList<CountryListener> listeners = new ArrayList<CountryListener>();
 
-	public Country(String countryCode, String name, String currency, double longitude, double latitude, String imageUrl,
-			boolean visible) {
+	public Country(String countryCode, String name, String currency, double longitude, double latitude, String imageUrl) {
 		this.countryCode = countryCode;
 		this.name = name;
 		this.currencyCode = currency;
 		this.longitude = longitude;
 		this.latitude = latitude;
 		this.imageUrl = imageUrl;
+		this.visible = true;
+		this.model = new DatabaseModel();
+	}
+	
+	public Country(String countryCode, String name, String currencyCode, double longitude, double latitude, String imageUrl,boolean visible,String cur_code,String cur_name, String cur_symbol) {
+		this.countryCode = countryCode;
+		this.name = name;
+		this.currencyCode = currencyCode;
+		this.longitude = longitude;
+		this.latitude = latitude;
+		this.imageUrl = imageUrl;
 		this.visible = visible;
+		this.currency = new Currency(cur_code,cur_name,cur_symbol);
 		this.model = new DatabaseModel();
 	}
 
@@ -107,6 +119,14 @@ public class Country {
 		this.visible = visible;
 	}
 
+	public Currency getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(Currency currency) {
+		this.currency = currency;
+	}
+
 	public synchronized void addListener(CountryListener listener) {
 		listeners.add(listener);
 	}
@@ -154,8 +174,8 @@ public class Country {
 	@Override
 	public String toString() {
 		return "Country [countryCode=" + countryCode + ", name=" + name + ", currencyCode=" + currencyCode
-				+ ", longitude=" + longitude + ", latitude=" + latitude + ", imageUrl=" + imageUrl + ", rate="
-				+ Arrays.toString(rate) + ", visible=" + visible + "]";
+				+ ", longitude=" + longitude + ", latitude=" + latitude + ", imageUrl=" + imageUrl + ", currency="
+				+ currency + ", rate=" + Arrays.toString(rate) + ", visible=" + visible + "]";
 	}
 
 }
