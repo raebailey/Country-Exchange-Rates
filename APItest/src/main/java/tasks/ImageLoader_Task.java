@@ -15,7 +15,7 @@ import components.image.ImageHelper;
 public class ImageLoader_Task extends Thread implements Runnable {
 
 	private String[] imageUrls;
-	private Object[] imageComponents;
+	private JLabel[] imageComponents;
 	private int width = 330;
 	private int height = 111;
 
@@ -25,12 +25,12 @@ public class ImageLoader_Task extends Thread implements Runnable {
 	 * @param components An array of components which image will be set.
 	 * @param urls       An array of urls of images to be loaded.
 	 */
-	public ImageLoader_Task(Object[] components, String[] urls) {
+	public ImageLoader_Task(JLabel[] components, String[] urls) {
 		imageUrls = urls;
 		imageComponents = components;
 	}
 
-	public ImageLoader_Task(Object[] components, String[] urls, int width, int height) {
+	public ImageLoader_Task(JLabel[] components, String[] urls, int width, int height) {
 		imageUrls = urls;
 		imageComponents = components;
 		this.width = width;
@@ -40,35 +40,23 @@ public class ImageLoader_Task extends Thread implements Runnable {
 	@Override
 	public void run() {
 		for (int i = 0; i < imageComponents.length; i++) {
-			JLabel label = (JLabel) imageComponents[i];
+			JLabel label = imageComponents[i];
 			String imageUrl = imageUrls[i];
-			String default_url = "https://www.freeiconspng.com/uploads/no-image-icon-6.png";
-			URL url;
 			Image image;
 			try {
-				if (imageUrl == null) {
-					Image newImage = (Image) CacheManager.getCacheItem(default_url);
-					if (newImage != null) {
-						image = newImage;
-					} else {
-						url = new URL(default_url);
-						image = ImageIO.read(url);
-						CacheManager.addCache(default_url, image);
-					}
+				Image newImage = (Image) CacheManager.getCacheItem(imageUrl);
+				if (newImage != null) {
+					image = newImage;
 				} else {
-					Image newImage = (Image) CacheManager.getCacheItem(imageUrl);
-					if (newImage != null) {
-						image = newImage;
-					} else {
-						url = new URL(imageUrl);
-						image = ImageIO.read(url);
-						CacheManager.addCache(imageUrl, image);
-					}
+					URL url = new URL(imageUrl);
+					image = ImageIO.read(url);
+					CacheManager.addCache(imageUrl, image);
 				}
+
 				image = image.getScaledInstance(this.width, this.height, java.awt.Image.SCALE_SMOOTH);
 				label.setIcon(new ImageIcon(ImageHelper.makeRoundedCorner(image, 8, this.width, this.height)));
 			} catch (Exception ex) {
-				label.setIcon(new ImageIcon(ImageHelper.readImage("/images/fail.png",0,0)));
+				label.setIcon(new ImageIcon(ImageHelper.readImage("/images/fail.png", 0, 0)));
 			}
 		}
 

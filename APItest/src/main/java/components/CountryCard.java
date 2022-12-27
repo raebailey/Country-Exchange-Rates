@@ -76,7 +76,6 @@ public class CountryCard extends RoundPanel {
 				new Notification(frame, Notification.Type.INFO, Notification.Location.BOTTOM_RIGHT,
 						"pressed " + country.getName(), (Image) CacheManager.getCacheItem(country.getImageUrl()))
 						.showNotification();
-
 			}
 
 		});

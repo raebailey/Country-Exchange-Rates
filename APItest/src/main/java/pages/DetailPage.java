@@ -36,6 +36,7 @@ import models.Page;
 import models.Rate;
 import net.miginfocom.swing.MigLayout;
 import sample.DatabaseModel;
+import tasks.ImageLoader_Task;
 import ui.CustomWindow;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -213,14 +214,6 @@ public class DetailPage extends CustomPage {
 			}
 		});
 		scrollPane.setViewportView(table);
-
-		try {
-			URL rightUrl = new URL("https://img.icons8.com/material-sharp/24/000000/double-left.png");
-			Image rightImage = ImageIO.read(rightUrl);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public DetailPage self() {
@@ -230,50 +223,28 @@ public class DetailPage extends CustomPage {
 	private void setCountry(Country country) {
 
 		String imageUrl = country.getImageUrl();
-		String default_url = "https://www.freeiconspng.com/uploads/no-image-icon-6.png";
-		URL url;
-		Image image;
-		try {
-			Image newImage = (Image) CacheManager.getCacheItem(default_url);
-			if (newImage == null) {
-				url = new URL(default_url);
-				image = ImageIO.read(url);
-			} else {
-				image = newImage;
-			}
-			if (imageUrl != null) {
-				Image newImage1 = (Image) CacheManager.getCacheItem(imageUrl);
-				if (newImage1 == null) {
-					url = new URL(imageUrl);
-					image = ImageIO.read(url);
-				} else {
-					image = newImage1;
-				}
+		imageLbl.setIcon(new ImageIcon(getClass().getResource("/images/loading3 new.gif")));
+		JLabel[] lblArr = {imageLbl};
+		String[] strArr = {imageUrl};
+		new ImageLoader_Task(lblArr,strArr,320,160).start();
 
-			}
-			imageLbl.setIcon(new ImageIcon(ImageHelper.makeRoundedCorner(image, 8, 320, 160)));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			imageLbl.setIcon(new ImageIcon(getClass().getResource("/images/fail.png")));
-		}
 		nameLbl.setText(country.getName());
 		latLbl.setText(String.valueOf(country.getLatitude()));
 		longLbl.setText(String.valueOf(country.getLongitude()));
 		currCodeLbl.setText(country.getCurrencyCode().toUpperCase());
-
-		try {
-			url = new URL("https://img.icons8.com/emoji/48/000000/red-triangle-pointed-down-emoji.png");
-			image = ImageIO.read(url);
-			rateEstLbl.setIcon(new ImageIcon(image.getScaledInstance(22, 22, java.awt.Image.SCALE_SMOOTH)));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+//
+//		try {
+//			url = new URL("https://img.icons8.com/emoji/48/000000/red-triangle-pointed-down-emoji.png");
+//			image = ImageIO.read(url);
+//			rateEstLbl.setIcon(new ImageIcon(image.getScaledInstance(22, 22, java.awt.Image.SCALE_SMOOTH)));
+//		} catch (MalformedURLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//
 		DefaultTableModel mode = (DefaultTableModel) table.getModel();
 		int count = 1;
 		Rate[] rates = model.fetchRates(country.getCurrencyCode());
