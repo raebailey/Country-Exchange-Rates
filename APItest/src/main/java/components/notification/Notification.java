@@ -6,6 +6,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import javax.swing.JDialog;
 import org.jdesktop.animation.timing.Animator;
@@ -29,6 +31,7 @@ public class Notification extends javax.swing.JComponent {
     private int shadowSize = 6;
     private Type type;
     private Location location;
+    private boolean mouseOn = false;
 
     /**
      * Initializes notification class
@@ -44,6 +47,39 @@ public class Notification extends javax.swing.JComponent {
         this.location = location;
         initComponents();
         init(message,image);
+        addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				mouseOn = false;
+				endAnimation();
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				System.out.println("Entered");
+				mouseOn = true;
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
         initAnimator();
     }
 
@@ -144,19 +180,7 @@ public class Notification extends javax.swing.JComponent {
 
             @Override
             public void end() {
-                showing = !showing;
-                if (showing) {
-                    thread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            sleep();
-                            closeNotification();
-                        }
-                    });
-                    thread.start();
-                } else {
-                    dialog.dispose();
-                }
+               endAnimation();
             }
         };
         animator = new Animator(500, target);
@@ -188,6 +212,27 @@ public class Notification extends javax.swing.JComponent {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
         }
+    }
+    
+    private void endAnimation() {
+    	 showing = !showing;
+         if (showing) {
+             thread = new Thread(new Runnable() {
+                 @Override
+                 public void run() {
+                	 if(!mouseOn) {
+                		 sleep();
+                         closeNotification();
+                	 }
+                     
+                 }
+             });
+             thread.start();
+         } else {
+        	 if(!mouseOn) {
+             dialog.dispose();
+        	 }
+         }
     }
 
     @Override

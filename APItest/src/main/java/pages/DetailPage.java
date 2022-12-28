@@ -31,6 +31,7 @@ import components.ScrollBarCustom;
 import components.TableDark;
 import components.CustomButton.ButtonStyle;
 import components.image.ImageHelper;
+import components.notification.Notification;
 import models.Country;
 import models.Page;
 import models.Rate;
@@ -38,11 +39,13 @@ import net.miginfocom.swing.MigLayout;
 import sample.DatabaseModel;
 import tasks.ImageLoader_Task;
 import ui.CustomWindow;
+import ui.Home;
+
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.JTable;
 
-public class DetailPage extends CustomPage {
+public class DetailPage extends CustomPage implements InternetConnectAction {
 	private JPanel body;
 	private JPanel panel_8;
 	private JLabel imageLbl;
@@ -66,9 +69,6 @@ public class DetailPage extends CustomPage {
 	 */
 	public DetailPage(Country country) {
 		super();
-		setBackground(new Color(255, 0, 0));
-		this.setName("Detail_Page");
-		setPreferredSize(new Dimension(1280, 720));
 		initialize();
 		setCountry(country);
 	}
@@ -78,6 +78,8 @@ public class DetailPage extends CustomPage {
 	 */
 	private void initialize() {
 		setLayout(new BorderLayout(0, 0));
+		this.setName("Detail_Page");
+		setPreferredSize(new Dimension(1150, 720));
 
 		body = new JPanel();
 		body.setPreferredSize(new Dimension(1280, 720));
@@ -224,9 +226,9 @@ public class DetailPage extends CustomPage {
 
 		String imageUrl = country.getImageUrl();
 		imageLbl.setIcon(new ImageIcon(getClass().getResource("/images/loading3 new.gif")));
-		JLabel[] lblArr = {imageLbl};
-		String[] strArr = {imageUrl};
-		new ImageLoader_Task(lblArr,strArr,320,160).start();
+		JLabel[] lblArr = { imageLbl };
+		String[] strArr = { imageUrl };
+		new ImageLoader_Task(lblArr, strArr, 320, 160).start();
 
 		nameLbl.setText(country.getName());
 		latLbl.setText(String.valueOf(country.getLatitude()));
@@ -248,7 +250,7 @@ public class DetailPage extends CustomPage {
 		DefaultTableModel mode = (DefaultTableModel) table.getModel();
 		int count = 1;
 		Rate[] rates = model.fetchRates(country.getCurrencyCode());
-		
+
 		for (Rate r : rates) {
 			String formatedRate = String.format("(%1$s)%2$s", country.getCurrency().getSymbol(), r.getRateVal());
 			mode.addRow(new Object[] { count, formatedRate, r.getDate().split(" ")[0] });
@@ -262,5 +264,16 @@ public class DetailPage extends CustomPage {
 //		}
 
 //		linechart.start();
+	}
+
+	@Override
+	public void refresh(boolean ref) {
+		System.out.println(this.getName());
+		if (!ref) {
+			Home home = Page.getInstance().getPagefactory().getWindow();
+			new Notification(home, Notification.Type.WARNING, Notification.Location.BOTTOM_RIGHT, home.getInternetMsg(),
+					null).showNotification();
+		}
+
 	}
 }

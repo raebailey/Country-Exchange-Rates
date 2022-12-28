@@ -6,8 +6,8 @@ import java.util.UUID;
 
 import javax.swing.JPanel;
 
-public class CustomPage extends JPanel{
-	final static int width =1280;
+public class CustomPage extends JPanel implements InternetConnectAction{
+	final static int width =1150;
 	final static  int height = 720;
 	private String identifier;
 	private String name;
@@ -42,6 +42,12 @@ public class CustomPage extends JPanel{
 
 	public void setIsactive(boolean isactive) {
 		this.isactive = isactive;
+	}
+	
+	@Override
+	public void refresh(boolean ref) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
