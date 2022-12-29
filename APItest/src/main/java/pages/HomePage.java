@@ -1,5 +1,10 @@
 package pages;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.util.ArrayList;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -12,23 +17,16 @@ import components.search.SearchTextField;
 import layouts.WrapLayout;
 import models.Country;
 import models.Page;
+import pagination.EventPagination;
+import pagination.Pagination;
+import pagination.style.PaginationItemRenderStyle1;
 import sample.DatabaseModel;
 import tasks.ImageLoader_Task;
 import tasks.SearchTask;
 import ui.Home;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.net.InetAddress;
-import java.util.ArrayList;
+import java.awt.FlowLayout;
 
 public class HomePage extends CustomPage implements InternetConnectAction {
-//	public HomePage() {
-//		setLayout(new BorderLayout(0, 0));
-//	}
 
 	private JScrollPane scrollPane;
 	private JPanel panel;
@@ -42,7 +40,48 @@ public class HomePage extends CustomPage implements InternetConnectAction {
 
 	public HomePage() {
 		initialize();
+		loadPage(1);
+		getPagination().setPaginationItemRender(new PaginationItemRenderStyle1());
+		getPagination().addEventPagination(new EventPagination() {
+
+			@Override
+			public void pageChanged(int page) {
+				loadPage(page);
+				setPageNumber(page);
+			}
+		});
+	}
+
+	private void loadPage(int page) {
+		DatabaseModel model = new DatabaseModel();
+		int totalRecords = model.getAmount();
+		int totalPage = (int) Math.ceil(totalRecords / 10);
+		Country[] countries = model.getCountries(page, totalPage);
+		ArrayList<JLabel> cardArr = new ArrayList<JLabel>();
+		ArrayList<String> urlArr = new ArrayList<String>();
+
+		JLabel[] cArr = new JLabel[cardArr.size()];
+		String[] uArr = new String[urlArr.size()];
+
+		textField.setSuggestionItems(countries);
+		panel_2.removeAll();
+		for (Country country : countries) {
+			CountryCard card = new CountryCard(country, Page.getInstance().getPagefactory().getWindow());
+			cardArr.add(card.getImagelbl());
+			urlArr.add(country.getImageUrl());
+			ccArr.add(card);
+			panel_2.add(card);
+		}
+
+		load = new ImageLoader_Task(cardArr.toArray(cArr), urlArr.toArray(uArr));
 		load.start();
+		int pages;
+		if (totalRecords % 24 != 0) {
+			pages = (totalRecords / 24) + 1;
+		} else {
+			pages = (int) (totalRecords / 24);
+		}
+		getPagination().setPagegination(page, pages);
 	}
 
 	/**
@@ -50,12 +89,7 @@ public class HomePage extends CustomPage implements InternetConnectAction {
 	 */
 	private void initialize() {
 		this.setName("Home_Page");
-		DatabaseModel model = new DatabaseModel();
-		Country[] countries = model.getCountries();
-		ArrayList<JLabel> cardArr = new ArrayList<JLabel>();
-		ArrayList<String> urlArr = new ArrayList<String>();
 		ccArr = new ArrayList<CountryCard>();
-
 		panel = new JPanel();
 		add(panel);
 		panel.setLayout(new BorderLayout(0, 0));
@@ -72,16 +106,6 @@ public class HomePage extends CustomPage implements InternetConnectAction {
 		WrapLayout wraplayout = new WrapLayout(WrapLayout.LEFT, 20, 20);
 		panel_2.setLayout(wraplayout);
 		scrollPane.setViewportView(panel_2);
-		for (Country country : countries) {
-			CountryCard card = new CountryCard(country, Page.getInstance().getPagefactory().getWindow());
-			cardArr.add(card.getImagelbl());
-			urlArr.add(country.getImageUrl());
-			ccArr.add(card);
-			panel_2.add(card);
-		}
-		JLabel[] cArr = new JLabel[cardArr.size()];
-		String[] uArr = new String[urlArr.size()];
-		load = new ImageLoader_Task(cardArr.toArray(cArr), urlArr.toArray(uArr));
 		search = new SearchTask(ccArr.toArray(new CountryCard[ccArr.size()]), panel_2,
 				Page.getInstance().getPagefactory().getWindow());
 
@@ -96,9 +120,14 @@ public class HomePage extends CustomPage implements InternetConnectAction {
 		panel_4.setBackground(new Color(53, 57, 53));
 		panel_4.setLayout(null);
 
+		JPanel paginatePanel = new JPanel();
+		paginatePanel.setPreferredSize(new Dimension(350, 10));
+		panel_1.add(paginatePanel, BorderLayout.WEST);
+		paginatePanel.setLayout(new BorderLayout(0, 0));
+		paginatePanel.add(getPagination());
+
 		textField = new SearchTextField(search);
-		textField.setHintText("Search Country " + "(" + countries.length + ")");
-		textField.setSuggestionItems(countries);
+		textField.setHintText("Search Country ");
 		textField.setBounds(0, 0, 300, 40);
 		textField.setColumns(10);
 		panel_4.add(textField);
@@ -113,24 +142,16 @@ public class HomePage extends CustomPage implements InternetConnectAction {
 	}
 
 	@Override
-	public void refresh(boolean ref) {
-		if (!ref) {
-			Home home = Page.getInstance().getPagefactory().getWindow();
-			new Notification(home, Notification.Type.WARNING, Notification.Location.BOTTOM_RIGHT, home.getInternetMsg(),
-					null).showNotification();
-		} else {
-			ArrayList<JLabel> cardArr = new ArrayList<JLabel>();
-			ArrayList<String> urlArr = new ArrayList<String>();
-			for (CountryCard card : getCcArr()) {
-				cardArr.add(card.getImagelbl());
-				urlArr.add(card.getCountry().getImageUrl());
-			}
-			JLabel[] cArr = new JLabel[cardArr.size()];
-			String[] uArr = new String[urlArr.size()];
-			new ImageLoader_Task(cardArr.toArray(cArr), urlArr.toArray(uArr)).start();
-		}
+	public void refresh() {
+		loadPage(getPageNumber());
 		System.out.println(this.getName());
+	}
 
+	@Override
+	public void sendNotification(String message) {
+		Home home = Page.getInstance().getPagefactory().getWindow();
+		new Notification(home, Notification.Type.WARNING, Notification.Location.BOTTOM_RIGHT, home.getInternetMsg(),
+				null).showNotification();
 	}
 
 }

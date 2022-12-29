@@ -21,7 +21,7 @@ public class CustomWindow extends JFrame implements ActionListener {
 	 */
 	private static final long serialVersionUID = 9153467656675809168L;
 	private CustomPage currentPage;
-	private boolean internetStat;
+	private boolean internetStat=true;
 	private String internetMsg;
 
 	public CustomWindow() {
@@ -74,6 +74,16 @@ public class CustomWindow extends JFrame implements ActionListener {
 		this.currentPage = page;
 	}
 
+	private void noInternet() {
+		setInternetMsg("No Internet Connection");
+		System.out.println(getInternetMsg());
+		if (internetStat) {
+			internetStat = false;
+//			currentPage.sendNotification(getInternetMsg());
+		}
+		currentPage.sendNotification(getInternetMsg());
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
@@ -81,17 +91,13 @@ public class CustomWindow extends JFrame implements ActionListener {
 			if (address.isReachable(3000)) {
 				if (!internetStat) {
 					internetStat = true;
+					currentPage.refresh();
 				}
 			} else {
-				setInternetMsg("No Internet Connection");
-				if (internetStat) {
-					internetStat = false;
-				}
+				noInternet();
 			}
-			currentPage.refresh(internetStat);
 		} catch (Exception ex) {
-			setInternetMsg("No Internet Connection");
-			currentPage.refresh(false);
+			noInternet();
 //			ex.printStackTrace();
 		}
 

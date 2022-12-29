@@ -1,6 +1,7 @@
 package pages;
 
 public interface InternetConnectAction {
-	public void refresh(boolean ref);
+	public void refresh();
+	public void sendNotification(String message);
 
 }

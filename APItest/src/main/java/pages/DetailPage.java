@@ -63,6 +63,8 @@ public class DetailPage extends CustomPage implements InternetConnectAction {
 	private DatabaseModel model = new DatabaseModel();
 	private JScrollPane scrollPane;
 	private TableDark table;
+	
+	private Country country;
 
 	/**
 	 * Create the application.
@@ -70,6 +72,7 @@ public class DetailPage extends CustomPage implements InternetConnectAction {
 	public DetailPage(Country country) {
 		super();
 		initialize();
+		this.country = country;
 		setCountry(country);
 	}
 
@@ -82,8 +85,8 @@ public class DetailPage extends CustomPage implements InternetConnectAction {
 		setPreferredSize(new Dimension(1150, 720));
 
 		body = new JPanel();
-		body.setPreferredSize(new Dimension(1280, 720));
-		body.setMinimumSize(new Dimension(1280, 720));
+		body.setPreferredSize(new Dimension(1150, 720));
+		body.setMinimumSize(new Dimension(1150, 720));
 		add(body);
 		body.setLayout(new BorderLayout(0, 0));
 
@@ -250,6 +253,9 @@ public class DetailPage extends CustomPage implements InternetConnectAction {
 		DefaultTableModel mode = (DefaultTableModel) table.getModel();
 		int count = 1;
 		Rate[] rates = model.fetchRates(country.getCurrencyCode());
+		if(mode.getRowCount()>0) {
+			mode.setRowCount(0);
+		}
 
 		for (Rate r : rates) {
 			String formatedRate = String.format("(%1$s)%2$s", country.getCurrency().getSymbol(), r.getRateVal());
@@ -267,13 +273,14 @@ public class DetailPage extends CustomPage implements InternetConnectAction {
 	}
 
 	@Override
-	public void refresh(boolean ref) {
-		System.out.println(this.getName());
-		if (!ref) {
-			Home home = Page.getInstance().getPagefactory().getWindow();
-			new Notification(home, Notification.Type.WARNING, Notification.Location.BOTTOM_RIGHT, home.getInternetMsg(),
-					null).showNotification();
-		}
+	public void refresh() {
+		setCountry(country);
+	}
 
+	@Override
+	public void sendNotification(String message) {
+		Home home = Page.getInstance().getPagefactory().getWindow();
+		new Notification(home, Notification.Type.WARNING, Notification.Location.BOTTOM_RIGHT, home.getInternetMsg(),
+				null).showNotification();
 	}
 }

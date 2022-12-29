@@ -236,6 +236,7 @@ public class SearchTextField extends JTextField implements EventTextField {
 	 */
 	public void setHintText(String text) {
 		this.hintText = text;
+		repaint();
 	}
 	
 	// Make this an abstract method 

@@ -19,6 +19,7 @@ public class DatabaseModel {
 
 	/**
 	 * Establishes a connection with database
+	 * 
 	 * @return Connection object
 	 */
 	private Connection getConnection() {
@@ -33,18 +34,21 @@ public class DatabaseModel {
 
 		return con;
 	}
-	
+
 	/**
 	 * Gets all countries
+	 * 
 	 * @return An array of countries
 	 */
-	public Country[] getCountries() {
+	public Country[] getCountries(int page, int limit) {
 		if (con == null) {
 			con = getConnection();
 		}
 		ArrayList<Country> countries = new ArrayList<Country>();
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT Country.*,Currency.name as curr_name,Currency.symbol from Country INNER JOIN Currency on Country.currency_code = Currency.currency_code;");
+			PreparedStatement stmt = con.prepareStatement(
+					"SELECT Country.*,Currency.name as curr_name,Currency.symbol from Country INNER JOIN Currency on Country.currency_code = Currency.currency_code limit "
+							+ (page - 1) * limit + " ," + limit + ";");
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				String country_code = rs.getString("country_code");
@@ -54,7 +58,8 @@ public class DatabaseModel {
 				float latitude = rs.getFloat("latitude");
 				String image = rs.getString("image");
 				boolean visible = rs.getBoolean("isactive");
-				Country country = new Country(country_code, name, currency_code, longitude, latitude, image,visible,currency_code,rs.getString("curr_name"),rs.getString("symbol"));
+				Country country = new Country(country_code, name, currency_code, longitude, latitude, image, visible,
+						currency_code, rs.getString("curr_name"), rs.getString("symbol"));
 				countries.add(country);
 			}
 			rs.close();
@@ -68,9 +73,41 @@ public class DatabaseModel {
 		return countries.toArray(new Country[countries.size()]);
 
 	}
-	
+
+	/**
+	 * Gets the amount of countries in database
+	 * @return An integer value of the number of countries in database.
+	 */
+	public int getAmount() {
+		if (con == null) {
+			con = getConnection();
+		}
+
+		try {
+			PreparedStatement stmt = con.prepareStatement("SELECT count(*) FROM Country;");
+			ResultSet rs = stmt.executeQuery();
+			int count = 0;
+			if (rs.next()) {
+				count = rs.getInt(1);
+			}
+
+			rs.close();
+			stmt.close();
+			con.close();
+
+			return count;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			con = null;
+		}
+		return 0;
+
+	}
+
 	/**
 	 * Gets a specific country using the country code
+	 * 
 	 * @param code The code for a specific country
 	 * @return A country object
 	 */
@@ -83,7 +120,8 @@ public class DatabaseModel {
 		}
 
 		try {
-			stmt = con.prepareStatement("SELECT Country.*,Currency.name as curr_name,Currency.symbol from Country INNER JOIN Currency on Country.currency_code = Currency.currency_code where country_code = ?");
+			stmt = con.prepareStatement(
+					"SELECT Country.*,Currency.name as curr_name,Currency.symbol from Country INNER JOIN Currency on Country.currency_code = Currency.currency_code where country_code = ?");
 			stmt.setString(1, code);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -94,7 +132,8 @@ public class DatabaseModel {
 				float latitude = rs.getFloat("latitude");
 				String image = rs.getString("image");
 				boolean visible = rs.getBoolean("isactive");
-				country = new Country(country_code, name, currency_code, longitude, latitude, image,visible,currency_code,rs.getString("curr_name"),rs.getString("symbol"));
+				country = new Country(country_code, name, currency_code, longitude, latitude, image, visible,
+						currency_code, rs.getString("curr_name"), rs.getString("symbol"));
 			}
 			rs.close();
 			stmt.close();
@@ -112,7 +151,8 @@ public class DatabaseModel {
 
 	/**
 	 * Gets all the rates for a specific country
-	 * @param code The code for a specific country 
+	 * 
+	 * @param code The code for a specific country
 	 * @return An array of Rates
 	 */
 	public Rate[] fetchRates(String code) {
@@ -149,14 +189,16 @@ public class DatabaseModel {
 
 	/**
 	 * Inserts a country to Country table
-	 * @param code The code of a specific country
-	 * @param name The name of the country 
+	 * 
+	 * @param code          The code of a specific country
+	 * @param name          The name of the country
 	 * @param currency_code The currency code of that country
-	 * @param longitude The longitudinal coordinate of country
-	 * @param latitude The lattitudinal coordinate of country
-	 * @param image The image url of country flag
+	 * @param longitude     The longitudinal coordinate of country
+	 * @param latitude      The lattitudinal coordinate of country
+	 * @param image         The image url of country flag
 	 */
-	public void insertCountry(String code, String name, String currency_code, Double longitude, Double latitude,String image) {
+	public void insertCountry(String code, String name, String currency_code, Double longitude, Double latitude,
+			String image) {
 		if (con == null) {
 			con = getConnection();
 		}
@@ -182,11 +224,12 @@ public class DatabaseModel {
 
 	/**
 	 * Inserts rate into Rate table
-	 * @param key The currency code of a country
-	 * @param value The rate value
+	 * 
+	 * @param key         The currency code of a country
+	 * @param value       The rate value
 	 * @param last_update The time and date that the rate was retrieved
 	 */
-	public void insertRate(String key,Double value, String last_update) {
+	public void insertRate(String key, Double value, String last_update) {
 		if (con == null) {
 			con = getConnection();
 		}
@@ -206,14 +249,15 @@ public class DatabaseModel {
 		}
 
 	}
-	
+
 	/**
 	 * Inserts currency in Currency table
+	 * 
 	 * @param currency_code The code used to represent a particular country
-	 * @param name The name of the currency
-	 * @param symbol The symbol used to represent currency
+	 * @param name          The name of the currency
+	 * @param symbol        The symbol used to represent currency
 	 */
-	public void insertCurrency(String currency_code,String name, String symbol) {
+	public void insertCurrency(String currency_code, String name, String symbol) {
 		if (con == null) {
 			con = getConnection();
 		}
@@ -233,10 +277,11 @@ public class DatabaseModel {
 		}
 
 	}
-	
+
 	/**
 	 * Gets Currency information for a specific country
-	 * @param code The currency code for a specific country 
+	 * 
+	 * @param code The currency code for a specific country
 	 * @return A Currency object
 	 */
 	public Currency fetchCurrency(String code) {
@@ -265,33 +310,35 @@ public class DatabaseModel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			//con = null;
+			// con = null;
 		}
 
 		return currency;
 	}
 
 	/**
-	 * Checks to see if a rate exist for a particular country on a specific date and time
+	 * Checks to see if a rate exist for a particular country on a specific date and
+	 * time
+	 * 
 	 * @param date The date and time of the rate
 	 * @param code The country code of which the rate matches
-	 * @return boolean 
+	 * @return boolean
 	 */
-	public boolean rateExist(String date,String code) {
+	public boolean rateExist(String date, String code) {
 		boolean exist = false;
 		if (con == null) {
 			con = getConnection();
 		}
 
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM Rates where last_updated = ? AND currency_code = ?");
+			PreparedStatement stmt = con
+					.prepareStatement("SELECT * FROM Rates where last_updated = ? AND currency_code = ?");
 			stmt.setString(1, date);
 			stmt.setString(2, code);
 			ResultSet rs = stmt.executeQuery();
 
 			exist = rs.next();
-			
-			
+
 			rs.close();
 			stmt.close();
 			con.close();
@@ -308,8 +355,9 @@ public class DatabaseModel {
 
 	/**
 	 * Checks if a country exists
+	 * 
 	 * @param code The code for a country
-	 * @return boolean 
+	 * @return boolean
 	 */
 	public boolean countryExist(String code) {
 		boolean exist = false;
@@ -336,9 +384,10 @@ public class DatabaseModel {
 		return exist;
 
 	}
-	
+
 	/**
 	 * Checks if a currency already exists
+	 * 
 	 * @param code The code for a currency
 	 * @return boolean
 	 */
@@ -370,6 +419,7 @@ public class DatabaseModel {
 
 	/**
 	 * Gets the next execution for fetching rates
+	 * 
 	 * @return Date object
 	 */
 	public Date getRunTime() {
@@ -398,6 +448,7 @@ public class DatabaseModel {
 
 	/**
 	 * Updates the next run time to fetch rates from API
+	 * 
 	 * @param nextRun The date and time for the next execution
 	 */
 	public void updateRunTime(String nextRun) {
@@ -420,7 +471,8 @@ public class DatabaseModel {
 
 	/**
 	 * Inserts the next runtime in the NextUpdate table
-	 * @param id The id of the currency code 
+	 * 
+	 * @param id   The id of the currency code
 	 * @param time The date and time of the next runtime
 	 */
 	public void insertRunTime(String id, String time) {
@@ -444,7 +496,8 @@ public class DatabaseModel {
 
 	/**
 	 * Checks to see if run time for a specific currency exists
-	 * @param code The currency code 
+	 * 
+	 * @param code The currency code
 	 * @return boolean
 	 */
 	public boolean runTimeExist(String code) {
@@ -472,17 +525,19 @@ public class DatabaseModel {
 		return exist;
 
 	}
-/**
- * Updates a specific country in database
- * @param country The country object that was updated
- */
+
+	/**
+	 * Updates a specific country in database
+	 * 
+	 * @param country The country object that was updated
+	 */
 	public void updateCountry(Country country) {
 		if (con == null) {
 			con = getConnection();
 		}
 		try {
 			PreparedStatement stmt = con.prepareStatement("UPDATE Country SET isactive = ? WHERE country_code = ?;");
-			stmt.setInt(1, (country.isVisible())?1:0);
+			stmt.setInt(1, (country.isVisible()) ? 1 : 0);
 			stmt.setString(2, country.getCountryCode());
 			stmt.executeUpdate();
 			stmt.close();
@@ -493,7 +548,7 @@ public class DatabaseModel {
 		} finally {
 			con = null;
 		}
-		
+
 	}
 
 }
