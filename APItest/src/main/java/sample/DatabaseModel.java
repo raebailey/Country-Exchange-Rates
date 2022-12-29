@@ -46,9 +46,13 @@ public class DatabaseModel {
 		}
 		ArrayList<Country> countries = new ArrayList<Country>();
 		try {
-			PreparedStatement stmt = con.prepareStatement(
-					"SELECT Country.*,Currency.name as curr_name,Currency.symbol from Country INNER JOIN Currency on Country.currency_code = Currency.currency_code limit "
-							+ (page - 1) * limit + " ," + limit + ";");
+			String sql = "SELECT Country.*,Currency.name as curr_name,Currency.symbol from Country INNER JOIN Currency on Country.currency_code = Currency.currency_code";
+			if (page != 0 && limit != 0) {
+				sql = sql + " limit " + +(page - 1) * limit + " ," + limit + ";";
+			} else {
+				sql = sql + " ;";
+			}
+			PreparedStatement stmt = con.prepareStatement(sql);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				String country_code = rs.getString("country_code");
@@ -76,6 +80,7 @@ public class DatabaseModel {
 
 	/**
 	 * Gets the amount of countries in database
+	 * 
 	 * @return An integer value of the number of countries in database.
 	 */
 	public int getAmount() {
