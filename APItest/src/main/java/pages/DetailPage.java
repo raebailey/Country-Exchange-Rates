@@ -231,7 +231,7 @@ public class DetailPage extends CustomPage implements InternetConnectAction {
 		imageLbl.setIcon(new ImageIcon(getClass().getResource("/images/loading3 new.gif")));
 		JLabel[] lblArr = { imageLbl };
 		String[] strArr = { imageUrl };
-		new ImageLoader_Task(lblArr, strArr, 320, 160).start();
+		Page.getExecutor().execute(new ImageLoader_Task(lblArr, strArr, 320, 160));
 
 		nameLbl.setText(country.getName());
 		latLbl.setText(String.valueOf(country.getLatitude()));

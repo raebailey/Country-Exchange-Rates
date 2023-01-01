@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.net.InetAddress;
 
 import javax.swing.JFrame;
@@ -76,7 +78,6 @@ public class CustomWindow extends JFrame implements ActionListener {
 
 	private void noInternet() {
 		setInternetMsg("No Internet Connection");
-		System.out.println(getInternetMsg());
 		if (internetStat) {
 			internetStat = false;
 //			currentPage.sendNotification(getInternetMsg());
@@ -102,5 +103,7 @@ public class CustomWindow extends JFrame implements ActionListener {
 		}
 
 	}
+
+	
 
 }

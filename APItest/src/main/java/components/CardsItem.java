@@ -1,37 +1,19 @@
 package components;
 
-import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.RenderingHints;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.geom.RoundRectangle2D;
-import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.border.MatteBorder;
 
-import components.CustomTitleBar.TitleButton;
 import components.image.ImageHelper;
+import models.Page;
 import models.apinotifications.ApiNotification;
 import tasks.ImageLoader_Task;
 
@@ -63,7 +45,7 @@ public class CardsItem extends RoundPanel {
 		if (imagePath != null) {
 			JLabel[] label = { lblNewLabel };
 			String[] urls = { imagePath };
-			new ImageLoader_Task(label, urls, 24, 24).start();
+			Page.getExecutor().execute(new ImageLoader_Task(label, urls, 24, 24));
 		} else {
 			img = img.getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 			lblNewLabel.setIcon(new ImageIcon(img));

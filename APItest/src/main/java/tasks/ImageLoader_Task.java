@@ -11,8 +11,8 @@ import javax.swing.JLabel;
 
 import cache.CacheManager;
 import components.image.ImageHelper;
-
-public class ImageLoader_Task extends Thread implements Runnable {
+//Create an Executor to call this class.
+public class ImageLoader_Task implements Runnable {
 
 	private String[] imageUrls;
 	private JLabel[] imageComponents;

@@ -36,8 +36,11 @@ public class DatabaseModel {
 	}
 
 	/**
-	 * Gets all countries
+	 * Gets all countries based on offset((page-1)*limit) and limit given.
+	 * If the page number and limit is 0 return all countries in table
 	 * 
+	 * @param page 
+	 * @param limit
 	 * @return An array of countries
 	 */
 	public Country[] getCountries(int page, int limit) {

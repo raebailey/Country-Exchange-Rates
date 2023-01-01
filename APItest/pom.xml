@@ -46,6 +46,50 @@
 			<artifactId>emoji4j</artifactId>
 			<version>6.0</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.miglayout/miglayout-swing -->
+		<dependency>
+			<groupId>com.miglayout</groupId>
+			<artifactId>miglayout-swing</artifactId>
+			<version>5.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.guava/failureaccess -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>failureaccess</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+		<!-- <dependency>
+			<groupId>com.miglayout</groupId>
+			<artifactId>miglayout-swing</artifactId>
+			<version>4.3-SNAPSHOT</version>
+		</dependency>-->
 
 	</dependencies>
+	<build>
+		<finalName></finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.1.1</version>
+
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+
+			</plugin>
+		</plugins>
+	</build>
 </project>

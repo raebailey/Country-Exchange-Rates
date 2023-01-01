@@ -37,6 +37,7 @@ public class HomePage extends CustomPage implements InternetConnectAction {
 	private JPanel panel_4;
 	private SearchTextField textField;
 	private ArrayList<CountryCard> ccArr;
+	private final int amtPerPage = 24;
 
 	public HomePage() {
 		initialize();
@@ -47,7 +48,6 @@ public class HomePage extends CustomPage implements InternetConnectAction {
 			@Override
 			public void pageChanged(int page) {
 				loadPage(page);
-				setPageNumber(page);
 			}
 		});
 	}
@@ -56,10 +56,11 @@ public class HomePage extends CustomPage implements InternetConnectAction {
 		DatabaseModel model = new DatabaseModel();
 		int totalRecords = model.getAmount();
 		int totalPage = (int) Math.ceil(totalRecords / 10);
+		//load all countries then subset for pagination
 		Country[] countries = model.getCountries(page, totalPage);
 		ArrayList<JLabel> cardArr = new ArrayList<JLabel>();
 		ArrayList<String> urlArr = new ArrayList<String>();
-
+		
 		JLabel[] cArr = new JLabel[cardArr.size()];
 		String[] uArr = new String[urlArr.size()];
 
@@ -73,14 +74,15 @@ public class HomePage extends CustomPage implements InternetConnectAction {
 			panel_2.add(card);
 		}
 
-		load = new ImageLoader_Task(cardArr.toArray(cArr), urlArr.toArray(uArr));
-		load.start();
+		Page.getExecutor().execute( new ImageLoader_Task(cardArr.toArray(cArr), urlArr.toArray(uArr)));
 		int pages;
-		if (totalRecords % 24 != 0) {
-			pages = (totalRecords / 24) + 1;
+		if (totalRecords % amtPerPage != 0) {
+			pages = (totalRecords / amtPerPage) + 1;
 		} else {
-			pages = (int) (totalRecords / 24);
+			pages = (int) (totalRecords / amtPerPage);
 		}
+
+		setPageNumber(page);
 		getPagination().setPagegination(page, pages);
 	}
 
@@ -121,7 +123,6 @@ public class HomePage extends CustomPage implements InternetConnectAction {
 		panel_4.setLayout(null);
 
 		JPanel paginatePanel = new JPanel();
-		paginatePanel.setPreferredSize(new Dimension(350, 10));
 		panel_1.add(paginatePanel, BorderLayout.WEST);
 		paginatePanel.setLayout(new BorderLayout(0, 0));
 		paginatePanel.add(getPagination());

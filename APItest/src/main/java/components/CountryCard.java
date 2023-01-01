@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -22,8 +21,6 @@ import components.CustomButton.ButtonStyle;
 import components.icon.ActionInterface;
 import components.icon.CustomIcon;
 import components.notification.Notification;
-import events.CountryEvent;
-import events.CountryListener;
 import models.Country;
 import models.Page;
 import ui.CustomWindow;

@@ -2,19 +2,21 @@ package pages;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.util.UUID;
 
 import javax.swing.JPanel;
 
 import pagination.Pagination;
 
-public class CustomPage extends JPanel implements InternetConnectAction {
+public class CustomPage extends JPanel implements InternetConnectAction,MouseMotionListener{
 	final static int width = 1150;
 	final static int height = 720;
 	private String identifier;
 	private String name;
 	private boolean isactive;
-	private int pageNumber;
+	private int pageNumber = 1;
 	private Pagination pagination;
 
 	public CustomPage() {
@@ -23,6 +25,7 @@ public class CustomPage extends JPanel implements InternetConnectAction {
 		pagination = new Pagination();
 		setSize(new Dimension(width, height));
 		setLayout(new BorderLayout(0, 0));
+		addMouseMotionListener(this);
 	}
 
 	public String getIdentifier() {
@@ -80,6 +83,17 @@ public class CustomPage extends JPanel implements InternetConnectAction {
 	public void sendNotification(String message) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		System.out.println("Dragged Page we are on is: "+getName()+" Mouse points x: "+e.getX()+" y: "+e.getY());
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		System.out.println("Page we are on page "+getPageNumber()+" of: "+getName()+" Mouse points x: "+e.getX()+" y: "+e.getY());
 	}
 
 }

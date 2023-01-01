@@ -27,14 +27,15 @@ public class Country {
 	private ArrayList<CountryListener> listeners = new ArrayList<CountryListener>();
 
 	public Country(String countryCode, String name, String currency, double longitude, double latitude, String imageUrl) {
-		this.countryCode = countryCode;
-		this.name = name;
-		this.currencyCode = currency;
-		this.longitude = longitude;
-		this.latitude = latitude;
-		this.imageUrl = imageUrl;
-		this.visible = true;
-		this.model = new DatabaseModel();
+		this(countryCode,name,currency,longitude,latitude,imageUrl,true,null,null,null);
+//		this.countryCode = countryCode;
+//		this.name = name;
+//		this.currencyCode = currency;
+//		this.longitude = longitude;
+//		this.latitude = latitude;
+//		this.imageUrl = imageUrl;
+//		this.visible = true;
+//		this.model = new DatabaseModel();
 	}
 	
 	public Country(String countryCode, String name, String currencyCode, double longitude, double latitude, String imageUrl,boolean visible,String cur_code,String cur_name, String cur_symbol) {
@@ -45,7 +46,12 @@ public class Country {
 		this.latitude = latitude;
 		this.imageUrl = imageUrl;
 		this.visible = visible;
-		this.currency = new Currency(cur_code,cur_name,cur_symbol);
+		if(cur_code!=null) {
+			this.currency = new Currency(cur_code,cur_name,cur_symbol);
+		}else {
+			this.currency = null;
+		}
+		
 		this.model = new DatabaseModel();
 	}
 
