@@ -14,10 +14,10 @@ import org.json.simple.JSONObject;
 import enums.MessageTypes;
 import events.RateEvent;
 import events.RateListener;
+import models.DatabaseModel;
 import models.Rate;
 import models.apinotifications.ApiNotification;
 import sample.APItest;
-import sample.DatabaseModel;
 import sample.Service;
 import ui.ApiUI;
 

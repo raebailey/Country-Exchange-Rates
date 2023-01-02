@@ -29,7 +29,7 @@ import components.search.EventTextField;
 import components.search.SearchTextField;
 import layouts.WrapLayout;
 import models.Country;
-import sample.DatabaseModel;
+import models.DatabaseModel;
 import tasks.Country_Task;
 import tasks.ImageLoader_Task;
 import tasks.SearchTask;

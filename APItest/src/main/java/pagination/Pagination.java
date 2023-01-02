@@ -55,7 +55,7 @@ public class Pagination extends JPanel {
         }
     }
 
-    private void changePage(int current, int totalPage) {
+    private void changePage(int current, final int totalPage) {
         page = paginate(current, totalPage);
         removeAll();
         refresh();
@@ -70,8 +70,8 @@ public class Pagination extends JPanel {
             }
         });
         add(cmdPrev);
-        for (Object item : page.getItems()) {
-            JButton cmd = paginationItemRender.createPaginationItem(item, false, false, isEnable(item));
+        for (final Object item : page.getItems()) {
+            final JButton cmd = paginationItemRender.createPaginationItem(item, false, false, isEnable(item));
             if (item instanceof Integer) {
                 if (Integer.valueOf(item.toString()) == page.getCurrent()) {
                     cmd.setSelected(true);

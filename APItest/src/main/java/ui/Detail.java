@@ -37,10 +37,10 @@ import components.RoundPanel;
 import components.TableDark;
 import components.image.ImageHelper;
 import models.Country;
+import models.DatabaseModel;
 import models.Page;
 import models.Rate;
 import net.miginfocom.swing.MigLayout;
-import sample.DatabaseModel;
 
 public class Detail extends CustomWindow{
 

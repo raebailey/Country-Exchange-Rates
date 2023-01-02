@@ -1,4 +1,4 @@
-package sample;
+package models;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,10 +9,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
-import models.Country;
-import models.Currency;
-import models.Rate;
 
 public class DatabaseModel {
 	private Connection con;

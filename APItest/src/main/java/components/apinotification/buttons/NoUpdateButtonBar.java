@@ -21,7 +21,7 @@ public class NoUpdateButtonBar extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public NoUpdateButtonBar(ArrayList<ApiNotification> notifications) {
+	public NoUpdateButtonBar(final ArrayList<ApiNotification> notifications) {
 		setBackground(new Color(240, 240, 240));
 		setOpaque(false);
 		setPreferredSize(new Dimension(328, 40));

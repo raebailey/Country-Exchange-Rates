@@ -26,7 +26,7 @@ public class ButtonBar extends JPanel {
 		cmdMinimize.setFont(cmdMinimize.getFont().deriveFont(0, 3));
 	}
 
-	public void initEvent(JFrame fram) {
+	public void initEvent(final JFrame fram) {
 		cmdClose.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {

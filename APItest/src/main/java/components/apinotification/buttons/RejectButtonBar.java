@@ -21,7 +21,7 @@ public class RejectButtonBar extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public RejectButtonBar(ArrayList<ApiNotification> notifications) {
+	public RejectButtonBar(final ArrayList<ApiNotification> notifications) {
 		setOpaque(false);
 		setPreferredSize(new Dimension(328, 40));
 		setBorder(null);

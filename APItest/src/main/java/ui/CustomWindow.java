@@ -6,9 +6,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 
@@ -30,6 +33,21 @@ public class CustomWindow extends JFrame implements ActionListener {
 		initialize();
 		javax.swing.Timer timer = new javax.swing.Timer(10000, this);
 		timer.start();
+//		try {
+//		      Process process = Runtime.getRuntime().exec("netsh wlan show interfaces");
+//		      BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+//		      String line;
+//		      while ((line = reader.readLine()) != null) {
+//		        if (line.contains("Signal")) {
+//		          String[] parts = line.split(":");
+//		          String strength = parts[1].trim();
+//		          JOptionPane.showMessageDialog(this, "WiFi strength: " + strength, "WiFi Strength", JOptionPane.INFORMATION_MESSAGE);
+//		        }
+//		      }
+//		      reader.close();
+//		    } catch (Exception e) {
+//		      e.printStackTrace();
+//		    }
 	}
 
 	private void initialize() {

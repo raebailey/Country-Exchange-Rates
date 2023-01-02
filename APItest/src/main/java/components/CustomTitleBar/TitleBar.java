@@ -31,7 +31,7 @@ public class TitleBar extends JPanel {
 		buttonBar.initEvent(fram);
 	}
 
-	private void initMoving(JFrame fram) {
+	private void initMoving(final JFrame fram) {
 		panelMove.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent me) {

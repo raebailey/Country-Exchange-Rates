@@ -36,8 +36,8 @@ import components.CustomButton;
 import components.RoundPanel;
 import components.ScrollBarCustom;
 import components.CustomTitleBar.TitleBar;
+import models.DatabaseModel;
 import models.apinotifications.ApiNotification;
-import sample.DatabaseModel;
 import tasks.Country_Task;
 import tasks.UpdateRate_Task;
 
@@ -145,7 +145,7 @@ public class ApiUI extends JFrame implements ActionListener {
 		titleBar.setPreferredSize(new Dimension(200, 29));
 		panel_1.add(titleBar);
 
-		JButton btnNewButton = new JButton("Run");
+		final JButton btnNewButton = new JButton("Run");
 
 		try {
 			Image img;
